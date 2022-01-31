@@ -1,0 +1,86 @@
+<div class="content" role="main">
+    <!-- <button class="card goback" (click)="goBack()">
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+        </svg>
+        go back
+    </button> -->
+
+    <div class="card card-selection">
+        <p><b>{{ entity }}</b> battles history on <b>{{ textPlatform() }}</b></p>
+    </div>
+
+    <div class="table">
+        <div class="row header green">
+            <div class="cell">
+                Number
+            </div>
+            <div class="cell">
+                Rival
+            </div>
+            <div class="cell">
+                Result
+            </div>
+            <div class="cell">
+                Won rounds
+            </div>
+            <div class="cell">
+                Played rounds
+            </div>
+            <div class="cell">
+                Raw points
+            </div>
+            <div class="cell">
+                Beating factor
+            </div>
+            <div class="cell">
+                Won points
+            </div>
+            <div class="cell">
+                Event
+            </div>
+            <div class="cell">
+                Media
+            </div>
+        </div>
+
+        <div class="row" *ngFor="let item of battle; index as i">
+            <div class="cell">
+                {{ i+1 }}
+            </div>
+            <div class="cell">
+                {{ item.rival }}
+            </div>
+            <div class="cell victory" *ngIf="item.result == 'Victory'">
+                {{ item.result }}
+            </div>
+            <div class="cell defeat" *ngIf="item.result == 'Defeat'">
+                {{ item.result }}
+            </div>
+            <div class="cell">
+                {{ item.won_rounds }}
+            </div>
+            <div class="cell">
+                {{ item.played_rounds }}
+            </div>
+            <div class="cell">
+                {{ item.raw_points }}
+            </div>
+            <div class="cell">
+                {{ item.beating_factor }}
+            </div>
+            <div class="cell">
+                {{ item.won_points }}
+            </div>
+            <div class="cell">
+                {{ item.event }}
+            </div>
+            <div class="cell" *ngIf="item.video != ''">
+                <a target="_blank" href="{{ item.video }}">Video</a>
+            </div>
+            <div class="cell" *ngIf="item.video == ''">
+                ...
+            </div>
+        </div>
+    </div>
+</div>

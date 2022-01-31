@@ -21,7 +21,9 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "resolveJsonModule": true, // To allow json loads
+    "esModuleInterop": true // To allow json loads
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

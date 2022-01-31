@@ -1,0 +1,20 @@
+<div class="content" role="main">
+
+    <app-platform (selectedPlatform)="recievePlatform($event)"></app-platform>
+
+    <app-ranking-type *ngIf="platform != ''" [platformType]="platform" [buttonStyle]="setButtonStyle(platform)" (selectedRanking)="recieveRanking($event)">
+    </app-ranking-type>
+
+    <div class="card card-selection" *ngIf="platform != ''">
+        <p>Selected platform: <b>{{ setTextPlatform() }}</b></p>
+    </div>
+    <div class="card card-selection" *ngIf="rankingType != ''">
+        <p>Ranking by: <b>{{ setTextRanking() }}</b></p>
+    </div>
+
+    <app-ranking-content *ngIf="rankingType != ''" [rankingList]="setRankingContent()" [platform]="platform">
+    </app-ranking-content>
+
+    <app-footer></app-footer>
+
+</div>
