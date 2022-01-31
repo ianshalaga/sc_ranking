@@ -23,6 +23,16 @@
     max-width: 800px;
 } */
 
+.content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 960px;
+    /* max-width: 1200px; */
+    flex-direction: column;
+    align-items: center;
+}
+
 .table {
     margin: 0 0 40px 0;
     width: 100%;

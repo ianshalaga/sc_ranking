@@ -1,69 +1,69 @@
-<div class="table" *ngIf="rankingList != null">
+<div class="content">
+    <div class="table" *ngIf="rankingList != null">
+        <div class="row header green">
+            <div class="cell">
+                Position
+            </div>
+            <div class="cell">
+                Name
+            </div>
+            <div class="cell">
+                Played battles
+            </div>
+            <div class="cell">
+                Won battles
+            </div>
+            <div class="cell">
+                Lost battles
+            </div>
+            <div class="cell">
+                Draw battles
+            </div>
+            <div class="cell">
+                Win rate
+            </div>
+            <div class="cell">
+                Points earned
+            </div>
+            <div class="cell">
+                WLR
+            </div>
+            <div class="cell">
+                Level
+            </div>
+        </div>
 
-    <div class="row header green">
-        <div class="cell">
-            Position
-        </div>
-        <div class="cell">
-            Name
-        </div>
-        <div class="cell">
-            Played battles
-        </div>
-        <div class="cell">
-            Won battles
-        </div>
-        <div class="cell">
-            Lost battles
-        </div>
-        <div class="cell">
-            Draw battles
-        </div>
-        <div class="cell">
-            Win rate
-        </div>
-        <div class="cell">
-            Points earned
-        </div>
-        <div class="cell">
-            WLR
-        </div>
-        <div class="cell">
-            Level
-        </div>
-    </div>
-
-    <div class="row" *ngFor="let item of rankingList; index as i">
-        <div class="cell">
-            {{ i+1 }}
-        </div>
-        <div class="cell">
-            <a routerLink="/history/{{ platform }}/{{ item.player }}">{{ item.player }} </a>
-            <!-- {{ item.player }} -->
-        </div>
-        <div class="cell">
-            {{ item.played_battles }}
-        </div>
-        <div class="cell">
-            {{ item.won_battles }}
-        </div>
-        <div class="cell">
-            {{ item.lost_battles }}
-        </div>
-        <div class="cell">
-            {{ item.draw_battles }}
-        </div>
-        <div class="cell">
-            {{ item.win_rate }}
-        </div>
-        <div class="cell">
-            {{ item.points_earned }}
-        </div>
-        <div class="cell">
-            {{ item.wlr }}
-        </div>
-        <div class="cell">
-            {{ item.player_level }}
+        <div class="row" *ngFor="let item of rankingList; index as i">
+            <div class="cell">
+                {{ i+1 }}
+            </div>
+            <div class="cell">
+                <a routerLink="/history/{{ platform }}/{{ item.player }}">{{ item.player }}</a>
+            </div>
+            <div class="cell">
+                {{ item.played_battles }}
+            </div>
+            <div class="cell">
+                {{ item.won_battles }}
+            </div>
+            <div class="cell">
+                {{ item.lost_battles }}
+            </div>
+            <div class="cell">
+                {{ item.draw_battles }}
+            </div>
+            <div class="cell">
+                {{ item.win_rate }}
+            </div>
+            <div class="cell">
+                {{ item.points_earned }}
+            </div>
+            <div class="cell">
+                {{ item.wlr }}
+            </div>
+            <div class="cell">
+                {{ item.player_level }}
+            </div>
         </div>
     </div>
 </div>
