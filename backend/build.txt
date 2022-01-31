@@ -1,0 +1,3 @@
+ng build --prod --output-path docs --base-href /sc_ranking/
+
+Make a copy of docs/index.html and name it docs/404.html.
