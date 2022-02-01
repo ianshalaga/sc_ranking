@@ -72,7 +72,7 @@ p {
     display: flex;
     margin: 82px auto 32px;
     padding: 0 16px;
-    max-width: 960px;
+    max-width: 720px;
     /* max-width: 1200px; */
     flex-direction: column;
     align-items: center;
