@@ -1,24 +1,24 @@
 export interface BattleData {
-    rival: String
-    result: String,
-    won_rounds: Number,
-    played_rounds: Number,
-    raw_points: String,
-    beating_factor: String,
-    won_points: String,
-    event: String,
-    video: String
+    rival: string
+    result: string,
+    won_rounds: number,
+    played_rounds: number,
+    raw_points: string,
+    beating_factor: string,
+    won_points: string,
+    event: string,
+    video: string
 }
 
 export interface PlayerData {
-    player: String,
-    played_battles: Number,
-    won_battles: Number,
-    lost_battles: Number,
-    draw_battles: Number,
-    win_rate: String,
-    points_earned: String,
-    wlr: String,
-    player_level: String,
+    player: string,
+    played_battles: number,
+    won_battles: number,
+    lost_battles: number,
+    draw_battles: number,
+    win_rate: string,
+    points_earned: string,
+    wlr: string,
+    player_level: string,
     battles_history: BattleData[]
 }

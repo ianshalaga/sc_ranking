@@ -32,6 +32,12 @@ export class EntityHistoryComponent implements OnInit {
     this.rankingsService.getEntity(this.platform, this.entity).subscribe(ent => this.battle = ent);
   }
 
+  getEntityClick(platform: string, entity: string): void {
+    this.platform = platform
+    this.entity = entity
+    this.rankingsService.getEntity(this.platform, this.entity).subscribe(ent => this.battle = ent);
+  }
+
   textPlatform(): string {
     let pltf!: string
     if (this.platform == 'PC')

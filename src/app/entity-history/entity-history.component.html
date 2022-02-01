@@ -1,86 +1,42 @@
-<div class="content" role="main">
-    <!-- <button class="card goback" (click)="goBack()">
-        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-        </svg>
-        go back
-    </button> -->
+<div class="content">
 
     <div class="card card-selection">
-        <p><b>{{ entity }}</b> battles history on <b>{{ textPlatform() }}</b></p>
+        <h4><b>{{ entity }}</b> battles history on <b>{{ textPlatform() }}</b></h4>
     </div>
 
-    <div class="table">
-        <div class="row header green">
-            <div class="cell">
-                Number
-            </div>
-            <div class="cell">
-                Rival
-            </div>
-            <div class="cell">
-                Result
-            </div>
-            <div class="cell">
-                Won rounds
-            </div>
-            <div class="cell">
-                Played rounds
-            </div>
-            <div class="cell">
-                Raw points
-            </div>
-            <div class="cell">
-                Beating factor
-            </div>
-            <div class="cell">
-                Won points
-            </div>
-            <div class="cell">
-                Event
-            </div>
-            <div class="cell">
-                Media
-            </div>
-        </div>
+    <div class="table-responsive-sm">
+        <table class="table table-striped table-light table-hover table-bordered text-center">
+            <thead class="align-middle text-center">
+                <tr class="table-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Rival</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Won rounds</th>
+                    <th scope="col">Played rounds</th>
+                    <th scope="col">Raw points</th>
+                    <th scope="col">Beating factor</th>
+                    <th scope="col">Won points</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Media</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of battle; index as i">
+                    <th class="table-danger text-center" scope="row">{{ i+1 }}</th>
+                    <td><a routerLink="/history/{{ platform }}/{{ item.rival }}" (click)="getEntityClick(platform, item.rival)">{{ item.rival }}</a></td>
 
-        <div class="row" *ngFor="let item of battle; index as i">
-            <div class="cell">
-                {{ i+1 }}
-            </div>
-            <div class="cell">
-                {{ item.rival }}
-            </div>
-            <div class="cell victory" *ngIf="item.result == 'Victory'">
-                {{ item.result }}
-            </div>
-            <div class="cell defeat" *ngIf="item.result == 'Defeat'">
-                {{ item.result }}
-            </div>
-            <div class="cell">
-                {{ item.won_rounds }}
-            </div>
-            <div class="cell">
-                {{ item.played_rounds }}
-            </div>
-            <div class="cell">
-                {{ item.raw_points }}
-            </div>
-            <div class="cell">
-                {{ item.beating_factor }}
-            </div>
-            <div class="cell">
-                {{ item.won_points }}
-            </div>
-            <div class="cell">
-                {{ item.event }}
-            </div>
-            <div class="cell" *ngIf="item.video != ''">
-                <a target="_blank" href="{{ item.video }}">Video</a>
-            </div>
-            <div class="cell" *ngIf="item.video == ''">
-                ...
-            </div>
-        </div>
+                    <td class="table-success" *ngIf="item.result == 'Victory'">{{ item.result }}</td>
+                    <td class="table-danger" *ngIf="item.result == 'Defeat'">{{ item.result }}</td>
+                    <td>{{ item.won_rounds }}</td>
+                    <td>{{ item.played_rounds }}</td>
+                    <td>{{ item.raw_points }}</td>
+                    <td>{{ item.beating_factor }}</td>
+                    <td>{{ item.won_points }}</td>
+                    <td>{{ item.event }}</td>
+                    <td *ngIf="item.video != ''"><a target="_blank" href="{{ item.video }}">Video</a></td>
+                    <td *ngIf="item.video == ''">...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
