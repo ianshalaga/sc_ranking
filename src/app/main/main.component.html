@@ -1,20 +1,38 @@
-<div class="content" role="main">
+<div class="container" role="main">
 
-    <app-platform (selectedPlatform)="recievePlatform($event)"></app-platform>
-
-    <app-ranking-type *ngIf="platform != ''" [platformType]="platform" [buttonStyle]="setButtonStyle(platform)" (selectedRanking)="recieveRanking($event)">
-    </app-ranking-type>
-
-    <div class="card card-selection" *ngIf="platform != ''">
-        <p>Selected platform: <b>{{ setTextPlatform() }}</b></p>
-    </div>
-    <div class="card card-selection" *ngIf="rankingType != ''">
-        <p>Ranking by: <b>{{ setTextRanking() }}</b></p>
+    <!-- Platforms -->
+    <div class="container d-flex justify-content-center align-items-center">
+        <app-platform (selectedPlatform)="recievePlatform($event)"></app-platform>
     </div>
 
-    <app-ranking-content *ngIf="rankingType != ''" [rankingList]="setRankingContent()" [platform]="platform">
-    </app-ranking-content>
+    <!-- Rankings type -->
+    <div class="container d-flex justify-content-center align-items-center">
+        <app-ranking-type *ngIf="platform != ''" [platformType]="platform" [buttonStyle]="setButtonStyle(platform)" (selectedRanking)="recieveRanking($event)">
+        </app-ranking-type>
+    </div>
 
-    <app-footer></app-footer>
+    <!-- Selections -->
+    <div class="card card-border text-center text-dark  mx-auto my-3 justify-content-center" style="width: 300px" *ngIf="platform != ''">
+        <div class="card-body">
+            <p class="card-text">Selected platform: <b>{{ setTextPlatform() }}</b></p>
+        </div>
+    </div>
+    <div class="card card-border text-center text-dark  mx-auto my-3 justify-content-center" style="width: 300px" *ngIf="rankingType != ''">
+        <div class="card-body">
+            <p class="card-text">Ranking by: <b>{{ setTextRanking() }}</b></p>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <!-- <div class="container d-flex justify-content-center align-items-center"> -->
+    <div class="container">
+        <app-ranking-content *ngIf="rankingType != ''" [rankingList]="setRankingContent()" [platform]="platform">
+        </app-ranking-content>
+    </div>
+
+    <!-- Footer -->
+    <div class="container d-flex justify-content-center align-items-center my-3">
+        <app-footer></app-footer>
+    </div>
 
 </div>

@@ -62,11 +62,11 @@ export class MainComponent implements OnInit {
   }
 
   setButtonStyle(pltf: string): string {
-    var Style: string = "card"
+    var Style: string = "btn btn-union btn-sm m-1"
     if (pltf == "PC")
-      Style = "card card-pc"
+      Style = "btn btn-pc btn-sm m-1"
     if (pltf == "PS4")
-      Style = "card card-ps4"
+      Style = "btn btn-ps4 btn-sm m-1"
     return Style
   }
 

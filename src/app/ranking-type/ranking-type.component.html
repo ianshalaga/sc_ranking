@@ -1,46 +1,56 @@
-<div class="card-container">
+<div class="container d-flex flex-column justify-content-center align-items-center">
 
     <!-- Players-Characters button -->
-    <button [attr.class]="buttonStyle" tabindex="0" (click)="sendRanking('PL_CH')">
-    <svg *ngIf="platformType == 'PC' || platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path fill="currentColor" [attr.d]="buttonPC" />
+    <button type="button" [attr.class]="buttonStyle" (click)="sendRanking('PL_CH')">
+        <svg *ngIf="platformType == 'PC' || platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" [attr.d]="buttonPC"/>
         </svg>
-    <svg *ngIf="platformType == 'PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
+
+        <svg *ngIf="platformType == 'PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
-    <div><span><b>Players-Characters</b> Ranking</span></div>
-    <svg *ngIf="platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
+
+        <svg *ngIf="platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
+
+        <div><span><b>Players-Characters</b> Ranking</span></div>
     </button>
 
     <!-- Players button -->
-    <button [attr.class]="buttonStyle" tabindex="0" (click)="sendRanking('PL')">
+    <button type="button" [attr.class]="buttonStyle" (click)="sendRanking('PL')">
         <svg *ngIf="platformType == 'PC' || platformType == 'PC_PS4'" style="width:24px;height:24px"
             viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPC" />
         </svg>
+
         <svg *ngIf="platformType == 'PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
-        <div><span><b>Players</b> Ranking</span></div>
+
         <svg *ngIf="platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
+
+        <div><span><b>Players</b> Ranking</span></div>
     </button>
 
     <!-- Characters button -->
-    <button [attr.class]="buttonStyle" tabindex="0" (click)="sendRanking('CH')">
+    <button type="button" [attr.class]="buttonStyle" (click)="sendRanking('CH')">
         <svg *ngIf="platformType == 'PC' || platformType == 'PC_PS4'" style="width:24px;height:24px"
             viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPC" />
         </svg>
+
         <svg *ngIf="platformType == 'PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
-        <div><span><b>Characters</b> Ranking</span></div>
+
         <svg *ngIf="platformType == 'PC_PS4'" style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="currentColor" [attr.d]="buttonPS4" />
         </svg>
+
+        <div><span><b>Characters</b> Ranking</span></div>
     </button>
+
 </div>

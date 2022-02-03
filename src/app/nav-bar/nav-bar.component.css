@@ -1,6 +1,14 @@
-.navbar {
-    /* overflow: hidden;
-    background-color: #333; */
+.nav-link:hover {
+    background-color: brown;
+}
+
+
+/* a:active {
+    background-color: brown;
+} */
+
+
+/* .navbar {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,7 +30,6 @@
     float: left;
     font-size: 16px;
     color: white;
-    /* align-items: baseline; */
     text-align: center;
     padding: 19px 16px;
     text-decoration: none;
@@ -38,9 +45,7 @@
 }
 
 .dropdown .dropbtn {
-    /* text-align: top; */
     display: flex;
-    /* flex-direction: row; */
     font-size: 16px;
     border: none;
     outline: none;
@@ -80,4 +85,4 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
-}
+} */
