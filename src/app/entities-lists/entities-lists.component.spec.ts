@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EntityHistoryComponent } from './entity-history.component';
+import { EntitiesListsComponent } from './entities-lists.component';
 
-describe('EntityHistoryComponent', () => {
-  let component: EntityHistoryComponent;
-  let fixture: ComponentFixture<EntityHistoryComponent>;
+describe('EntitiesListsComponent', () => {
+  let component: EntitiesListsComponent;
+  let fixture: ComponentFixture<EntitiesListsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EntityHistoryComponent ]
+      declarations: [ EntitiesListsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EntityHistoryComponent);
+    fixture = TestBed.createComponent(EntitiesListsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,47 @@
+<div class="container d-flex justify-content-center mt-3">
+
+    <div class="table-responsive-lg mx-auto">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Player-Character</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of PlChList">
+                    <td><a routerLink="/stats/{{ item }}">{{ item }}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive-lg mx-auto">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Player</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of PlList">
+                    <td><a routerLink="/stats/{{ item }}">{{ item }}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive-lg mx-auto">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Character</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ChList">
+                    <td><a routerLink="/stats/{{ item }}">{{ item }}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

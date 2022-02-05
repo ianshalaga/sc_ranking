@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MainComponent } from './main/main.component';
-import { EntityHistoryComponent } from './entity-history/entity-history.component';
+import { EntityStatsComponent } from './entity-stats/entity-stats.component';
+import { EntitiesListsComponent } from './entities-lists/entities-lists.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/rankings', pathMatch: 'full' },
   { path: 'rankings', component: MainComponent },
-  { path: 'history/:platform/:entity', component: EntityHistoryComponent },
-  // { path: 'rankings/:platform', component: PlatformComponent }
+  { path: 'stats', component: EntitiesListsComponent },
+  { path: 'stats/:entity', component: EntityStatsComponent }
 ];
 
 @NgModule({

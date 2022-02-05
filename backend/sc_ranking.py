@@ -55,6 +55,8 @@ class battle_data:
                  rounds_played,
                  p1_beating_factor,
                  p2_beating_factor,
+                 p1_lvl_factor,
+                 p2_lvl_factor,
                  p1_win,
                  p2_win,
                  draw,
@@ -70,6 +72,8 @@ class battle_data:
         self.rounds_played = rounds_played
         self.p1_beating_factor = p1_beating_factor
         self.p2_beating_factor = p2_beating_factor
+        self.p1_lvl_factor = p1_lvl_factor
+        self.p2_lvl_factor = p2_lvl_factor
         self.p1_win = p1_win
         self.p2_win = p2_win
         self.draw = draw
@@ -88,10 +92,14 @@ class battle_data:
             self.p2_beating_factor = 0.1
         else:
             self.p2_beating_factor = self.p2_won_rounds / self.rounds_played
-
-    def calculate_won_points(self):
-        self.p1_won_points = self.p1_raw_points * self.p1_beating_factor
-        self.p2_won_points = self.p2_raw_points * self.p2_beating_factor
+    
+    def calculate_won_points(self, p1_win_rate, p2_win_rate):
+        b = 1
+        a = -(25/132)
+        self.p1_lvl_factor = a*(p1_win_rate - p2_win_rate) + b
+        self.p2_lvl_factor = a*(p2_win_rate - p1_win_rate) + b
+        self.p1_won_points = self.p1_raw_points * self.p1_beating_factor * self.p1_lvl_factor
+        self.p2_won_points = self.p2_raw_points * self.p2_beating_factor * self.p2_lvl_factor
 
     def calculate_result(self):
         if self.p1_won_rounds > self.p2_won_rounds:  # Player 1 won
@@ -118,6 +126,7 @@ class battle_data:
         self.p1_history["played_rounds"] = self.rounds_played
         self.p1_history["raw_points"] = f"{'%.0f' % self.p1_raw_points}"
         self.p1_history["beating_factor"] = f"{'%.2f' % self.p1_beating_factor}"
+        self.p1_history["lvl_factor"] = f"{'%.2f' % self.p1_lvl_factor}"
         self.p1_history["won_points"] = f"{'%.0f' % self.p1_won_points}"
         self.p1_history["event"] = event
         self.p1_history["video"] = video
@@ -126,13 +135,14 @@ class battle_data:
         self.p2_history["played_rounds"] = self.rounds_played
         self.p2_history["raw_points"] = f"{'%.0f' % self.p2_raw_points}"
         self.p2_history["beating_factor"] = f"{'%.2f' % self.p2_beating_factor}"
+        self.p2_history["lvl_factor"] = f"{'%.2f' % self.p2_lvl_factor}"
         self.p2_history["won_points"] = f"{'%.0f' % self.p2_won_points}"
         self.p2_history["event"] = event
         self.p2_history["video"] = video
+    
 
-
-def battle_data_generator(battle, point_system_obj):
-    battle_data_obj = battle_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+def battle_data_generator(battle, point_system_obj, player1_win_rate, player2_win_rate):
+    battle_data_obj = battle_data(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     for i in range(5): # int(len(battle)/2)
         # Player 1
@@ -166,13 +176,30 @@ def battle_data_generator(battle, point_system_obj):
 
     battle_data_obj.calculate_rounds_played()
     battle_data_obj.calculate_beating_factors()
-    battle_data_obj.calculate_won_points()
+    battle_data_obj.calculate_won_points(player1_win_rate, player2_win_rate)
     battle_data_obj.calculate_result()
     battle_data_obj.generate_history(battle[-3], battle[-1])
 
     return battle_data_obj
 
 
+class player_stats:
+    def __init__(self,
+                 played_battles,
+                 won_battles,
+                 lost_battles,
+                 draw_battles,
+                 win_rate):
+        self.played_battles = played_battles
+        self.won_battles = won_battles
+        self.lost_battles = lost_battles
+        self.draw_battles = draw_battles
+        self.win_rate = win_rate
+
+    def calculate_win_rate(self):
+        self.win_rate = self.won_battles / self.played_battles
+    
+        
 class player_data:
     def __init__(self,
                  played_battles,
@@ -183,7 +210,8 @@ class player_data:
                  win_rate,
                  player_level,
                  wlr,
-                 battles_history):
+                 battles_history,
+                 player_stats):
         self.played_battles = played_battles
         self.won_battles = won_battles
         self.lost_battles = lost_battles
@@ -193,17 +221,18 @@ class player_data:
         self.player_level = player_level
         self.wlr = wlr  # Wins / Loss Ratio
         self.battles_history = battles_history
+        self.player_stats = player_stats
 
     def calculate_win_rate(self):
         self.win_rate = self.won_battles / self.played_battles
 
     def calculate_wlr(self):
         if self.lost_battles == 0:
-            self.wlr = self.won_battles
+            self.wlr = self.won_battles + (self.draw_battles / 2)
         elif self.won_battles == 0:
-            self.wlr = 1 / self.lost_battles
+            self.wlr = (1 + (self.draw_battles / 2)) / self.lost_battles
         else:
-            self.wlr = self.won_battles / self.lost_battles
+            self.wlr = (self.won_battles + (self.draw_battles / 2)) / self.lost_battles
 
     def calculate_player_lvl(self):
         self.player_level = self.wlr * self.points_earned
@@ -214,25 +243,36 @@ class player_data:
 
 
 def player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict):
-    battle_list = battle[4:]
-    battle_data_obj = battle_data_generator(battle_list, point_system_obj)
-
     if entity1 not in entities_dict:
-        entities_dict[entity1] = player_data(0, 0, 0, 0, 0, 0, 0, 0, [])
+        entities_dict[entity1] = player_data(0, 0, 0, 0, 0, 0, 0, 0, [], {entity2: player_stats(0, 0, 0, 0, 0)})
+    elif entity2 not in entities_dict[entity1].player_stats:
+        entities_dict[entity1].player_stats[entity2] = player_stats(0, 0, 0, 0, 0)
+
     if entity2 not in entities_dict:
-        entities_dict[entity2] = player_data(0, 0, 0, 0, 0, 0, 0, 0, [])
+        entities_dict[entity2] = player_data(0, 0, 0, 0, 0, 0, 0, 0, [], {entity1: player_stats(0, 0, 0, 0, 0)})
+    elif entity1 not in entities_dict[entity2].player_stats:
+        entities_dict[entity2].player_stats[entity1] = player_stats(0, 0, 0, 0, 0)
+
+    battle_list = battle[4:]
+    battle_data_obj = battle_data_generator(battle_list, point_system_obj, entities_dict[entity1].win_rate, entities_dict[entity2].win_rate)
 
     if battle_data_obj.p1_win:
         entities_dict[entity1].won_battles += 1
         entities_dict[entity2].lost_battles += 1
+        entities_dict[entity1].player_stats[entity2].won_battles += 1
+        entities_dict[entity2].player_stats[entity1].lost_battles += 1
 
     if battle_data_obj.p2_win:
         entities_dict[entity1].lost_battles += 1
         entities_dict[entity2].won_battles += 1
+        entities_dict[entity2].player_stats[entity1].won_battles += 1
+        entities_dict[entity1].player_stats[entity2].lost_battles += 1
 
-    # if battle_data_obj.draw:
-    #     entities_dict[entity1].draw_battles += 1
-    #     entities_dict[entity2].draw_battles += 1
+    if battle_data_obj.draw:
+        entities_dict[entity1].draw_battles += 1
+        entities_dict[entity2].draw_battles += 1
+        entities_dict[entity1].player_stats[entity2].draw_battles += 1
+        entities_dict[entity2].player_stats[entity1].draw_battles += 1
 
     entities_dict[entity1].points_earned += battle_data_obj.p1_won_points
     entities_dict[entity2].points_earned += battle_data_obj.p2_won_points
@@ -246,6 +286,11 @@ def player_data_generator(battle, point_system_obj, entity1, entity2, entities_d
     entities_dict[entity2].calculate_player_lvl()
     entities_dict[entity1].add_to_history(battle_data_obj.p1_history, entity2)
     entities_dict[entity2].add_to_history(battle_data_obj.p2_history, entity1)
+
+    entities_dict[entity1].player_stats[entity2].played_battles += 1
+    entities_dict[entity2].player_stats[entity1].played_battles += 1
+    entities_dict[entity1].player_stats[entity2].calculate_win_rate()
+    entities_dict[entity2].player_stats[entity1].calculate_win_rate()
 
 
 def make_tier_lists(battles_list, point_system_obj, tier_list_type, platform):
@@ -307,17 +352,37 @@ def print_results(ranking_dict):
             )
 
 
+def player_stats_obj_to_dict(rival, player_stats_obj):
+    player_stats_dict = {
+        "rival": rival,
+        "played_battles": player_stats_obj.played_battles,
+        "won_battles": player_stats_obj.won_battles,
+        "lost_battles": player_stats_obj.lost_battles,
+        "draw_battles": player_stats_obj.draw_battles,
+        "win_rate": f"{'%.0f' % (player_stats_obj.win_rate * 100)}" + " %",
+    }
+    return player_stats_dict
+
+
+def player_stats_obj_to_dict_batch(player_stats_dict):
+    player_stats_list = list()
+    for rival, player_stats_obj in player_stats_dict.items():
+        player_stats_list.append(player_stats_obj_to_dict(rival, player_stats_obj))
+    return player_stats_list
+
+
 def player_data_obj_to_dict(player_data_obj):
     player_data_dict = {
         "played_battles": player_data_obj.played_battles,
         "won_battles": player_data_obj.won_battles,
         "lost_battles": player_data_obj.lost_battles,
         "draw_battles": player_data_obj.draw_battles,
-        "win_rate": f"{'%.0f' % (player_data_obj.win_rate * 100)}" + " %",
+        "win_rate": f"{'%.2f' % (player_data_obj.win_rate * 100)}" + " %",
         "points_earned": f"{'%.0f' % player_data_obj.points_earned}" ,
         "wlr": f"{'%.2f' % player_data_obj.wlr}",
         "player_level": f"{'%.0f' % player_data_obj.player_level}",
-        "battles_history": player_data_obj.battles_history
+        "battles_history": player_data_obj.battles_history,
+        "player_stats": player_stats_obj_to_dict_batch(player_data_obj.player_stats)
     }
     return player_data_dict
 

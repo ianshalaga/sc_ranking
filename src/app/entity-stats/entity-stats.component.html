@@ -1,0 +1,229 @@
+<div class="container">
+
+    <!-- Player stats -->
+
+    <!-- PC Stats -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="PlayerStatsPC.length != 0">
+        <h5><b>{{ entity }}</b> stats on <b>PC</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="PlayerStatsPC.length != 0">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Rival</th>
+                    <th scope="col">Win rate</th>
+                    <th scope="col">Played battles</th>
+                    <th scope="col">Won battles</th>
+                    <th scope="col">Lost battles</th>
+                    <th scope="col">Draw battles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of PlayerStatsPC">
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.won_battles/item.played_battles> 0.5">{{ item.win_rate }}</td>
+                    <td class="table-danger" *ngIf="item.won_battles/item.played_battles< 0.5">{{ item.win_rate }}</td>
+                    <td class="table-warning" *ngIf="item.won_battles/item.played_battles== 0.5">{{ item.win_rate }}</td>
+                    <td>{{ item.played_battles }}</td>
+                    <td>{{ item.won_battles }}</td>
+                    <td>{{ item.lost_battles }}</td>
+                    <td>{{ item.draw_battles }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PS4 Stats -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="PlayerStatsPS4.length != 0">
+        <h5><b>{{ entity }}</b> stats on <b>PS4</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="PlayerStatsPS4.length != 0">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Rival</th>
+                    <th scope="col">Win rate</th>
+                    <th scope="col">Played battles</th>
+                    <th scope="col">Won battles</th>
+                    <th scope="col">Lost battles</th>
+                    <th scope="col">Draw battles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of PlayerStatsPS4">
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.won_battles/item.played_battles> 0.5">{{ item.win_rate }}</td>
+                    <td class="table-danger" *ngIf="item.won_battles/item.played_battles< 0.5">{{ item.win_rate }}</td>
+                    <td class="table-warning" *ngIf="item.won_battles/item.played_battles== 0.5">{{ item.win_rate }}</td>
+                    <td>{{ item.played_battles }}</td>
+                    <td>{{ item.won_battles }}</td>
+                    <td>{{ item.lost_battles }}</td>
+                    <td>{{ item.draw_battles }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PC + PS4 Stats -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="max(PlayerStatsPC.length, PlayerStatsPS4.length) < PlayerStatsPcPs4.length">
+        <h5><b>{{ entity }}</b> stats on <b>PC + PS4</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="max(PlayerStatsPC.length, PlayerStatsPS4.length) < PlayerStatsPcPs4.length">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">Rival</th>
+                    <th scope="col">Win rate</th>
+                    <th scope="col">Played battles</th>
+                    <th scope="col">Won battles</th>
+                    <th scope="col">Lost battles</th>
+                    <th scope="col">Draw battles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of PlayerStatsPcPs4">
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.won_battles/item.played_battles> 0.5">{{ item.win_rate }}</td>
+                    <td class="table-danger" *ngIf="item.won_battles/item.played_battles< 0.5">{{ item.win_rate }}</td>
+                    <td class="table-warning" *ngIf="item.won_battles/item.played_battles== 0.5">{{ item.win_rate }}</td>
+                    <td>{{ item.played_battles }}</td>
+                    <td>{{ item.won_battles }}</td>
+                    <td>{{ item.lost_battles }}</td>
+                    <td>{{ item.draw_battles }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Battles history -->
+
+    <!-- PC -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="PlayerStatsPC.length != 0">
+        <h5><b>{{ entity }}</b> battles history on <b>PC</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="PlayerStatsPC.length != 0">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Rival</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Won rounds</th>
+                    <th scope="col">Played rounds</th>
+                    <th scope="col">Raw points</th>
+                    <th scope="col">Beating factor</th>
+                    <th scope="col">Lvl factor</th>
+                    <th scope="col">Won points</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Media</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of BattlesListPC; index as i">
+                    <th class="table-danger" scope="row">{{ i+1 }}</th>
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.result == 'Victory'">{{ item.result }}</td>
+                    <td class="table-danger" *ngIf="item.result == 'Defeat'">{{ item.result }}</td>
+                    <td>{{ item.won_rounds }}</td>
+                    <td>{{ item.played_rounds }}</td>
+                    <td>{{ item.raw_points }}</td>
+                    <td>{{ item.beating_factor }}</td>
+                    <td>{{ item.lvl_factor }}</td>
+                    <td>{{ item.won_points }}</td>
+                    <td>{{ item.event }}</td>
+                    <td *ngIf="item.video != ''"><a target="_blank" href="{{ item.video }}">Video</a></td>
+                    <td *ngIf="item.video == ''">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PS4 -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="PlayerStatsPS4.length != 0">
+        <h5><b>{{ entity }}</b> battles history on <b>PS4</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="PlayerStatsPS4.length != 0">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Rival</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Won rounds</th>
+                    <th scope="col">Played rounds</th>
+                    <th scope="col">Raw points</th>
+                    <th scope="col">Beating factor</th>
+                    <th scope="col">Lvl factor</th>
+                    <th scope="col">Won points</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Media</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of BattlesListPS4; index as i">
+                    <th class="table-danger" scope="row">{{ i+1 }}</th>
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.result == 'Victory'">{{ item.result }}</td>
+                    <td class="table-danger" *ngIf="item.result == 'Defeat'">{{ item.result }}</td>
+                    <td>{{ item.won_rounds }}</td>
+                    <td>{{ item.played_rounds }}</td>
+                    <td>{{ item.raw_points }}</td>
+                    <td>{{ item.beating_factor }}</td>
+                    <td>{{ item.lvl_factor }}</td>
+                    <td>{{ item.won_points }}</td>
+                    <td>{{ item.event }}</td>
+                    <td *ngIf="item.video != ''"><a target="_blank" href="{{ item.video }}">Video</a></td>
+                    <td *ngIf="item.video == ''">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PC + PS4 -->
+    <div class="card card-border text-center text-dark mx-auto justify-content-center align-middle pt-1 mt-3" *ngIf="max(PlayerStatsPC.length, PlayerStatsPS4.length) < PlayerStatsPcPs4.length">
+        <h5><b>{{ entity }}</b> battles history on <b>PC + PS4</b></h5>
+    </div>
+
+    <div class="table-responsive-lg" *ngIf="max(PlayerStatsPC.length, PlayerStatsPS4.length) < PlayerStatsPcPs4.length">
+        <table class="table table-sm table-striped table-light table-hover table-bordered text-center align-middle">
+            <thead class="align-middle">
+                <tr class="table-primary">
+                    <th scope="col">#</th>
+                    <th scope="col">Rival</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Won rounds</th>
+                    <th scope="col">Played rounds</th>
+                    <th scope="col">Raw points</th>
+                    <th scope="col">Beating factor</th>
+                    <th scope="col">Lvl factor</th>
+                    <th scope="col">Won points</th>
+                    <th scope="col">Event</th>
+                    <th scope="col">Media</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of BattlesListPcPs4; index as i">
+                    <th class="table-danger" scope="row">{{ i+1 }}</th>
+                    <td><a routerLink="/stats/{{ item.rival }}" (click)="getUpdateClick(item.rival)">{{ item.rival }}</a></td>
+                    <td class="table-success" *ngIf="item.result == 'Victory'">{{ item.result }}</td>
+                    <td class="table-danger" *ngIf="item.result == 'Defeat'">{{ item.result }}</td>
+                    <td>{{ item.won_rounds }}</td>
+                    <td>{{ item.played_rounds }}</td>
+                    <td>{{ item.raw_points }}</td>
+                    <td>{{ item.beating_factor }}</td>
+                    <td>{{ item.lvl_factor }}</td>
+                    <td>{{ item.won_points }}</td>
+                    <td>{{ item.event }}</td>
+                    <td *ngIf="item.video != ''"><a target="_blank" href="{{ item.video }}">Video</a></td>
+                    <td *ngIf="item.video == ''">...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

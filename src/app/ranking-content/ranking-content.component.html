@@ -20,7 +20,13 @@
         <tbody>
             <tr *ngFor="let item of rankingList; index as i">
                 <th class="table-danger" scope="row">{{ i+1 }}</th>
-                <td><a routerLink="/history/{{ platform }}/{{ item.player }}">{{ item.player }}</a></td>
+                <td>
+                    <!-- class="container-fluid d-flex align-items-center" -->
+                    <!-- <img src="../../assets/images/characters/amy.jpg" alt="character" class="img-table rounded float-start me-2"> -->
+                    <!-- <img src="../../assets/images/characters/nightmare.jpg" alt="character" class="img-table rounded float-end me-2"> -->
+                    <!-- <a routerLink="/history/{{ platform }}/{{ item.player }}">{{ item.player }}</a> -->
+                    <a routerLink="/stats/{{ item.player }}">{{ item.player }}</a>
+                </td>
                 <td>{{ item.played_battles }}</td>
                 <td>{{ item.won_battles }}</td>
                 <td>{{ item.lost_battles }}</td>

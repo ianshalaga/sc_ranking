@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { BattleData, PlayerData } from 'src/app/player-data'
+import { BattleData, PlayerData, PlayerStats } from 'src/app/player-data'
 
 // PC
 import ranking_pl_ch_pc from 'src/assets/data/ranking_pl_ch_pc.json'
@@ -24,6 +24,9 @@ import ranking_ch_union from 'src/assets/data/ranking_ch_union.json'
 export class RankingsService {
 
   constructor() { }
+
+
+  // Ranking page functions
 
   getPcPlCh(): Observable<PlayerData[]> { return of(ranking_pl_ch_pc) }
   getPcPl(): Observable<PlayerData[]> { return of(ranking_pl_pc) }
@@ -48,4 +51,94 @@ export class RankingsService {
       battleData = listUnion.find(ent => ent.player == entity)?.battles_history!
     return of(battleData)
   }
+
+  getBattlesHistoryPC(entity: string): Observable<BattleData[]> {
+    let BattleData: BattleData[] = []
+    if (ranking_pl_ch_pc.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_ch_pc.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_pl_pc.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_pc.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_ch_pc.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_ch_pc.find(ent => ent.player == entity)?.battles_history!
+    return of(BattleData)
+  }
+
+  getBattlesHistoryPS4(entity: string): Observable<BattleData[]> {
+    let BattleData: BattleData[] = []
+    if (ranking_pl_ch_ps4.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_ch_ps4.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_pl_ps4.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_ps4.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_ch_ps4.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_ch_ps4.find(ent => ent.player == entity)?.battles_history!
+    return of(BattleData)
+  }
+
+  getBattlesHistoryPcPs4(entity: string): Observable<BattleData[]> {
+    let BattleData: BattleData[] = []
+    if (ranking_pl_ch_union.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_ch_union.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_pl_union.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_pl_union.find(ent => ent.player == entity)?.battles_history!
+    if (ranking_ch_union.find(ent => ent.player == entity) != undefined)
+      BattleData = ranking_ch_union.find(ent => ent.player == entity)?.battles_history!
+    return of(BattleData)
+  }
+
+  // Stats page functions
+
+  getPlChList(): Observable<string[]> {
+    const PlChList: string[] = []
+    for (let i=0; i<ranking_pl_ch_union.length; i++)
+      PlChList.push(ranking_pl_ch_union[i].player)
+    return of(PlChList.sort())
+  }
+
+  getPlList(): Observable<string[]> {
+    const PlList: string[] = []
+    for (let i=0; i<ranking_pl_union.length; i++)
+      PlList.push(ranking_pl_union[i].player)
+    return of(PlList.sort())
+  }
+
+  getChList(): Observable<string[]> {
+    const ChList: string[] = []
+    for (let i=0; i<ranking_ch_union.length; i++)
+      ChList.push(ranking_ch_union[i].player)
+    return of(ChList.sort())
+  }
+
+  getPlayerStatsPC(entity: string): Observable<PlayerStats[]> {
+    let PlayerStatsList: PlayerStats[] = []
+    if (ranking_pl_ch_pc.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_ch_pc.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_pl_pc.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_pc.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_ch_pc.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_ch_pc.find(ent => ent.player == entity)?.player_stats!
+    return of(PlayerStatsList)
+  }
+  
+  getPlayerStatsPS4(entity: string): Observable<PlayerStats[]> {
+    let PlayerStatsList: PlayerStats[] = []
+    if (ranking_pl_ch_ps4.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_ch_ps4.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_pl_ps4.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_ps4.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_ch_ps4.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_ch_ps4.find(ent => ent.player == entity)?.player_stats!
+    return of(PlayerStatsList)
+  }
+
+  getPlayerStatsPcPs4(entity: string): Observable<PlayerStats[]> {
+    let PlayerStatsList: PlayerStats[] = []
+    if (ranking_pl_ch_union.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_ch_union.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_pl_union.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_pl_union.find(ent => ent.player == entity)?.player_stats!
+    if (ranking_ch_union.find(ent => ent.player == entity) != undefined)
+      PlayerStatsList = ranking_ch_union.find(ent => ent.player == entity)?.player_stats!
+    return of(PlayerStatsList)
+  }
+
 }

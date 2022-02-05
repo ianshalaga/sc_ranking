@@ -9,7 +9,8 @@ import { RankingContentComponent } from './ranking-content/ranking-content.compo
 import { FooterComponent } from './footer/footer.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
-import { EntityHistoryComponent } from './entity-history/entity-history.component';
+import { EntityStatsComponent } from './entity-stats/entity-stats.component';
+import { EntitiesListsComponent } from './entities-lists/entities-lists.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { EntityHistoryComponent } from './entity-history/entity-history.componen
     RankingContentComponent,
     FooterComponent,
     MainComponent,
-    EntityHistoryComponent
+    EntityStatsComponent,
+    EntitiesListsComponent
   ],
   imports: [
     BrowserModule,
