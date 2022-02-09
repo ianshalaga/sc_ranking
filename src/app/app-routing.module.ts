@@ -4,12 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { EntityStatsComponent } from './entity-stats/entity-stats.component';
 import { EntitiesListsComponent } from './entities-lists/entities-lists.component';
+import { EventsComponent } from './events/events.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/rankings', pathMatch: 'full' },
+  { path: '', redirectTo: '/events', pathMatch: 'full' },
   { path: 'rankings', component: MainComponent },
   { path: 'stats', component: EntitiesListsComponent },
-  { path: 'stats/:entity', component: EntityStatsComponent }
+  { path: 'stats/:entity', component: EntityStatsComponent },
+  { path: 'events', component: EventsComponent }
 ];
 
 @NgModule({

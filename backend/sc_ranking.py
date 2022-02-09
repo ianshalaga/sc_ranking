@@ -4,6 +4,10 @@ import json
 
 
 def load_csv_fights(csv_fights_path):
+    '''
+    Input: csv file with battles extracted from Google Sheets.
+    Output: List of battles where each battle is a list too.
+    '''
     battles_list = list()
     battles_pc_count = 0
     battles_ps4_count = 0
@@ -11,16 +15,16 @@ def load_csv_fights(csv_fights_path):
     with open(csv_fights_path, encoding="utf8") as f:
         csv_reader = csv.reader(f, delimiter=',', quoting=csv.QUOTE_ALL)
         for battle in csv_reader:
-            if battle[-1] == "Media":
+            if battle[-1] == "Platform": # Avoids header row
                 continue
             for e in range(len(battle)):
                 if battle[e] == "0":
                     battle[e] = 0
             battles_list.append(battle)
             battles_count += 1
-            if battle[-2] == "PC":
+            if battle[-1] == "PC":
                 battles_pc_count += 1
-            if battle[-2] == "PS4":
+            if battle[-1] == "PS4":
                 battles_ps4_count += 1
         print(f"Combates en PC: {battles_pc_count}")
         print(f"Combates en PS4: {battles_ps4_count}")
@@ -178,7 +182,7 @@ def battle_data_generator(battle, point_system_obj, player1_win_rate, player2_wi
     battle_data_obj.calculate_beating_factors()
     battle_data_obj.calculate_won_points(player1_win_rate, player2_win_rate)
     battle_data_obj.calculate_result()
-    battle_data_obj.generate_history(battle[-3], battle[-1])
+    battle_data_obj.generate_history(battle[-4], battle[-1])
 
     return battle_data_obj
 
@@ -219,7 +223,7 @@ class player_data:
         self.points_earned = points_earned
         self.win_rate = win_rate
         self.player_level = player_level
-        self.wlr = wlr  # Wins / Loss Ratio
+        self.wlr = wlr  # Wins / Losses Ratio
         self.battles_history = battles_history
         self.player_stats = player_stats
 
@@ -318,10 +322,10 @@ def make_tier_lists(battles_list, point_system_obj, tier_list_type, platform):
             entity1 = character1
             entity2 = character2
 
-        if platform == "PC" and battle[-2] == "PC":
+        if platform == "PC" and battle[-1] == "PC":
             player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict)
 
-        if platform == "PS4" and battle[-2] == "PS4":
+        if platform == "PS4" and battle[-1] == "PS4":
             player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict)
 
         if platform == "union":
@@ -396,12 +400,127 @@ def player_data_obj_to_dict_batch(entities_dict):
 def ranking_dict_to_json(ranking_dict, json_path):
     json_list = list()
     converted_dict = player_data_obj_to_dict_batch(ranking_dict)
-    for entity, player_data in converted_dict.items():
+    for entity in converted_dict.keys():
         converted_dict[entity]["player"] = entity
         json_list.append(converted_dict[entity])
     
     with open(json_path, "w", encoding="utf8") as f:
         json.dump(json_list, f)
+
+
+def flatten_last(players_list):
+    players_list.reverse()
+    flatten_list = list()
+    for player in players_list:
+        if player not in flatten_list:
+            flatten_list.append(player)
+    return flatten_list
+
+
+def normalize_string_length(strings_list):
+    normalized_list = list()
+    max_length = 0
+    for string in strings_list:
+        if len(string) > max_length:
+            max_length = len(string)
+    max_length += 1
+    for string in strings_list:
+        normalized_list.append(string.ljust(max_length))
+    return normalized_list
+
+
+def event_stats_generator(battles_list, point_system_obj, json_path):
+    events_stats_list = list()
+    players_set = set()
+    characters_set = set()
+    battle = battles_list[0]
+    event_battles = [battle]
+    results_list = list()
+    p1 = battle[0]
+    p2 = battle[2]
+    ch1 = battle[1]
+    ch2 = battle[3]
+    event = battle[-4]
+    platform = battle[-1]
+    playlist = battle[-3]
+    players_set.add(p1)
+    players_set.add(p2)
+    characters_set.add(ch1)
+    characters_set.add(ch2)
+    repeated_players_list = [p1, p2]
+    for i in range(1, len(battles_list)):
+        if battles_list[i][-4] == event:
+            players_set.add(battles_list[i][0])
+            characters_set.add(battles_list[i][1])
+            players_set.add(battles_list[i][2])
+            characters_set.add(battles_list[i][3])
+            event_battles.append(battles_list[i])
+            repeated_players_list.append(battles_list[i][0])
+            repeated_players_list.append(battles_list[i][2])
+        else:
+            order_list = flatten_last(repeated_players_list)
+            repeated_players_list = list()
+            entities_dict = player_data_obj_to_dict_batch(make_tier_lists(event_battles, point_system_obj, "PL", platform))
+            ranking_list = list()
+            for player in entities_dict.keys():
+                ranking_list.append(player)
+                results_list = order_list
+            # results_list = order_list[:4]
+            # for player in ranking_list:
+            #     if player not in results_list:
+            #         results_list.append(player)
+            # normalize_string_length(results_list)
+            players_list = list(players_set)
+            characters_list = list(characters_set)
+            players_list.sort()
+            characters_list.sort()
+            events_stats_list.append({
+                "event": "Seyfer Studios Lightning Tournament " + event.split(" ")[1],
+                "platform": platform,
+                "players": players_list,
+                "characters": characters_list,
+                "playlist": playlist,
+                "result": results_list
+            })
+            event = battles_list[i][-4]
+            platform = battles_list[i][-1]
+            players_set = set()
+            characters_set = set()
+            playlist = battles_list[i][-3]
+            event_battles = []
+            results_list = list()
+
+    order_list = flatten_last(repeated_players_list)
+    entities_dict = player_data_obj_to_dict_batch(make_tier_lists(event_battles, point_system_obj, "PL", platform))
+    ranking_list = list()
+    for player in entities_dict.keys():
+        ranking_list.append(player)
+    results_list = order_list
+    # results_list = order_list[:4]
+    # for player in ranking_list:
+    #     if player not in results_list:
+    #         results_list.append(player)
+    # normalize_string_length(results_list)
+    players_list = list(players_set)
+    characters_list = list(characters_set)
+    players_list.sort()
+    characters_list.sort()
+    events_stats_list.append({
+        "event": "Seyfer Studios Lightning Tournament " + event.split(" ")[1],
+        "platform": platform,
+        "players": players_list,
+        "characters": characters_list,
+        "playlist": playlist,
+        "result": results_list
+    })
+    order_list = flatten_last(repeated_players_list)
+
+    events_stats_list.reverse()
+    # for e in events_stats_list:
+    #     print(e)
+
+    with open(json_path, "w", encoding="utf8") as f:
+        json.dump(events_stats_list, f)
 
 
 
@@ -453,3 +572,6 @@ ranking_dict_to_json(entities_dict_ch_ps4, json_ch_ps4_path)
 ranking_dict_to_json(entities_dict_pl_ch_union, json_pl_ch_union_path)
 ranking_dict_to_json(entities_dict_pl_union, json_pl_union_path)
 ranking_dict_to_json(entities_dict_ch_union, json_ch_union_path)
+
+json_event_stats_path = "src/assets/data/event_stats.json"
+event_stats_generator(fights_list, point_system_obj, json_event_stats_path)

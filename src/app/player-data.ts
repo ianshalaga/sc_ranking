@@ -33,3 +33,24 @@ export interface PlayerData {
     battles_history: BattleData[],
     player_stats: PlayerStats[]
 }
+
+export interface EntitiesCount {
+    PlChPc: number,
+    PlPc: number,
+    ChPc: number,
+    PlChPs4: number,
+    PlPs4: number,
+    ChPs4: number,
+    PlChPcPs4: number,
+    PlPcPs4: number,
+    ChPcPs4: number,
+}
+
+export interface EventStats {
+    event: string,
+    platform: string,
+    players: string[],
+    characters: string[],
+    playlist: string,
+    result: string[]
+}

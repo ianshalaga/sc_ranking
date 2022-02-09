@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { EntityStatsComponent } from './entity-stats/entity-stats.component';
 import { EntitiesListsComponent } from './entities-lists/entities-lists.component';
+import { EventsComponent } from './events/events.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { EntitiesListsComponent } from './entities-lists/entities-lists.componen
     FooterComponent,
     MainComponent,
     EntityStatsComponent,
-    EntitiesListsComponent
+    EntitiesListsComponent,
+    EventsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 .card.card-border {
     border-radius: 40px;
     border: 5px solid #333;
-    color: #fffffe;
+    /* color: #fffffe; */
     height: 40px;
-    background-color: tan;
+    background-color: coral;
 }
