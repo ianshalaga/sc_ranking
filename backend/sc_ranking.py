@@ -15,7 +15,7 @@ def load_csv_fights(csv_fights_path):
     with open(csv_fights_path, encoding="utf8") as f:
         csv_reader = csv.reader(f, delimiter=',', quoting=csv.QUOTE_ALL)
         for battle in csv_reader:
-            if battle[-1] == "Platform": # Avoids header row
+            if battle[-1] == "platform": # Avoids header row
                 continue
             for e in range(len(battle)):
                 if battle[e] == "0":
@@ -89,19 +89,24 @@ class battle_data:
 
     def calculate_beating_factors(self):
         if self.p1_won_rounds == 0:
-            self.p1_beating_factor = 0.1
+            # self.p1_beating_factor = 0.1
+            self.p1_beating_factor = (1/self.rounds_played)/2
         else:
             self.p1_beating_factor = self.p1_won_rounds / self.rounds_played
         if self.p2_won_rounds == 0:
-            self.p2_beating_factor = 0.1
+            # self.p2_beating_factor = 0.1
+            self.p2_beating_factor = (1/self.rounds_played)/2
         else:
             self.p2_beating_factor = self.p2_won_rounds / self.rounds_played
     
-    def calculate_won_points(self, p1_win_rate, p2_win_rate):
+    def calculate_lvl_factors(self, p1_win_rate, p2_win_rate):
         b = 1
         a = -(25/132)
         self.p1_lvl_factor = a*(p1_win_rate - p2_win_rate) + b
         self.p2_lvl_factor = a*(p2_win_rate - p1_win_rate) + b
+
+    def calculate_won_points(self, p1_win_rate, p2_win_rate):
+        self.calculate_lvl_factors(p1_win_rate, p2_win_rate)
         self.p1_won_points = self.p1_raw_points * self.p1_beating_factor * self.p1_lvl_factor
         self.p2_won_points = self.p2_raw_points * self.p2_beating_factor * self.p2_lvl_factor
 
