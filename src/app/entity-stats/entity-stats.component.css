@@ -1,3 +1,21 @@
 .card.card-border {
     background-color: coral;
 }
+
+.card.card-pc {
+    /* width: 230px; */
+    color: #fffffe;
+    background-color: #312d2e
+}
+
+.card.card-ps4 {
+    /* width: 230px; */
+    color: #fffffe;
+    background-color: #0087cb
+}
+
+.card.card-union {
+    /* width: 230px; */
+    color: #fffffe;
+    background-color: #a721d1
+}

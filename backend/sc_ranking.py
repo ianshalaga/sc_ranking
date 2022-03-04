@@ -187,7 +187,7 @@ def battle_data_generator(battle, point_system_obj, player1_win_rate, player2_wi
     battle_data_obj.calculate_beating_factors()
     battle_data_obj.calculate_won_points(player1_win_rate, player2_win_rate)
     battle_data_obj.calculate_result()
-    battle_data_obj.generate_history(battle[-4], battle[-1])
+    battle_data_obj.generate_history(battle[-4], battle[-5])
 
     return battle_data_obj
 
@@ -262,7 +262,7 @@ def player_data_generator(battle, point_system_obj, entity1, entity2, entities_d
     elif entity1 not in entities_dict[entity2].player_stats:
         entities_dict[entity2].player_stats[entity1] = player_stats(0, 0, 0, 0, 0)
 
-    battle_list = battle[4:]
+    battle_list = battle[5:]
     battle_data_obj = battle_data_generator(battle_list, point_system_obj, entities_dict[entity1].win_rate, entities_dict[entity2].win_rate)
 
     if battle_data_obj.p1_win:
@@ -469,7 +469,7 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
             ranking_list = list()
             for player in entities_dict.keys():
                 ranking_list.append(player)
-                results_list = order_list
+            results_list = order_list
             # results_list = order_list[:4]
             # for player in ranking_list:
             #     if player not in results_list:
@@ -516,13 +516,14 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
         "players": players_list,
         "characters": characters_list,
         "playlist": playlist,
-        "result": results_list
+        "result": ranking_list[:2] + results_list[2:]
     })
     order_list = flatten_last(repeated_players_list)
 
     events_stats_list.reverse()
     # for e in events_stats_list:
     #     print(e)
+    # print(ranking_list)
 
     with open(json_path, "w", encoding="utf8") as f:
         json.dump(events_stats_list, f)

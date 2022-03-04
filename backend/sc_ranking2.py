@@ -1,11 +1,16 @@
 import csv
 import json
+import sqlite3
+from sqlite3 import Error
 
 
 def load_fights(fights_path):
     '''
-    Input: csv files with data of fights.
-    Output: dictionary with the data from input.
+    Input:
+        * csv files with data of fights.
+    Outputs:
+        * Dictionary with the data from input.
+        * Dictionary with battle indexes.
     '''
     fights_dict = dict() # Output
 
@@ -20,7 +25,7 @@ def load_fights(fights_path):
             battles_list.append(battle)
 
     # indexes for csv headers
-    idx_dict = dict()
+    idx_dict = dict() # Output
     for i in range(len(battles_list[0])):
         idx_dict[battles_list[0][i]] = i
 
@@ -38,20 +43,191 @@ def load_fights(fights_path):
     duels_list.append(duel_fights_list)
 
     # Filling fights dict
-    fights_dict["PC"] = list()
-    fights_dict["PS4"] = list()
-    fights_dict["union"] = list()
-    fights_dict["event"] = dict()
+    # PC
+    fights_dict["PC"] = {
+        "data": {
+            "events": dict(),
+            "players": dict(),
+            "characters": dict()
+        },
+        "duels": list()
+    }
+    # PS4
+    fights_dict["PS4"] = {
+        "data": {
+            "events": dict(),
+            "players": dict(),
+            "characters": dict()
+        },
+        "duels": list()
+    }
+    # PC + PS4
+    fights_dict["union"] = {
+        "data": {
+            "events": dict(),
+            "players": dict(),
+            "characters": dict()
+        },
+        "duels": list()
+    }
+    # Events
+    fights_dict["events"] = dict()
+
     for duel in duels_list:
-        fights_dict["union"].append(duel)
+        # Union
+        fights_dict["union"]["duels"].append(duel)
+        fights_dict["union"]["data"]["events"][duel[0][idx_dict["event"]]] = {
+            "playlist": duel[0][idx_dict["playlist"]],
+            "brackets": duel[0][idx_dict["brackets"]]
+        }
+        for fight in duel:
+            # Player 1
+            if fights_dict["union"]["data"]["players"].get(fight[idx_dict["player1"]]):
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player1"]]]["events"][fight[idx_dict["event"]]] = ""
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player1"]]]["characters"][fight[idx_dict["character1"]]] = ""
+            else:
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player1"]]] = {
+                    "events": dict(),
+                    "characters": dict()
+                }
+            # Player 2
+            if fights_dict["union"]["data"]["players"].get(fight[idx_dict["player2"]]):
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player2"]]]["events"][fight[idx_dict["event"]]] = ""
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player2"]]]["characters"][fight[idx_dict["character2"]]] = ""
+            else:
+                fights_dict["union"]["data"]["players"][fight[idx_dict["player2"]]] = {
+                    "events": dict(),
+                    "characters": dict()
+                }
+            # Character 1
+            if fights_dict["union"]["data"]["characters"].get(fight[idx_dict["character1"]]):
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character1"]]]["events"][fight[idx_dict["event"]]] = ""
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character1"]]]["players"][fight[idx_dict["player1"]]] = ""
+            else:
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character1"]]] = {
+                    "events": dict(),
+                    "players": dict()
+                }
+            # Character 2
+            if fights_dict["union"]["data"]["characters"].get(fight[idx_dict["character2"]]):
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character2"]]]["events"][fight[idx_dict["event"]]] = ""
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character2"]]]["players"][fight[idx_dict["player2"]]] = ""
+            else:
+                fights_dict["union"]["data"]["characters"][fight[idx_dict["character2"]]] = {
+                    "events": dict(),
+                    "players": dict()
+                }
+
+        # PC
         if duel[0][idx_dict["platform"]] == "PC":
-            fights_dict["PC"].append(duel)
+            fights_dict["PC"]["duels"].append(duel)
+            fights_dict["PC"]["data"]["events"][duel[0][idx_dict["event"]]] = {
+                "playlist": duel[0][idx_dict["playlist"]],
+                "brackets": duel[0][idx_dict["brackets"]]
+            }
+            for fight in duel:
+                # Player 1
+                if fights_dict["PC"]["data"]["players"].get(fight[idx_dict["player1"]]):
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player1"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player1"]]]["characters"][fight[idx_dict["character1"]]] = ""
+                else:
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player1"]]] = {
+                        "events": dict(),
+                        "characters": dict()
+                    }
+                # Player 2
+                if fights_dict["PC"]["data"]["players"].get(fight[idx_dict["player2"]]):
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player2"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player2"]]]["characters"][fight[idx_dict["character2"]]] = ""
+                else:
+                    fights_dict["PC"]["data"]["players"][fight[idx_dict["player2"]]] = {
+                        "events": dict(),
+                        "characters": dict()
+                    }
+                # Character 1
+                if fights_dict["PC"]["data"]["characters"].get(fight[idx_dict["character1"]]):
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character1"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character1"]]]["players"][fight[idx_dict["player1"]]] = ""
+                else:
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character1"]]] = {
+                        "events": dict(),
+                        "players": dict()
+                    }
+                # Character 2
+                if fights_dict["PC"]["data"]["characters"].get(fight[idx_dict["character2"]]):
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character2"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character2"]]]["players"][fight[idx_dict["player2"]]] = ""
+                else:
+                    fights_dict["PC"]["data"]["characters"][fight[idx_dict["character2"]]] = {
+                        "events": dict(),
+                        "players": dict()
+                    }
+
+        # PS4
         if duel[0][idx_dict["platform"]] == "PS4":
-            fights_dict["PS4"].append(duel)
-        if fights_dict["event"].get(duel[0][idx_dict["event"]]):
-            fights_dict["event"][duel[0][idx_dict["event"]]].append(duel)
+            fights_dict["PS4"]["duels"].append(duel)
+            fights_dict["PS4"]["data"]["events"][duel[0][idx_dict["event"]]] = {
+                "playlist": duel[0][idx_dict["playlist"]],
+                "brackets": duel[0][idx_dict["brackets"]]
+            }
+            for fight in duel:
+                # Player 1
+                if fights_dict["PS4"]["data"]["players"].get(fight[idx_dict["player1"]]):
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player1"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player1"]]]["characters"][fight[idx_dict["character1"]]] = ""
+                else:
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player1"]]] = {
+                        "events": dict(),
+                        "characters": dict()
+                    }
+                # Player 2
+                if fights_dict["PS4"]["data"]["players"].get(fight[idx_dict["player2"]]):
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player2"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player2"]]]["characters"][fight[idx_dict["character2"]]] = ""
+                else:
+                    fights_dict["PS4"]["data"]["players"][fight[idx_dict["player2"]]] = {
+                        "events": dict(),
+                        "characters": dict()
+                    }
+                # Character 1
+                if fights_dict["PS4"]["data"]["characters"].get(fight[idx_dict["character1"]]):
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character1"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character1"]]]["players"][fight[idx_dict["player1"]]] = ""
+                else:
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character1"]]] = {
+                        "events": dict(),
+                        "players": dict()
+                    }
+                # Character 2
+                if fights_dict["PS4"]["data"]["characters"].get(fight[idx_dict["character2"]]):
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character2"]]]["events"][fight[idx_dict["event"]]] = ""
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character2"]]]["players"][fight[idx_dict["player2"]]] = ""
+                else:
+                    fights_dict["PS4"]["data"]["characters"][fight[idx_dict["character2"]]] = {
+                        "events": dict(),
+                        "players": dict()
+                    }
+
+        # Events
+        if fights_dict["events"].get(duel[0][idx_dict["event"]]):
+            fights_dict["events"][duel[0][idx_dict["event"]]]["duels"].append(duel)
+            fights_dict["events"][duel[0][idx_dict["event"]]]["data"]["playlist"] = duel[0][idx_dict["playlist"]]
+            fights_dict["events"][duel[0][idx_dict["event"]]]["data"]["brackets"] = duel[0][idx_dict["brackets"]]
         else:
-            fights_dict["event"][duel[0][idx_dict["event"]]] = [duel]
+            fights_dict["events"][duel[0][idx_dict["event"]]] = {
+                "data": dict(),
+                "duels": [duel]
+            }
+
+    fights_dict["players"] = dict()
+    players_set = set()
+    characters_set = set()
+    for battle in battles_list:
+        players_set.add(battle[idx_dict["player1"]])
+        players_set.add(battle[idx_dict["player2"]])
+        characters_set.add(battle[idx_dict["character1"]])
+        characters_set.add(battle[idx_dict["character2"]])
+    
 
     return fights_dict, idx_dict
 
@@ -696,7 +872,10 @@ def make_rankings_Pl(duels_list, idx_dict, point_system_obj):
 
     result = dict(sorted(ranking_plch.items(), key=lambda item: item[1].player_level, reverse=True))
     for k, v in result.items():
-        print(k, v.points_earned, v.wlr_fights, v.wlr_duels, v.player_level, v.wlr_duels*v.wlr_fights)
+        # print(k, v.points_earned, v.wlr_fights, v.wlr_duels, v.player_level, v.wlr_duels*v.wlr_fights, v.duels_win_rate, v.fights_win_rate)
+        print(k, v.duels_win_rate, v.fights_win_rate)
+        for pl, stat in v.player_stats.items():
+            print("\t" ,pl, stat.win_rate)
     return dict(sorted(ranking_plch.items(), key=lambda item: item[1].player_level, reverse=True))
 
 
@@ -736,7 +915,7 @@ point_system_obj = point_system(
 )
 
 # make_rankings_PlCh(fights_dict["PC"], idx_dict, point_system_obj)
-make_rankings_Pl(fights_dict["PC"], idx_dict, point_system_obj)
+# make_rankings_Pl(fights_dict["events"]["SSLT 7"], idx_dict, point_system_obj)
 
 json_path = "backend/json.json"
 with open(json_path, "w", encoding="utf8") as f:
