@@ -232,6 +232,10 @@ def load_fights(fights_path):
     return fights_dict, idx_dict
 
 
+def event_results_calculator(event_duels_list):
+    return
+
+
 class point_system:
     def __init__(self,
                  pw, # perfect win

@@ -17,6 +17,10 @@
                 "SSLT 7": {
                     "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy",
                     "brackets": "https://challonge.com/2b9d2rm0"
+                },
+                "SSLT 9": {
+                    "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq",
+                    "brackets": "https://challonge.com/es/2ja9lhxa"
                 }
             },
             "players": {
@@ -33,7 +37,8 @@
                 "raynarrok": {
                     "events": {
                         "SSLT 1": "",
-                        "SSLT 3": ""
+                        "SSLT 3": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Setsuka": "",
@@ -46,7 +51,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Ivy": "",
@@ -74,12 +80,14 @@
                 "Sigfrancis": {
                     "events": {
                         "SSLT 3": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Siegfried": "",
                         "Yoshimitsu": "",
-                        "Zasalamel": ""
+                        "Zasalamel": "",
+                        "Taki": ""
                     }
                 },
                 "DonMarlboro": {
@@ -134,11 +142,13 @@
                 "Fire Red": {
                     "events": {
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Taki": "",
-                        "Cassandra": ""
+                        "Cassandra": "",
+                        "Groh": ""
                     }
                 },
                 "Maxxus": {
@@ -161,13 +171,34 @@
                 },
                 "Camus": {
                     "events": {
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Kilik": "",
                         "Taki": "",
                         "Groh": "",
                         "Sophitia": ""
+                    }
+                },
+                "Kyorage": {
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "characters": {
+                        "Xianghua": "",
+                        "Taki": "",
+                        "Sophitia": "",
+                        "Hilde": "",
+                        "Nightmare": ""
+                    }
+                },
+                "Imano": {
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "characters": {
+                        "Haohmaru": ""
                     }
                 }
             },
@@ -177,18 +208,21 @@
                         "SSLT 1": "",
                         "SSLT 3": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "wylde": "",
                         "DonMarlboro": "",
-                        "Maxxus": ""
+                        "Maxxus": "",
+                        "Kyorage": ""
                     }
                 },
                 "Setsuka": {
                     "events": {
                         "SSLT 1": "",
-                        "SSLT 3": ""
+                        "SSLT 3": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "raynarrok": "",
@@ -200,7 +234,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Kovas": ""
@@ -240,11 +275,13 @@
                     "events": {
                         "SSLT 3": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "JaffarWolf": "",
-                        "Camus": ""
+                        "Camus": "",
+                        "Fire Red": ""
                     }
                 },
                 "Seong Mi-na": {
@@ -260,7 +297,8 @@
                 "Yoshimitsu": {
                     "events": {
                         "SSLT 3": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Sigfrancis": "",
@@ -269,16 +307,19 @@
                 },
                 "Hilde": {
                     "events": {
-                        "SSLT 3": ""
+                        "SSLT 3": "",
+                        "SSLT 9": ""
                     },
                     "players": {
-                        "raynarrok": ""
+                        "raynarrok": "",
+                        "Kyorage": ""
                     }
                 },
                 "Zasalamel": {
                     "events": {
                         "SSLT 3": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "raynarrok": "",
@@ -300,7 +341,8 @@
                 "Cassandra": {
                     "events": {
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Megarl": "",
@@ -310,20 +352,25 @@
                 },
                 "Sophitia": {
                     "events": {
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
-                        "Camus": ""
+                        "Camus": "",
+                        "Kyorage": ""
                     }
                 },
                 "Taki": {
                     "events": {
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Fire Red": "",
-                        "Camus": ""
+                        "Camus": "",
+                        "Sigfrancis": "",
+                        "Kyorage": ""
                     }
                 },
                 "2B": {
@@ -335,15 +382,36 @@
                     }
                 },
                 "Tira": {
-                    "events": {},
-                    "players": {}
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "players": {
+                        "Kovas": ""
+                    }
                 },
                 "Kilik": {
                     "events": {
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Camus": ""
+                    }
+                },
+                "Xianghua": {
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "players": {
+                        "Kyorage": ""
+                    }
+                },
+                "Haohmaru": {
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "players": {
+                        "Imano": ""
                     }
                 }
             }
@@ -563,6 +631,62 @@
                 ["Camus", "Sophitia", "DonMarlboro", "Nightmare", "14", "W", "LB", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                 ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "LB", "W", "LY", "W", "LB", "W", "LY", "W", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                 ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "PL", "LB", 0, "W", "LY", "PW", "W", 0, "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"]
+            ],
+            [
+                ["Kyorage", "Hilde", "Camus", "Kilik", "1", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Xianghua", "Camus", "Kilik", "1", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Sigfrancis", "Taki", "Fire Red", "Cassandra", "2", "W", "W", "W", 0, 0, "LY", "LY", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Sigfrancis", "Taki", "2", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Sigfrancis", "Taki", "Fire Red", "Taki", "2", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kovas", "Ivy", "raynarrok", "Hilde", "3", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/0FrbxP-gFdM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Sigfrancis", "Zasalamel", "Kyorage", "Taki", "4", "W", "LY", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Sigfrancis", "Yoshimitsu", "Kyorage", "Taki", "4", "W", "W", "W", 0, 0, "LY", "LB", "LB", 0, 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Sophitia", "Sigfrancis", "Yoshimitsu", "4", "W", "LB", "PW", "W", 0, "LB", "W", "PL", "LY", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Fire Red", "Cassandra", "Camus", "Kilik", "5", "PL", "LB", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "5", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kovas", "Ivy", "Imano", "Haohmaru", "6", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Imano", "Haohmaru", "Kovas", "Ivy", "6", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "W", "LB", "LB", "W", "W", "LB", "W", "W", "LY", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "raynarrok", "Setsuka", "7", "LY", "LB", "W", "W", "W", "W", "W", "LB", "LB", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kyorage", "Hilde", "Imano", "Haohmaru", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Nightmare", "Imano", "Haohmaru", "8", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Imano", "Haohmaru", "Kyorage", "Nightmare", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kyorage", "Xianghua", "Fire Red", "Groh", "9", "LB", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Sophitia", "Fire Red", "Groh", "9", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Camus", "Kilik", "Kovas", "Ivy", "10", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Camus", "Kilik", "10", "LY", "W", "LB", "LB", 0, "W", "LY", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Tira", "Camus", "Kilik", "10", "W", "LB", "LB", "LB", 0, "LB", "W", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Fire Red", "Groh", "Kovas", "Ivy", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LY", "W", "PW", "PL", "W", "W", "LY", "PL", "PW", "LY", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "LB", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Camus", "Kilik", "Fire Red", "Taki", "12", "W", "W", "LB", "LY", "W", "LB", "LB", "W", "W", "LY", "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
             ]
         ]
     },
@@ -580,6 +704,10 @@
                 "SSLT 6": {
                     "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t4-9o3vHI3_mXNJE5XryEwH",
                     "brackets": "https://challonge.com/6zk3bypp"
+                },
+                "SSLT 8": {
+                    "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr",
+                    "brackets": "https://challonge.com/aycj9qg6"
                 }
             },
             "players": {
@@ -597,10 +725,12 @@
                 "Junixart": {
                     "events": {
                         "SSLT 2": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
-                        "Talim": ""
+                        "Talim": "",
+                        "Seong Mi-na": ""
                     }
                 },
                 "raynarrok": {
@@ -626,7 +756,8 @@
                     "events": {
                         "SSLT 2": "",
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Seong Mi-na": "",
@@ -665,7 +796,8 @@
                 },
                 "Gontranno": {
                     "events": {
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Tira": "",
@@ -686,7 +818,8 @@
                 "Ozkuervo": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Maxi": ""
@@ -694,7 +827,8 @@
                 },
                 "Sebas": {
                     "events": {
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Yoshimitsu": ""
@@ -710,6 +844,31 @@
                         "Seong Mi-na": "",
                         "Siegfried": "",
                         "Taki": ""
+                    }
+                },
+                "Sigfrancis": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "characters": {
+                        "Hwang": "",
+                        "Xianghua": ""
+                    }
+                },
+                "DaiaNerdKilik": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "characters": {
+                        "Kilik": ""
+                    }
+                },
+                "Nightwing": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "characters": {
+                        "Maxi": ""
                     }
                 }
             },
@@ -728,7 +887,8 @@
                     "events": {
                         "SSLT 2": "",
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Junixart": "",
@@ -754,21 +914,25 @@
                 },
                 "Xianghua": {
                     "events": {
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Mastodon": "",
-                        "Kyorage": ""
+                        "Kyorage": "",
+                        "Sigfrancis": ""
                     }
                 },
                 "Seong Mi-na": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Mastodon": "",
-                        "Karol": ""
+                        "Karol": "",
+                        "Junixart": ""
                     }
                 },
                 "Nightmare": {
@@ -810,12 +974,14 @@
                 "Maxi": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Estebangris": "",
                         "Ozkuervo": "",
-                        "Sagadalius": ""
+                        "Sagadalius": "",
+                        "Nightwing": ""
                     }
                 },
                 "Haohmaru": {
@@ -824,7 +990,8 @@
                 },
                 "Tira": {
                     "events": {
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Gontranno": ""
@@ -837,7 +1004,8 @@
                 "Astaroth": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Gontranno": "",
@@ -867,7 +1035,8 @@
                 },
                 "Yoshimitsu": {
                     "events": {
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Sebas": "",
@@ -884,6 +1053,22 @@
                     },
                     "players": {
                         "Karol": ""
+                    }
+                },
+                "Hwang": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "players": {
+                        "Sigfrancis": ""
+                    }
+                },
+                "Kilik": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "players": {
+                        "DaiaNerdKilik": ""
                     }
                 }
             }
@@ -1046,6 +1231,73 @@
                 ["Junixart", "Talim", "Lang", "2B", "12", "W", "LY", "LB", "LY", 0, "LY", "W", "W", "W", 0, "https://youtu.be/fi6gL2gjBFI", "SSLT 6", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t4-9o3vHI3_mXNJE5XryEwH", "https://challonge.com/6zk3bypp", "PS4"],
                 ["Junixart", "Talim", "Lang", "2B", "12", "LB", "LB", "W", "LY", 0, "W", "W", "LB", "W", 0, "https://youtu.be/fi6gL2gjBFI", "SSLT 6", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t4-9o3vHI3_mXNJE5XryEwH", "https://challonge.com/6zk3bypp", "PS4"],
                 ["Junixart", "Talim", "Lang", "2B", "12", "LY", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/fi6gL2gjBFI", "SSLT 6", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t4-9o3vHI3_mXNJE5XryEwH", "https://challonge.com/6zk3bypp", "PS4"]
+            ],
+            [
+                ["Junixart", "Talim", "Mastodon", "Talim", "1", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Mastodon", "Talim", "Junixart", "Talim", "1", "W", "LY", "LY", "LY", 0, "LY", "W", "W", "W", 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sigfrancis", "Hwang", "Sebas", "Yoshimitsu", "3", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Sigfrancis", "Hwang", "3", "LB", "W", "W", "W", 0, "W", "LB", "LB", "LB", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Xianghua", "Sebas", "Yoshimitsu", "3", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["DaiaNerdKilik", "Kilik", "Nightwing", "Maxi", "4", "W", "W", "LY", "W", 0, "LY", "LB", "W", "LY", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Nightwing", "Maxi", "DaiaNerdKilik", "Kilik", "4", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "W", "LB", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sigfrancis", "Xianghua", "Nightwing", "Maxi", "6", "PL", "LB", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Nightwing", "Maxi", "Sigfrancis", "Xianghua", "6", "PL", "LY", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Hwang", "Nightwing", "Maxi", "6", "W", "PL", "W", "W", 0, "LB", "PW", "LB", "LB", 0, "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Junixart", "Talim", "7", "LB", "LB", "W", "LB", 0, "W", "W", "LB", "W", 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Tira", "Junixart", "Talim", "7", "PL", "LY", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "LB", "W", "PL", "W", "LB", "W", "LB", "PW", "LB", "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "DaiaNerdKilik", "Kilik", "8", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "W", "W", 0, 0, "LY", "LB", "LY", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Sigfrancis", "Xianghua", "9", "W", "W", "W", 0, 0, "LB", "LY", "LB", 0, 0, "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Hwang", "Gontranno", "Astaroth", "9", "W", "LY", "W", "LB", "LB", "LY", "W", "LB", "W", "W", "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "PL", "W", "LY", "LB", "LB", "PW", "LB", "W", "W", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "W", "LY", "LB", "W", "LB", "LY", "W", "W", "LB", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Mastodon", "Talim", "Sebas", "Yoshimitsu", "10", "LY", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "LB", "LY", "W", "W", "PW", "W", "W", "LY", "LB", "PL", "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Gontranno", "Astaroth", "11", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "W", "W", "LY", "PW", 0, "LY", "LY", "W", "PL", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LY", "W", "W", "LY", "W", "W", "LB", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "LY", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "DaiaNerdKilik", "Kilik", "13", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "W", "LY", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "LY", "LY", "W", "W", "W", "W", "W", "LY", "LB", "LY", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "PL", "W", "LB", "W", "LY", "PW", "LY", "W", "LB", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "W", "W", "PL", "W", 0, "LB", "LB", "PW", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "LY", "W", "W", "W", 0, "W", "LB", "LY", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
             ]
         ]
     },
@@ -1079,6 +1331,14 @@
                 "SSLT 7": {
                     "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy",
                     "brackets": "https://challonge.com/2b9d2rm0"
+                },
+                "SSLT 8": {
+                    "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr",
+                    "brackets": "https://challonge.com/aycj9qg6"
+                },
+                "SSLT 9": {
+                    "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq",
+                    "brackets": "https://challonge.com/es/2ja9lhxa"
                 }
             },
             "players": {
@@ -1096,7 +1356,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 2": "",
-                        "SSLT 3": ""
+                        "SSLT 3": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Setsuka": "",
@@ -1110,7 +1371,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Ivy": "",
@@ -1121,21 +1383,26 @@
                 "Kyorage": {
                     "events": {
                         "SSLT 2": "",
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Hilde": "",
                         "Nightmare": "",
-                        "Xianghua": ""
+                        "Xianghua": "",
+                        "Taki": "",
+                        "Sophitia": ""
                     }
                 },
                 "Junixart": {
                     "events": {
                         "SSLT 2": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
-                        "Talim": ""
+                        "Talim": "",
+                        "Seong Mi-na": ""
                     }
                 },
                 "Edu Bushi": {
@@ -1150,7 +1417,8 @@
                     "events": {
                         "SSLT 2": "",
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Seong Mi-na": "",
@@ -1178,12 +1446,17 @@
                 "Sigfrancis": {
                     "events": {
                         "SSLT 3": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 8": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Siegfried": "",
                         "Yoshimitsu": "",
-                        "Zasalamel": ""
+                        "Zasalamel": "",
+                        "Hwang": "",
+                        "Xianghua": "",
+                        "Taki": ""
                     }
                 },
                 "DonMarlboro": {
@@ -1249,7 +1522,8 @@
                 },
                 "Gontranno": {
                     "events": {
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Tira": "",
@@ -1270,7 +1544,8 @@
                 "Ozkuervo": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Maxi": ""
@@ -1296,11 +1571,13 @@
                 "Fire Red": {
                     "events": {
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Taki": "",
-                        "Cassandra": ""
+                        "Cassandra": "",
+                        "Groh": ""
                     }
                 },
                 "Maxxus": {
@@ -1323,7 +1600,8 @@
                 },
                 "Sebas": {
                     "events": {
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "characters": {
                         "Yoshimitsu": ""
@@ -1343,13 +1621,38 @@
                 },
                 "Camus": {
                     "events": {
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "characters": {
                         "Kilik": "",
                         "Taki": "",
                         "Groh": "",
                         "Sophitia": ""
+                    }
+                },
+                "DaiaNerdKilik": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "characters": {
+                        "Kilik": ""
+                    }
+                },
+                "Nightwing": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "characters": {
+                        "Maxi": ""
+                    }
+                },
+                "Imano": {
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "characters": {
+                        "Haohmaru": ""
                     }
                 }
             },
@@ -1361,7 +1664,8 @@
                         "SSLT 3": "",
                         "SSLT 4": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "wylde": "",
@@ -1374,7 +1678,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 2": "",
-                        "SSLT 3": ""
+                        "SSLT 3": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "raynarrok": "",
@@ -1386,7 +1691,8 @@
                     "events": {
                         "SSLT 1": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Kovas": ""
@@ -1396,7 +1702,8 @@
                     "events": {
                         "SSLT 2": "",
                         "SSLT 3": "",
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Kyorage": "",
@@ -1408,7 +1715,8 @@
                         "SSLT 2": "",
                         "SSLT 3": "",
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Junixart": "",
@@ -1429,11 +1737,14 @@
                 },
                 "Xianghua": {
                     "events": {
-                        "SSLT 4": ""
+                        "SSLT 4": "",
+                        "SSLT 8": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Mastodon": "",
-                        "Kyorage": ""
+                        "Kyorage": "",
+                        "Sigfrancis": ""
                     }
                 },
                 "Seong Mi-na": {
@@ -1441,13 +1752,15 @@
                         "SSLT 3": "",
                         "SSLT 4": "",
                         "SSLT 5": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Eche": "",
                         "Mastodon": "",
                         "Marv": "",
-                        "Karol": ""
+                        "Karol": "",
+                        "Junixart": ""
                     }
                 },
                 "Amy": {
@@ -1485,18 +1798,22 @@
                     "events": {
                         "SSLT 3": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "JaffarWolf": "",
-                        "Camus": ""
+                        "Camus": "",
+                        "Fire Red": ""
                     }
                 },
                 "Yoshimitsu": {
                     "events": {
                         "SSLT 3": "",
                         "SSLT 6": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 8": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Sigfrancis": "",
@@ -1509,7 +1826,8 @@
                     "events": {
                         "SSLT 3": "",
                         "SSLT 4": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "raynarrok": "",
@@ -1525,7 +1843,8 @@
                     "events": {
                         "SSLT 4": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Leospirandio": "",
@@ -1548,22 +1867,30 @@
                 "Maxi": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Estebangris": "",
                         "Ozkuervo": "",
-                        "Sagadalius": ""
+                        "Sagadalius": "",
+                        "Nightwing": ""
                     }
                 },
                 "Haohmaru": {
-                    "events": {},
-                    "players": {}
+                    "events": {
+                        "SSLT 9": ""
+                    },
+                    "players": {
+                        "Imano": ""
+                    }
                 },
                 "Tira": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 8": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Gontranno": "",
@@ -1577,7 +1904,8 @@
                 "Astaroth": {
                     "events": {
                         "SSLT 4": "",
-                        "SSLT 6": ""
+                        "SSLT 6": "",
+                        "SSLT 8": ""
                     },
                     "players": {
                         "Gontranno": "",
@@ -1588,12 +1916,14 @@
                     "events": {
                         "SSLT 4": "",
                         "SSLT 5": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Lang": "",
                         "Megarl": "",
-                        "Camus": ""
+                        "Camus": "",
+                        "Kyorage": ""
                     }
                 },
                 "2B": {
@@ -1611,20 +1941,34 @@
                     "events": {
                         "SSLT 5": "",
                         "SSLT 6": "",
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 9": ""
                     },
                     "players": {
                         "Fire Red": "",
                         "Karol": "",
-                        "Camus": ""
+                        "Camus": "",
+                        "Sigfrancis": "",
+                        "Kyorage": ""
                     }
                 },
                 "Kilik": {
                     "events": {
-                        "SSLT 7": ""
+                        "SSLT 7": "",
+                        "SSLT 8": "",
+                        "SSLT 9": ""
                     },
                     "players": {
-                        "Camus": ""
+                        "Camus": "",
+                        "DaiaNerdKilik": ""
+                    }
+                },
+                "Hwang": {
+                    "events": {
+                        "SSLT 8": ""
+                    },
+                    "players": {
+                        "Sigfrancis": ""
                     }
                 }
             }
@@ -2002,6 +2346,129 @@
                 ["Camus", "Sophitia", "DonMarlboro", "Nightmare", "14", "W", "LB", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                 ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "LB", "W", "LY", "W", "LB", "W", "LY", "W", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                 ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "PL", "LB", 0, "W", "LY", "PW", "W", 0, "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"]
+            ],
+            [
+                ["Junixart", "Talim", "Mastodon", "Talim", "1", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Mastodon", "Talim", "Junixart", "Talim", "1", "W", "LY", "LY", "LY", 0, "LY", "W", "W", "W", 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sigfrancis", "Hwang", "Sebas", "Yoshimitsu", "3", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Sigfrancis", "Hwang", "3", "LB", "W", "W", "W", 0, "W", "LB", "LB", "LB", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Xianghua", "Sebas", "Yoshimitsu", "3", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["DaiaNerdKilik", "Kilik", "Nightwing", "Maxi", "4", "W", "W", "LY", "W", 0, "LY", "LB", "W", "LY", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Nightwing", "Maxi", "DaiaNerdKilik", "Kilik", "4", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "W", "LB", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sigfrancis", "Xianghua", "Nightwing", "Maxi", "6", "PL", "LB", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Nightwing", "Maxi", "Sigfrancis", "Xianghua", "6", "PL", "LY", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Hwang", "Nightwing", "Maxi", "6", "W", "PL", "W", "W", 0, "LB", "PW", "LB", "LB", 0, "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Junixart", "Talim", "7", "LB", "LB", "W", "LB", 0, "W", "W", "LB", "W", 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Tira", "Junixart", "Talim", "7", "PL", "LY", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "LB", "W", "PL", "W", "LB", "W", "LB", "PW", "LB", "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "DaiaNerdKilik", "Kilik", "8", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "W", "W", 0, 0, "LY", "LB", "LY", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Sigfrancis", "Xianghua", "9", "W", "W", "W", 0, 0, "LB", "LY", "LB", 0, 0, "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sigfrancis", "Hwang", "Gontranno", "Astaroth", "9", "W", "LY", "W", "LB", "LB", "LY", "W", "LB", "W", "W", "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "PL", "W", "LY", "LB", "LB", "PW", "LB", "W", "W", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "W", "LY", "LB", "W", "LB", "LY", "W", "W", "LB", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Mastodon", "Talim", "Sebas", "Yoshimitsu", "10", "LY", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "LB", "LY", "W", "W", "PW", "W", "W", "LY", "LB", "PL", "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Sebas", "Yoshimitsu", "Gontranno", "Astaroth", "11", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "W", "W", "LY", "PW", 0, "LY", "LY", "W", "PL", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LY", "W", "W", "LY", "W", "W", "LB", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "LY", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Gontranno", "Astaroth", "DaiaNerdKilik", "Kilik", "13", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "W", "LY", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "LY", "LY", "W", "W", "W", "W", "W", "LY", "LB", "LY", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "PL", "W", "LB", "W", "LY", "PW", "LY", "W", "LB", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "W", "W", "PL", "W", 0, "LB", "LB", "PW", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "LY", "W", "W", "W", 0, "W", "LB", "LY", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+            ],
+            [
+                ["Kyorage", "Hilde", "Camus", "Kilik", "1", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Xianghua", "Camus", "Kilik", "1", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Sigfrancis", "Taki", "Fire Red", "Cassandra", "2", "W", "W", "W", 0, 0, "LY", "LY", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Sigfrancis", "Taki", "2", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Sigfrancis", "Taki", "Fire Red", "Taki", "2", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kovas", "Ivy", "raynarrok", "Hilde", "3", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/0FrbxP-gFdM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Sigfrancis", "Zasalamel", "Kyorage", "Taki", "4", "W", "LY", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Sigfrancis", "Yoshimitsu", "Kyorage", "Taki", "4", "W", "W", "W", 0, 0, "LY", "LB", "LB", 0, 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Sophitia", "Sigfrancis", "Yoshimitsu", "4", "W", "LB", "PW", "W", 0, "LB", "W", "PL", "LY", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Fire Red", "Cassandra", "Camus", "Kilik", "5", "PL", "LB", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "5", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kovas", "Ivy", "Imano", "Haohmaru", "6", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Imano", "Haohmaru", "Kovas", "Ivy", "6", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "W", "LB", "LB", "W", "W", "LB", "W", "W", "LY", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "raynarrok", "Setsuka", "7", "LY", "LB", "W", "W", "W", "W", "W", "LB", "LB", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kyorage", "Hilde", "Imano", "Haohmaru", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Nightmare", "Imano", "Haohmaru", "8", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Imano", "Haohmaru", "Kyorage", "Nightmare", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Kyorage", "Xianghua", "Fire Red", "Groh", "9", "LB", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kyorage", "Sophitia", "Fire Red", "Groh", "9", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Camus", "Kilik", "Kovas", "Ivy", "10", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Camus", "Kilik", "10", "LY", "W", "LB", "LB", 0, "W", "LY", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Tira", "Camus", "Kilik", "10", "W", "LB", "LB", "LB", 0, "LB", "W", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Fire Red", "Groh", "Kovas", "Ivy", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LY", "W", "PW", "PL", "W", "W", "LY", "PL", "PW", "LY", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "LB", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+            ],
+            [
+                ["Camus", "Kilik", "Fire Red", "Taki", "12", "W", "W", "LB", "LY", "W", "LB", "LB", "W", "W", "LY", "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
             ]
         ]
     },
@@ -2432,6 +2899,145 @@
                     ["Camus", "Sophitia", "DonMarlboro", "Nightmare", "14", "W", "LB", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                     ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "LB", "W", "LY", "W", "LB", "W", "LY", "W", "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"],
                     ["DonMarlboro", "Nightmare", "Camus", "Sophitia", "14", "LB", "W", "PL", "LB", 0, "W", "LY", "PW", "W", 0, "https://youtu.be/iEfLTJDiN9c", "SSLT 7", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5QgDpbtP9Xy7WQQvBBwNpy", "https://challonge.com/2b9d2rm0", "PC"]
+                ]
+            ]
+        },
+        "SSLT 8": {
+            "data": {
+                "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr",
+                "brackets": "https://challonge.com/aycj9qg6"
+            },
+            "duels": [
+                [
+                    ["Junixart", "Talim", "Mastodon", "Talim", "1", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Mastodon", "Talim", "Junixart", "Talim", "1", "W", "LY", "LY", "LY", 0, "LY", "W", "W", "W", 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Sigfrancis", "Hwang", "Sebas", "Yoshimitsu", "3", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sebas", "Yoshimitsu", "Sigfrancis", "Hwang", "3", "LB", "W", "W", "W", 0, "W", "LB", "LB", "LB", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sigfrancis", "Xianghua", "Sebas", "Yoshimitsu", "3", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["DaiaNerdKilik", "Kilik", "Nightwing", "Maxi", "4", "W", "W", "LY", "W", 0, "LY", "LB", "W", "LY", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Nightwing", "Maxi", "DaiaNerdKilik", "Kilik", "4", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "W", "LB", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Sigfrancis", "Xianghua", "Nightwing", "Maxi", "6", "PL", "LB", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Nightwing", "Maxi", "Sigfrancis", "Xianghua", "6", "PL", "LY", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sigfrancis", "Hwang", "Nightwing", "Maxi", "6", "W", "PL", "W", "W", 0, "LB", "PW", "LB", "LB", 0, "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Gontranno", "Astaroth", "Junixart", "Talim", "7", "LB", "LB", "W", "LB", 0, "W", "W", "LB", "W", 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Gontranno", "Tira", "Junixart", "Talim", "7", "PL", "LY", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "LB", "W", "PL", "W", "LB", "W", "LB", "PW", "LB", "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sebas", "Yoshimitsu", "DaiaNerdKilik", "Kilik", "8", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "W", "W", 0, 0, "LY", "LB", "LY", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Gontranno", "Astaroth", "Sigfrancis", "Xianghua", "9", "W", "W", "W", 0, 0, "LB", "LY", "LB", 0, 0, "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sigfrancis", "Hwang", "Gontranno", "Astaroth", "9", "W", "LY", "W", "LB", "LB", "LY", "W", "LB", "W", "W", "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "PL", "W", "LY", "LB", "LB", "PW", "LB", "W", "W", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "W", "LY", "LB", "W", "LB", "LY", "W", "W", "LB", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Mastodon", "Talim", "Sebas", "Yoshimitsu", "10", "LY", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "LB", "LY", "W", "W", "PW", "W", "W", "LY", "LB", "PL", "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Sebas", "Yoshimitsu", "Gontranno", "Astaroth", "11", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "W", "W", "LY", "PW", 0, "LY", "LY", "W", "PL", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LY", "W", "W", "LY", "W", "W", "LB", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "LY", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Gontranno", "Astaroth", "DaiaNerdKilik", "Kilik", "13", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "W", "LY", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ],
+                [
+                    ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "LY", "LY", "W", "W", "W", "W", "W", "LY", "LB", "LY", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "PL", "W", "LB", "W", "LY", "PW", "LY", "W", "LB", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "W", "W", "PL", "W", 0, "LB", "LB", "PW", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
+                    ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "LY", "W", "W", "W", 0, "W", "LB", "LY", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+                ]
+            ]
+        },
+        "SSLT 9": {
+            "data": {
+                "playlist": "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq",
+                "brackets": "https://challonge.com/es/2ja9lhxa"
+            },
+            "duels": [
+                [
+                    ["Kyorage", "Hilde", "Camus", "Kilik", "1", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kyorage", "Xianghua", "Camus", "Kilik", "1", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FH4VdxgcIaw", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Sigfrancis", "Taki", "Fire Red", "Cassandra", "2", "W", "W", "W", 0, 0, "LY", "LY", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Sigfrancis", "Taki", "2", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Sigfrancis", "Taki", "Fire Red", "Taki", "2", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/adKgxej7qpU", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Kovas", "Ivy", "raynarrok", "Hilde", "3", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/0FrbxP-gFdM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Sigfrancis", "Zasalamel", "Kyorage", "Taki", "4", "W", "LY", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Sigfrancis", "Yoshimitsu", "Kyorage", "Taki", "4", "W", "W", "W", 0, 0, "LY", "LB", "LB", 0, 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kyorage", "Sophitia", "Sigfrancis", "Yoshimitsu", "4", "W", "LB", "PW", "W", 0, "LB", "W", "PL", "LY", 0, "https://youtu.be/SsF6UEa2xtE", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Fire Red", "Cassandra", "Camus", "Kilik", "5", "PL", "LB", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Camus", "Kilik", "5", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/MAPngj03kJQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Kovas", "Ivy", "Imano", "Haohmaru", "6", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Imano", "Haohmaru", "Kovas", "Ivy", "6", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/A4cOc3pbzPo", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "W", "LB", "LB", "W", "W", "LB", "W", "W", "LY", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "raynarrok", "Setsuka", "7", "LY", "LB", "W", "W", "W", "W", "W", "LB", "LB", "LY", "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["raynarrok", "Setsuka", "Fire Red", "Taki", "7", "LB", "LB", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/ZKdkpXajD1c", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Kyorage", "Hilde", "Imano", "Haohmaru", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kyorage", "Nightmare", "Imano", "Haohmaru", "8", "W", "W", "W", 0, 0, "LB", "LB", "LY", 0, 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Imano", "Haohmaru", "Kyorage", "Nightmare", "8", "LB", "W", "LB", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/x1M_XMBLqdQ", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Kyorage", "Xianghua", "Fire Red", "Groh", "9", "LB", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kyorage", "Sophitia", "Fire Red", "Groh", "9", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/nzGylExsar8", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Camus", "Kilik", "Kovas", "Ivy", "10", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kovas", "Ivy", "Camus", "Kilik", "10", "LY", "W", "LB", "LB", 0, "W", "LY", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kovas", "Tira", "Camus", "Kilik", "10", "W", "LB", "LB", "LB", 0, "LB", "W", "W", "W", 0, "https://youtu.be/lv1Jrur2M38", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Fire Red", "Groh", "Kovas", "Ivy", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LY", "W", "PW", "PL", "W", "W", "LY", "PL", "PW", "LY", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Kovas", "Ivy", "11", "W", "W", "LY", "LY", "W", "LB", "LB", "W", "W", "LB", "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Kovas", "Ivy", "Fire Red", "Taki", "11", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/gojsyG2DDAM", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
+                ],
+                [
+                    ["Camus", "Kilik", "Fire Red", "Taki", "12", "W", "W", "LB", "LY", "W", "LB", "LB", "W", "W", "LY", "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"],
+                    ["Fire Red", "Taki", "Camus", "Kilik", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/6Ov08Pl2-eY", "SSLT 9", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t5nA6XGgwlhS_2XrL8XvdYq", "https://challonge.com/es/2ja9lhxa", "PC"]
                 ]
             ]
         }

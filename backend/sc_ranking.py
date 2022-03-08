@@ -434,6 +434,35 @@ def normalize_string_length(strings_list):
     return normalized_list
 
 
+def players_positions(battles_list):
+    event = battles_list[1][-4]
+    event_fights_list = [battles_list[1]]
+    event_duels_list = list()
+    for battle in battles_list:
+        if battle[-4] == event:
+            event_fights_list.append(battle)
+        else:
+            event_duels_list.append(event_fights_list)
+            event = battle[-4]
+            event_fights_list = [battle]
+    event_duels_list.append(event_fights_list)
+
+    for e in event_duels_list:
+        print(e)
+
+    duel = battles_list[1][4]
+    duel_fights_list = [battles_list[1]]
+    duels_list = list()
+    for battle in battles_list[2:]:
+        if battle[4] == duel:
+            duel_fights_list.append(battle)
+        else:
+            duels_list.append(duel_fights_list)
+            duel = battle[4]
+            duel_fights_list = [battle]
+    duels_list.append(duel_fights_list)
+
+
 def event_stats_generator(battles_list, point_system_obj, json_path):
     events_stats_list = list()
     players_set = set()
@@ -470,11 +499,6 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
             for player in entities_dict.keys():
                 ranking_list.append(player)
             results_list = order_list
-            # results_list = order_list[:4]
-            # for player in ranking_list:
-            #     if player not in results_list:
-            #         results_list.append(player)
-            # normalize_string_length(results_list)
             players_list = list(players_set)
             characters_list = list(characters_set)
             players_list.sort()
@@ -485,7 +509,7 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
                 "players": players_list,
                 "characters": characters_list,
                 "playlist": playlist,
-                "result": results_list
+                "result": ranking_list[:2] + results_list[2:]
             })
             event = battles_list[i][-4]
             platform = battles_list[i][-1]
@@ -501,11 +525,6 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
     for player in entities_dict.keys():
         ranking_list.append(player)
     results_list = order_list
-    # results_list = order_list[:4]
-    # for player in ranking_list:
-    #     if player not in results_list:
-    #         results_list.append(player)
-    # normalize_string_length(results_list)
     players_list = list(players_set)
     characters_list = list(characters_set)
     players_list.sort()
@@ -523,7 +542,6 @@ def event_stats_generator(battles_list, point_system_obj, json_path):
     events_stats_list.reverse()
     # for e in events_stats_list:
     #     print(e)
-    # print(ranking_list)
 
     with open(json_path, "w", encoding="utf8") as f:
         json.dump(events_stats_list, f)
@@ -581,3 +599,5 @@ ranking_dict_to_json(entities_dict_ch_union, json_ch_union_path)
 
 json_event_stats_path = "src/assets/data/event_stats.json"
 event_stats_generator(fights_list, point_system_obj, json_event_stats_path)
+
+# players_positions(fights_list)
