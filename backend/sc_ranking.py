@@ -238,8 +238,11 @@ class player_data:
     def calculate_wlr(self):
         if self.lost_battles == 0:
             self.wlr = self.won_battles + (self.draw_battles / 2)
-        elif self.won_battles == 0:
-            self.wlr = (1 + (self.draw_battles / 2)) / self.lost_battles
+        elif self.won_battles + self.draw_battles == 0:
+            # self.wlr = (1 + (self.draw_battles / 2)) / self.lost_battles
+            self.wlr = 1 / self.lost_battles
+        elif self.lost_battles == 1:
+            self.wlr = (self.won_battles + (self.draw_battles / 2)) * 3/4
         else:
             self.wlr = (self.won_battles + (self.draw_battles / 2)) / self.lost_battles
 

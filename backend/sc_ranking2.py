@@ -233,6 +233,8 @@ def load_fights(fights_path):
 
 
 def event_results_calculator(event_duels_list):
+    # for duel in event_duels_list:
+
     return
 
 
