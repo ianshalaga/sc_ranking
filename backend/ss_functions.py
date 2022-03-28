@@ -1,14 +1,23 @@
+import json
+from unittest import result
 
 
-
-def calculate_battle_winner(battle, battle_idx_dict):
+def calculate_battle_winner(battle, battle_idx_dict, win_conditions):
+    '''
+    Inputs:
+        Battle list.
+        Indexes for the battle list.
+        Win conditions strings.
+    Output:
+        Battle winner.
+    '''
     winner = ""
     p1_won_rounds = 0
     p2_won_rounds = 0
     for round in range(battle_idx_dict["r1_p1"], battle_idx_dict["r1_p1"]+5):
-        if battle[round] == "W" or battle[round] == "PW":
+        if battle[round] in win_conditions:
             p1_won_rounds += 1
-        if battle[round+5] == "W" or battle[round+5] == "PW":
+        if battle[round+5] in win_conditions:
             p2_won_rounds += 1
         if (battle[round] or battle[round+5]) == "D":
             p1_won_rounds += 1
@@ -22,7 +31,7 @@ def calculate_battle_winner(battle, battle_idx_dict):
     return winner
 
 
-def calculate_duel_winner(duel, battle_idx_dict):
+def calculate_duel_winner(duel, battle_idx_dict, win_conditions):
     winner = ""
     loser = ""
     p1 = duel[0][battle_idx_dict["player1"]]
@@ -30,7 +39,7 @@ def calculate_duel_winner(duel, battle_idx_dict):
     p1_won_fights = 0
     p2_won_fights = 0
     for fight in duel:
-        result = calculate_battle_winner(fight, battle_idx_dict)
+        result = calculate_battle_winner(fight, battle_idx_dict, win_conditions)
         if result == p1:
             p1_won_fights += 1
         if result == p2:
@@ -47,6 +56,9 @@ def calculate_duel_winner(duel, battle_idx_dict):
 
 
 def get_event_players(event_duels, battle_idx_dict):
+    '''
+    List of players in te event.
+    '''
     players_set = set()
     for duel in event_duels:
         players_set.add(duel[0][battle_idx_dict["player1"]])
@@ -60,45 +72,56 @@ def get_win_lose_ratio(wins, loses):
     wlr = 0
     if loses == 0:
         wlr = wins
+    elif wins == 0:
+        wlr = 0.5/loses
+    elif loses == 1:
+        wlr = wins*0.75
     else:
         wlr = wins / loses
     return wlr
 
 
-def calculate_event_results(event_duels, battle_idx_dict):
+def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
     players_list = get_event_players(event_duels, battle_idx_dict)
     players_dict = dict()
 
     for player in players_list:
         players_dict[player] = {
             "wlr": 0,
-            "buchholz_wins": 0,
+            # "buchholz_wins": 0,
             "buchholz_wlr": 0,
-            "rivals": set(),
+            # "rivals": set(),
+            "rivals": list(),
             "wins": 0,
             "loses": 0
         }
 
     for duel in event_duels:
-        winner, loser = calculate_duel_winner(duel, battle_idx_dict)
+        winner, loser = calculate_duel_winner(duel, battle_idx_dict, win_conditions)
         players_dict[winner]["wins"] += 1
         players_dict[loser]["loses"] += 1
-        players_dict[winner]["rivals"].add(loser)
-        players_dict[loser]["rivals"].add(winner)
+        # players_dict[winner]["rivals"].add(loser)
+        # players_dict[loser]["rivals"].add(winner)
+        players_dict[winner]["rivals"].append(loser)
+        players_dict[loser]["rivals"].append(winner)
     
     for player, data in players_dict.items():
         players_dict[player]["wlr"] = get_win_lose_ratio(players_dict[player]["wins"], players_dict[player]["loses"])
 
     for player, data in players_dict.items():
         for rival in data["rivals"]:
-            players_dict[player]["buchholz_wins"] += players_dict[rival]["wins"]
+            # players_dict[player]["buchholz_wins"] += players_dict[rival]["wins"]
             players_dict[player]["buchholz_wlr"] += players_dict[rival]["wlr"]
 
-    dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wins"], item[1]["buchholz_wlr"]), reverse=True))
+    # dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wins"], item[1]["buchholz_wlr"]), reverse=True))
+    dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wlr"]), reverse=True))
+    results = list()
 
     for k, v in dic.items():
-        print(k, v, "\n")
+        # print(k, v, "\n")
+        results.append(k)
 
+    return results
 
 battle_idx_dict = {
     "player1": 0,
@@ -133,76 +156,81 @@ duel = [
 
 event_duels = [
     [
-        ["Junixart", "Talim", "Mastodon", "Talim", "1", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Mastodon", "Talim", "Junixart", "Talim", "1", "W", "LY", "LY", "LY", 0, "LY", "W", "W", "W", 0, "https://youtu.be/ak9W5B2P4Jk", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Fire Red", "Groh", "wylde", "Nightmare", "1", "LB", "W", "LB", "W", "LB", "W", "LY", "W", "LB", "W", "https://youtu.be/rMA50_1354o", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Fire Red", "Taki", "wylde", "Nightmare", "1", "PL", "LB", "W", "W", "LB", "PW", "W", "LB", "LB", "W", "https://youtu.be/rMA50_1354o", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Ozkuervo", "Maxi", "Gontranno", "Tira", "2", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/uzQB44CUvVU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Kovas", "Ivy", "Imano", "Haohmaru", "2", "W", "W", "W", 0, 0, "LB", "LY", "LB", 0, 0, "https://youtu.be/cr5BiU9rC24", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Imano", "Haohmaru", "Kovas", "Ivy", "2", "LB", "W", "W", "LY", "W", "W", "LB", "LB", "W", "LY", "https://youtu.be/cr5BiU9rC24", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Kovas", "Ivy", "Imano", "Haohmaru", "2", "W", "LB", "W", "W", 0, "LB", "W", "LB", "LB", 0, "https://youtu.be/cr5BiU9rC24", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Sigfrancis", "Hwang", "Sebas", "Yoshimitsu", "3", "W", "W", "W", 0, 0, "LY", "LY", "LY", 0, 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sebas", "Yoshimitsu", "Sigfrancis", "Hwang", "3", "LB", "W", "W", "W", 0, "W", "LB", "LB", "LB", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sigfrancis", "Xianghua", "Sebas", "Yoshimitsu", "3", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/oNOlPtE1l4c", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["JaffarWolf", "Yoshimitsu", "Sigfrancis", "Yoshimitsu", "3", "W", "LB", "W", "W", 0, "LB", "W", "LB", "LY", 0, "https://youtu.be/xLtq7FRKzho", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Sigfrancis", "Siegfried", "JaffarWolf", "Yoshimitsu", "3", "LY", "W", "LY", "W", "W", "W", "LB", "W", "LB", "LY", "https://youtu.be/xLtq7FRKzho", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "Sigfrancis", "Siegfried", "3", "W", "W", "LY", "LY", "W", "LY", "LY", "W", "W", "LY", "https://youtu.be/xLtq7FRKzho", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["DaiaNerdKilik", "Kilik", "Nightwing", "Maxi", "4", "W", "W", "LY", "W", 0, "LY", "LB", "W", "LY", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Nightwing", "Maxi", "DaiaNerdKilik", "Kilik", "4", "LB", "W", "LB", "LY", 0, "W", "LB", "W", "W", 0, "https://youtu.be/mYn2LmZ_LR4", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["raynarrok", "Azwel", "wylde", "Nightmare", "4", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/9-P2rhzFXZc", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["raynarrok", "Xianghua", "wylde", "Nightmare", "4", "LY", "W", "LY", "LB", 0, "W", "LB", "W", "W", 0, "https://youtu.be/9-P2rhzFXZc", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Ozkuervo", "Maxi", "Mastodon", "Seong Mi-na", "5", "W", "LB", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/Syy-a_12a6M", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Sigfrancis", "Hwang", "Imano", "Haohmaru", "5", "LB", "W", "W", "W", 0, "W", "LB", "LY", "LY", 0, "https://youtu.be/FFL-Zzs8Fdc", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Imano", "Haohmaru", "Sigfrancis", "Hwang", "5", "LB", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/FFL-Zzs8Fdc", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Sigfrancis", "Xianghua", "Nightwing", "Maxi", "6", "PL", "LB", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Nightwing", "Maxi", "Sigfrancis", "Xianghua", "6", "PL", "LY", "W", "W", "W", "PW", "W", "LB", "LB", "LB", "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sigfrancis", "Hwang", "Nightwing", "Maxi", "6", "W", "PL", "W", "W", 0, "LB", "PW", "LB", "LB", 0, "https://youtu.be/MaQ1XYpghkE", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["JaffarWolf", "Yoshimitsu", "Kovas", "Ivy", "6", "W", "LY", "PW", "LB", "LY", "LY", "W", "PL", "W", "W", "https://youtu.be/kx2h-oxhJ0I", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "Kovas", "Ivy", "6", "LB", "LB", "PW", "W", "W", "W", "W", "PL", "LB", "LB", "https://youtu.be/kx2h-oxhJ0I", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Kovas", "Ivy", "JaffarWolf", "Yoshimitsu", "6", "W", "LY", "PL", "PW", "LB", "LB", "W", "PW", "PL", "W", "https://youtu.be/kx2h-oxhJ0I", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Gontranno", "Astaroth", "Junixart", "Talim", "7", "LB", "LB", "W", "LB", 0, "W", "W", "LB", "W", 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Gontranno", "Tira", "Junixart", "Talim", "7", "PL", "LY", "LY", 0, 0, "PW", "W", "W", 0, 0, "https://youtu.be/RlhghCiJQUA", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Sigfrancis", "Zasalamel", "raynarrok", "Azwel", "7", "W", "PW", "W", 0, 0, "LY", "PL", "LB", 0, 0, "https://youtu.be/nJ8fM7o3vDo", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["raynarrok", "Amy", "Sigfrancis", "Zasalamel", "7", "LB", "LB", "W", "W", "LY", "W", "W", "LB", "LB", "W", "https://youtu.be/nJ8fM7o3vDo", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "LB", "W", "PL", "W", "LB", "W", "LB", "PW", "LB", "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sebas", "Yoshimitsu", "DaiaNerdKilik", "Kilik", "8", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["DaiaNerdKilik", "Kilik", "Sebas", "Yoshimitsu", "8", "W", "W", "W", 0, 0, "LY", "LB", "LY", 0, 0, "https://youtu.be/_urBSSl9SLM", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Fire Red", "Groh", "Kovas", "Ivy", "8", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/voTfqBWDXFQ", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Fire Red", "Taki", "Kovas", "Ivy", "8", "LB", "LY", "W", "LY", 0, "W", "W", "LY", "W", 0, "https://youtu.be/voTfqBWDXFQ", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Gontranno", "Astaroth", "Sigfrancis", "Xianghua", "9", "W", "W", "W", 0, 0, "LB", "LY", "LB", 0, 0, "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sigfrancis", "Hwang", "Gontranno", "Astaroth", "9", "W", "LY", "W", "LB", "LB", "LY", "W", "LB", "W", "W", "https://youtu.be/BTKQ9FQi5Ns", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "9", "LY", "W", "PL", "LB", 0, "W", "LB", "PW", "W", 0, "https://youtu.be/NbBkX0ZMea8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "9", "LB", "W", "LY", "LB", 0, "W", "LY", "W", "W", 0, "https://youtu.be/NbBkX0ZMea8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "9", "LY", "W", "W", "W", 0, "W", "LY", "LB", "LB", 0, "https://youtu.be/NbBkX0ZMea8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["wylde", "Nightmare", "JaffarWolf", "Yoshimitsu", "9", "LB", "W", "W", "LB", "LB", "W", "LB", "LB", "W", "W", "https://youtu.be/NbBkX0ZMea8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["wylde", "Nightmare", "JaffarWolf", "Yoshimitsu", "9", "W", "LB", "LY", "W", "PL", "LY", "W", "W", "LB", "PW", "https://youtu.be/NbBkX0ZMea8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "PL", "W", "LY", "LB", "LB", "PW", "LB", "W", "W", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sebas", "Yoshimitsu", "Mastodon", "Talim", "10", "W", "W", "LY", "LB", "W", "LB", "LY", "W", "W", "LB", "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Mastodon", "Talim", "Sebas", "Yoshimitsu", "10", "LY", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/TEGV1S7tsgc", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Sigfrancis", "Hwang", "Kovas", "Ivy", "10", "LB", "W", "W", "LY", "W", "W", "LB", "LY", "W", "LY", "https://youtu.be/Odxqu1bx0tU", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Kovas", "Ivy", "Sigfrancis", "Hwang", "10", "LB", "LY", "W", "W", "LB", "W", "W", "LY", "LB", "W", "https://youtu.be/Odxqu1bx0tU", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "LB", "LY", "W", "W", "PW", "W", "W", "LY", "LB", "PL", "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Sebas", "Yoshimitsu", "Gontranno", "Astaroth", "11", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Gontranno", "Astaroth", "Sebas", "Yoshimitsu", "11", "W", "W", "LY", "PW", 0, "LY", "LY", "W", "PL", 0, "https://youtu.be/pVeVUHu0y3Y", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["Sigfrancis", "Siegfried", "wylde", "Nightmare", "11", "LB", "PL", "W", "W", "LB", "W", "PW", "LB", "LB", "W", "https://youtu.be/C8M_-WxAZE0", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Sigfrancis", "Siegfried", "wylde", "Nightmare", "11", "LB", "LY", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/C8M_-WxAZE0", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["Sigfrancis", "Yoshimitsu", "wylde", "Nightmare", "11", "LY", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/C8M_-WxAZE0", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "W", "LB", "W", 0, "LB", "LB", "W", "LY", 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LY", "W", "W", "LY", "W", "W", "LB", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Junixart", "Talim", "DaiaNerdKilik", "Kilik", "12", "W", "LY", "W", "LY", "W", "LB", "W", "LB", "W", "LB", "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["DaiaNerdKilik", "Kilik", "Junixart", "Talim", "12", "LB", "LY", "LY", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/pbXtjMq-E7E", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "12", "LB", "LB", "W", "PL", 0, "W", "W", "LY", "PW", 0, "https://youtu.be/Pf-wvdCSEj8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "12", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/Pf-wvdCSEj8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "12", "LB", "W", "LY", "W", "LB", "W", "LB", "W", "LY", "W", "https://youtu.be/Pf-wvdCSEj8", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ],
     [
-        ["Gontranno", "Astaroth", "DaiaNerdKilik", "Kilik", "13", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "W", "LY", "LY", "W", "LY", "LB", "W", "W", "LY", "W", "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["DaiaNerdKilik", "Kilik", "Gontranno", "Astaroth", "13", "LB", "PL", "LB", 0, 0, "W", "PW", "W", 0, 0, "https://youtu.be/u8xopJvZLBU", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
-    ],
-    [
-        ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "W", "W", 0, 0, "LB", "LB", "LB", 0, 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "LY", "LY", "W", "W", "W", "W", "W", "LY", "LB", "LY", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "W", "PL", "W", "LB", "W", "LY", "PW", "LY", "W", "LB", "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Gontranno", "Astaroth", "Junixart", "Seong Mi-na", "14", "W", "W", "PL", "W", 0, "LB", "LB", "PW", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"],
-        ["Junixart", "Seong Mi-na", "Gontranno", "Astaroth", "14", "LY", "W", "W", "W", 0, "W", "LB", "LY", "LB", 0, "https://youtu.be/jFrDUvN7g_o", "SSLT 8", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t70_LzcNxUNjh4fZFv49uRr", "https://challonge.com/aycj9qg6", "PS4"]
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "13", "W", "LB", "LB", "LB", 0, "LY", "W", "W", "W", 0, "https://youtu.be/QvdLUsXOdrM", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "13", "LY", "LB", "LB", 0, 0, "W", "W", "W", 0, 0, "https://youtu.be/QvdLUsXOdrM", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"],
+        ["JaffarWolf", "Yoshimitsu", "wylde", "Nightmare", "13", "LB", "W", "LY", "W", "LY", "W", "LY", "W", "LY", "W", "https://youtu.be/QvdLUsXOdrM", "SSLT 11", "https://www.youtube.com/embed/videoseries?list=PL90QAKwVH1t7qd1ccQTkclZDIKJHr6J5_", "https://challonge.com/es/n6aamya3", "PC"]
     ]
 ]
 
-# print(calculate_battle_winner(battle, battle_idx_dict))
+total_duels = ""
+json_path = "backend/json.json"
+with open(json_path, "r", encoding="utf8") as f:
+    total_duels = json.load(f)
 
-# print(calculate_duel_winner(duel, battle_idx_dict))
+# print(total_duels["union"]["duels"])
 
-calculate_event_results(event_duels, battle_idx_dict)
+win_conditions = ["PW", "W", "WB", "WY"]
+
+# print(calculate_battle_winner(battle, battle_idx_dict, win_conditions))
+
+# print(calculate_duel_winner(duel, battle_idx_dict, win_conditions))
+
+calculate_event_results(event_duels, battle_idx_dict, win_conditions)
+
+# calculate_event_results(total_duels["union"]["duels"], battle_idx_dict, win_conditions)
