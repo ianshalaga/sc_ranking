@@ -1,5 +1,42 @@
 import json
-from unittest import result
+import csv
+
+
+
+def load_csv_data(csv_data_path):
+    '''
+    Input:
+        CSV file with data of fights.
+    Outputs:
+        Dictionary with the data from input.
+        Dictionary with battle indexes.
+    '''
+
+    # csv to list
+    battles_list = list()
+    with open(csv_data_path, encoding="utf8") as f:
+        csv_reader = csv.reader(f, delimiter=',', quoting=csv.QUOTE_ALL)
+        for battle in csv_reader:
+            for e in range(len(battle)):
+                if battle[e] == "0":
+                    battle[e] = 0
+            battles_list.append(battle)
+
+    # indexes for csv headers
+    idx_dict = dict() # Output
+    for i in range(len(battles_list[0])):
+        idx_dict[battles_list[0][i]] = i
+
+    columns_dict = dict()
+    for e in idx_dict.keys():
+        columns_dict[e] = list()
+    for battle in battles_list[1:]:
+        for column in idx_dict.keys():
+            columns_dict[column].append(battle[idx_dict[column]])
+    for column, content in columns_dict.items():
+        columns_dict[column] = list(set(content))
+
+    return columns_dict, battles_list[1:], idx_dict
 
 
 def calculate_battle_winner(battle, battle_idx_dict, win_conditions):
@@ -32,6 +69,14 @@ def calculate_battle_winner(battle, battle_idx_dict, win_conditions):
 
 
 def calculate_duel_winner(duel, battle_idx_dict, win_conditions):
+    '''
+    Inputs:
+        Duel (List of battles).
+        Indexes for the battle list.
+        Win conditions strings.
+    Outputs:
+        Duel winner and loser.
+    '''
     winner = ""
     loser = ""
     p1 = duel[0][battle_idx_dict["player1"]]
@@ -57,7 +102,11 @@ def calculate_duel_winner(duel, battle_idx_dict, win_conditions):
 
 def get_event_players(event_duels, battle_idx_dict):
     '''
-    List of players in te event.
+    Inputs:
+        List of duels from an event.
+        Indexes for the battle list.
+    Output:
+        List of players in the event.
     '''
     players_set = set()
     for duel in event_duels:
@@ -69,6 +118,13 @@ def get_event_players(event_duels, battle_idx_dict):
 
 
 def get_win_lose_ratio(wins, loses):
+    '''
+    Inputs:
+        Duels wins.
+        Duels loses.
+    Output:
+        Win-lose ratio for duels.
+    '''
     wlr = 0
     if loses == 0:
         wlr = wins
@@ -82,15 +138,21 @@ def get_win_lose_ratio(wins, loses):
 
 
 def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
+    '''
+    Inputs:
+        List of duels from an event.
+        Indexes for the battle list.
+        Win conditions strings.
+    Output:
+        Event results list ordered from best to worst.
+    '''
     players_list = get_event_players(event_duels, battle_idx_dict)
     players_dict = dict()
 
     for player in players_list:
         players_dict[player] = {
             "wlr": 0,
-            # "buchholz_wins": 0,
             "buchholz_wlr": 0,
-            # "rivals": set(),
             "rivals": list(),
             "wins": 0,
             "loses": 0
@@ -100,8 +162,6 @@ def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
         winner, loser = calculate_duel_winner(duel, battle_idx_dict, win_conditions)
         players_dict[winner]["wins"] += 1
         players_dict[loser]["loses"] += 1
-        # players_dict[winner]["rivals"].add(loser)
-        # players_dict[loser]["rivals"].add(winner)
         players_dict[winner]["rivals"].append(loser)
         players_dict[loser]["rivals"].append(winner)
     
@@ -110,18 +170,20 @@ def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
 
     for player, data in players_dict.items():
         for rival in data["rivals"]:
-            # players_dict[player]["buchholz_wins"] += players_dict[rival]["wins"]
             players_dict[player]["buchholz_wlr"] += players_dict[rival]["wlr"]
 
-    # dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wins"], item[1]["buchholz_wlr"]), reverse=True))
     dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wlr"]), reverse=True))
+    
     results = list()
-
     for k, v in dic.items():
         # print(k, v, "\n")
         results.append(k)
 
     return results
+
+
+
+''' TESTING '''
 
 battle_idx_dict = {
     "player1": 0,
@@ -218,19 +280,17 @@ event_duels = [
     ]
 ]
 
-total_duels = ""
-json_path = "backend/json.json"
-with open(json_path, "r", encoding="utf8") as f:
-    total_duels = json.load(f)
-
-# print(total_duels["union"]["duels"])
+# total_duels = ""
+# json_path = "backend/json.json"
+# with open(json_path, "r", encoding="utf8") as f:
+#     total_duels = json.load(f)
 
 win_conditions = ["PW", "W", "WB", "WY"]
 
-# print(calculate_battle_winner(battle, battle_idx_dict, win_conditions))
+# print(calculate_event_results(event_duels, battle_idx_dict, win_conditions))
 
-# print(calculate_duel_winner(duel, battle_idx_dict, win_conditions))
+# csv_data_path = "backend/SCMdb - SSLT.csv"
+# columns_dict, battles_list, idx_dict = load_csv_data(csv_data_path)
 
-calculate_event_results(event_duels, battle_idx_dict, win_conditions)
-
-# calculate_event_results(total_duels["union"]["duels"], battle_idx_dict, win_conditions)
+# for k, v in columns_dict.items():
+#     print(k, v)
