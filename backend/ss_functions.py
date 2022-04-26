@@ -36,7 +36,18 @@ def load_csv_data(csv_data_path):
     for column, content in columns_dict.items():
         columns_dict[column] = list(set(content))
 
-    return columns_dict, battles_list[1:], idx_dict
+    duels_list = list()
+    duel_number = 1
+    duel = battles_list[1]
+    duels_list.append(duel)
+    for battle in battles_list[2:]:
+        if battle[idx_dict["duel"]] == duel_number:
+            continue
+        else:
+            duel_number = battle[idx_dict["duel"]]
+            duels_list.append(battle)
+
+    return columns_dict, battles_list[1:], idx_dict, duels_list
 
 
 def calculate_battle_winner(battle, battle_idx_dict, win_conditions):
@@ -60,9 +71,15 @@ def calculate_battle_winner(battle, battle_idx_dict, win_conditions):
             p1_won_rounds += 1
             p2_won_rounds += 1
     if p1_won_rounds > p2_won_rounds: # Player 1 wins
-        winner = battle[battle_idx_dict["player1"]]
+        if battle[battle_idx_dict["p1_team"]] != "":
+            winner = battle[battle_idx_dict["p1_team"]]
+        else:
+            winner = battle[battle_idx_dict["player1"]]
     if p1_won_rounds < p2_won_rounds: # Players 2 wins
-        winner = battle[battle_idx_dict["player2"]]
+        if battle[battle_idx_dict["p2_team"]] != "":
+            winner = battle[battle_idx_dict["p2_team"]]
+        else:
+            winner = battle[battle_idx_dict["player2"]]
     if p1_won_rounds == p2_won_rounds: # Draw
         winner = 0
     return winner
@@ -79,8 +96,12 @@ def calculate_duel_winner(duel, battle_idx_dict, win_conditions):
     '''
     winner = ""
     loser = ""
-    p1 = duel[0][battle_idx_dict["player1"]]
-    p2 = duel[0][battle_idx_dict["player2"]]
+    if duel[0][battle_idx_dict["p1_team"]] != "":
+        p1 = duel[0][battle_idx_dict["p1_team"]]
+        p2 = duel[0][battle_idx_dict["p2_team"]]
+    else:
+        p1 = duel[0][battle_idx_dict["player1"]]
+        p2 = duel[0][battle_idx_dict["player2"]]
     p1_won_fights = 0
     p2_won_fights = 0
     for fight in duel:
@@ -110,8 +131,12 @@ def get_event_players(event_duels, battle_idx_dict):
     '''
     players_set = set()
     for duel in event_duels:
-        players_set.add(duel[0][battle_idx_dict["player1"]])
-        players_set.add(duel[0][battle_idx_dict["player2"]])
+        if duel[0][battle_idx_dict["p1_team"]] != "":
+            players_set.add(duel[0][battle_idx_dict["p1_team"]])
+            players_set.add(duel[0][battle_idx_dict["p2_team"]])
+        else:
+            players_set.add(duel[0][battle_idx_dict["player1"]])
+            players_set.add(duel[0][battle_idx_dict["player2"]])
     players_list = list(players_set)
     players_list.sort()
     return players_list
@@ -289,8 +314,11 @@ win_conditions = ["PW", "W", "WB", "WY"]
 
 # print(calculate_event_results(event_duels, battle_idx_dict, win_conditions))
 
-# csv_data_path = "backend/SCMdb - SSLT.csv"
-# columns_dict, battles_list, idx_dict = load_csv_data(csv_data_path)
+csv_data_path = "backend/SCMdb - SSLT.csv"
+columns_dict, battles_list, idx_dict, duels_list = load_csv_data(csv_data_path)
 
 # for k, v in columns_dict.items():
 #     print(k, v)
+
+# for e in duels_list:
+#     print(e, "\n")

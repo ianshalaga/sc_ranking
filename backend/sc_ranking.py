@@ -497,13 +497,19 @@ def get_event_characters(event_duels, battle_idx_dict):
     return characters_list
 
 
+events_type_dic = {
+    "SSLT": "Seyfer Studios Lightning Tournament",
+    "SSLTT": "Seyfer Studios Lightning Team Tournament",
+}
+
+
 def event_stats_generator(battles_list, json_path, idx_dict):
     events_stats_list = list()
     events_grouped = event_grouping(battles_list, idx_dict)
     events_grouped.reverse()
     for event_duels in events_grouped:
         events_stats_list.append({
-                "event": "Seyfer Studios Lightning Tournament " + event_duels[0][0][idx_dict["event"]].split(" ")[1],
+                "event": events_type_dic[event_duels[0][0][idx_dict["event"]].split(" ")[0]] + " " + event_duels[0][0][idx_dict["event"]].split(" ")[1],
                 "platform": event_duels[0][0][idx_dict["platform"]],
                 "players": ss_functions.calculate_event_results(event_duels, idx_dict, ss_functions.win_conditions),
                 "characters": get_event_characters(event_duels, idx_dict),
