@@ -314,8 +314,8 @@ win_conditions = ["PW", "W", "WB", "WY"]
 
 # print(calculate_event_results(event_duels, battle_idx_dict, win_conditions))
 
-csv_data_path = "backend/SCMdb - SSLT.csv"
-columns_dict, battles_list, idx_dict, duels_list = load_csv_data(csv_data_path)
+# csv_data_path = "backend/SCMdb - SSLT.csv"
+# columns_dict, battles_list, idx_dict, duels_list = load_csv_data(csv_data_path)
 
 # for k, v in columns_dict.items():
 #     print(k, v)
