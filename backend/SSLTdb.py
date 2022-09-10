@@ -10,13 +10,15 @@ code_names_dict = {
     "PS4": "PlayStation 4",
     "SAS": "South America South",
     "SSLT": "Seyfer Studios Lightning Tournament",
+    "SSLTT": "Seyfer Studios Lightning Team Tournament",
+    "SSLTSE": "Seyfer Studios Lightning Tournament Special Edition",
+    "SSLL": "Seyfer Studios Lightning League",
     "FT2": "First to 2",
     "FT3": "First to 3",
     "First to 2": "BO3",
     "First to 3": "BO5",
     "BO3": "Best of 3",
     "BO5": "Best of 5",
-    "SSLT": "Seyfer Studios Lightning Tournament",
 }
 
 players_dict = {
@@ -94,8 +96,7 @@ def create_connection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file)
-        print(colored(f"Conexión establecida. Version {sqlite3.version}", "green"))
-        return conn
+        print(colored(f"Conexión establecida. SQLite version {sqlite3.version}", "green"))
     except Error as e:
         print(colored(e, "red"))
 

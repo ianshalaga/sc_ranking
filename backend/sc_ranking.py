@@ -500,7 +500,7 @@ def get_event_characters(event_duels, battle_idx_dict):
 events_type_dic = {
     "SSLT": "Seyfer Studios Lightning Tournament",
     "SSLTT": "Seyfer Studios Lightning Team Tournament",
-    "SSLTSP": "Seyfer Studios Lightning Tournament Special Edition"
+    "SSLTSE": "Seyfer Studios Lightning Tournament Special Edition"
 }
 
 
