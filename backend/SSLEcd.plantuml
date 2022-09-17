@@ -1,0 +1,112 @@
+@startuml SSLEuml
+
+class Game {
+    - name : String
+    - code_name : String
+}
+
+class Platform {
+    - name : String
+    - code_name : String
+}
+
+class Region {
+    - name : String
+    - code_name : String
+}
+
+class EventType {
+    - name : String
+    - code_name : String
+}
+
+class DuelType {
+    - name : String
+    - code_name : String
+    - name_synonymous : String
+    - code_name_synonymous : String
+}
+
+class Player {
+    - name : String
+    - playlist : String
+}
+
+class Character {
+    - name : String
+    - playlist : String
+}
+
+class GameVersionPlatform {
+    - version : String
+}
+
+Game "0..*" -- "1..*" Platform
+(Game, Platform) .. GameVersionPlatform
+
+class SocialMedia {
+    - link : String
+}
+
+Player "1" *-- "0..*" SocialMedia : Have >
+
+class Event {
+    - name : String
+    - code_name : String
+    - playlist : String
+    - bracket : String
+}
+
+Event "1..*" -- "1" EventType : Is of >
+Event "1..*" -- "1" Region : Belongs >
+Event "1..*" -- "1" GameVersionPlatform : Is played >
+
+class Duel {
+    - duel_order : Integer
+    - video : String
+}
+
+Duel "1..*" -- "1" DuelType : Is of >
+Duel "1..*" --* "1" Event : Belongs >
+
+class Team {
+    - name : String
+    - initials : String
+}
+
+Team "0..*" -- "2..*" Player
+(Team, Player) .. Duel
+
+class Combat {
+    - combat_order : Integer
+}
+
+Combat "1..*" -- "1" Player : Player1 >
+Combat "1..*" -- "1" Player : Player2 >
+Combat "1..*" -- "1" Character : Character1 >
+Combat "1..*" -- "1" Character : Character2 >
+Combat "1..*" --* "1" Duel : Belongs >
+
+enum RoundResult {
+    win : String
+    perfect_win : String
+    lose_blue : String
+    lose_yellow : String
+    perfect_lose : String
+    draw : String
+}
+
+class Round {
+    - round_order : Integer
+    - result_player1 : RoundResult
+    - result_player2 : RoundResult
+}
+
+Round "1..*" --* "1" Combat : Belongs >
+
+class Main {
+    + create_database(): void
+    + generate_ranking() : void
+}
+
+@enduml
