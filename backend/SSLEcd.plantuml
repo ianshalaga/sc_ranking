@@ -30,11 +30,30 @@ class DuelType {
 class Player {
     - name : String
     - playlist : String
+    + played_duels() : Integer
+    + won_duels() : Integer
+    + lost_duels() : Integer
+    + played_battles() : Integer
+    + won_battles() : Integer
+    + lost_battles() : Integer
+    + draw_battles() : Integer
+    + win_rate() : Float
+    + wlr() : Float
+    + points_earned() : Float
+    + player_level() : Float
 }
 
 class Character {
     - name : String
     - playlist : String
+    + played_battles() : Integer
+    + won_battles() : Integer
+    + lost_battles() : Integer
+    + draw_battles() : Integer
+    + win_rate() : Float
+    + wlr() : Float
+    + points_earned() : Float
+    + player_level() : Float
 }
 
 class GameVersionPlatform {
@@ -50,11 +69,34 @@ class SocialMedia {
 
 Player "1" *-- "0..*" SocialMedia : Have >
 
+class PlayerCharacter {
+    -name : String
+    + played_battles() : Integer
+    + won_battles() : Integer
+    + lost_battles() : Integer
+    + draw_battles() : Integer
+    + win_rate() : Float
+    + wlr() : Float
+    + points_earned() : Float
+    + player_level() : Float
+}
+
+' PlayerCharacter "1..*" -- "1" Player
+' PlayerCharacter "1..*" -- "1" Character
+
+Player "0..*" -- "1..*" Character
+(Player, Character) .. PlayerCharacter
+
 class Event {
     - name : String
     - code_name : String
     - playlist : String
     - bracket : String
+    + players(): List
+    + characters() : List
+    + played_duels() : Integer
+    + played_battles() : Integer
+    + 
 }
 
 Event "1..*" -- "1" EventType : Is of >
@@ -79,6 +121,17 @@ Team "0..*" -- "2..*" Player
 
 class Combat {
     - combat_order : Integer
+    + rounds_played() : Integer
+    + player1_won_rounds() : Integer
+    + player2_won_rounds() : Integer
+    + player1_raw_points() : Integer
+    + player2_raw_points() : Integer
+    + beating_factor_player1() : Float
+    + beating_factor_player2() : Float
+    + player1_won_points() : Float
+    + player2_won_points() : Float
+    + result_player1() : String
+    + result_player2() : String
 }
 
 Combat "1..*" -- "1" Player : Player1 >
@@ -87,19 +140,21 @@ Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
 Combat "1..*" --* "1" Duel : Belongs >
 
-enum RoundResult {
-    win : String
-    perfect_win : String
-    lose_blue : String
-    lose_yellow : String
-    perfect_lose : String
-    draw : String
-}
+' enum RoundResult {
+'     win : String
+'     perfect_win : String
+'     lose_blue : String
+'     lose_yellow : String
+'     perfect_lose : String
+'     draw : String
+' }
 
 class Round {
     - round_order : Integer
-    - result_player1 : RoundResult
-    - result_player2 : RoundResult
+    - result_player1 : String
+    - result_player2 : String
+    + get_player1_points() : Integer
+    + get_player2_points() : Integer
 }
 
 Round "1..*" --* "1" Combat : Belongs >
