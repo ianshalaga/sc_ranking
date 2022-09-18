@@ -30,15 +30,22 @@ class DuelType {
 class Player {
     - name : String
     - playlist : String
-    + played_duels() : Integer
-    + won_duels() : Integer
-    + lost_duels() : Integer
-    + played_battles() : Integer
-    + won_battles() : Integer
-    + lost_battles() : Integer
-    + draw_battles() : Integer
-    + win_rate() : Float
-    + wlr() : Float
+    + team_duels_played() : Integer
+    + team_duels_won() : Integer
+    + team_duels_lost() : Integer
+    + duels_played() : Integer
+    + duels_won() : Integer
+    + duels_lost() : Integer
+    + battles_played() : Integer
+    + battles_won() : Integer
+    + battles_lost() : Integer
+    + battles_draw() : Integer
+    + team_duels_win_rate() : Float
+    + duels_win_rate() : Float
+    + battles_win_rate() : Float
+    + team_duels_wlr() : Float
+    + duels_wlr() : Float
+    + battles_wlr() : Float
     + points_earned() : Float
     + player_level() : Float
 }
@@ -70,7 +77,6 @@ class SocialMedia {
 Player "1" *-- "0..*" SocialMedia : Have >
 
 class PlayerCharacter {
-    -name : String
     + played_battles() : Integer
     + won_battles() : Integer
     + lost_battles() : Integer
@@ -81,9 +87,6 @@ class PlayerCharacter {
     + player_level() : Float
 }
 
-' PlayerCharacter "1..*" -- "1" Player
-' PlayerCharacter "1..*" -- "1" Character
-
 Player "0..*" -- "1..*" Character
 (Player, Character) .. PlayerCharacter
 
@@ -92,11 +95,12 @@ class Event {
     - code_name : String
     - playlist : String
     - bracket : String
+    + teams() : List
     + players(): List
     + characters() : List
     + played_duels() : Integer
     + played_battles() : Integer
-    + 
+    + results() : List
 }
 
 Event "1..*" -- "1" EventType : Is of >
@@ -106,32 +110,45 @@ Event "1..*" -- "1" GameVersionPlatform : Is played >
 class Duel {
     - duel_order : Integer
     - video : String
+    + teams() : List
+    + players() : List
+    + player_winner() : String
+    + team_winner() : String
 }
 
 Duel "1..*" -- "1" DuelType : Is of >
 Duel "1..*" --* "1" Event : Belongs >
+Duel "1" -- "0..*" Team : Participate >
 
 class Team {
     - name : String
     - initials : String
+    + players() : List
+    + duels_played() : Integer
+    + duels_won() : Integer
+    + duels_lost() : Integer
+    + win_rate() : Float
+    + wlr() : Float
+    + points_earned() : Float
+    + team_level() : Float
 }
 
 Team "0..*" -- "2..*" Player
-(Team, Player) .. Duel
 
 class Combat {
     - combat_order : Integer
     + rounds_played() : Integer
-    + player1_won_rounds() : Integer
-    + player2_won_rounds() : Integer
-    + player1_raw_points() : Integer
-    + player2_raw_points() : Integer
+    + won_rounds_player1() : Integer
+    + won_rounds_player2() : Integer
+    + raw_points_player1() : Integer
+    + raw_points_player2() : Integer
     + beating_factor_player1() : Float
     + beating_factor_player2() : Float
-    + player1_won_points() : Float
-    + player2_won_points() : Float
+    + won_points_player1() : Float
+    + won_points_player2() : Float
     + result_player1() : String
     + result_player2() : String
+    + winner() : String
 }
 
 Combat "1..*" -- "1" Player : Player1 >
@@ -140,28 +157,37 @@ Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
 Combat "1..*" --* "1" Duel : Belongs >
 
-' enum RoundResult {
-'     win : String
-'     perfect_win : String
-'     lose_blue : String
-'     lose_yellow : String
-'     perfect_lose : String
-'     draw : String
-' }
+enum RoundResult {
+    W
+    PW
+    LB
+    LY
+    PL
+    D
+}
 
 class Round {
     - round_order : Integer
-    - result_player1 : String
-    - result_player2 : String
-    + get_player1_points() : Integer
-    + get_player2_points() : Integer
+    - result_player1 : RoundResult
+    - result_player2 : RoundResult
+    + points_player1() : Integer
+    + points_player2() : Integer
 }
 
 Round "1..*" --* "1" Combat : Belongs >
 
 class Main {
-    + create_database(): void
+    + create_database() : void
     + generate_ranking() : void
+    + event_result(): void
+}
+
+Main "1" -- "0..*" Event : Have >
+
+enum RankingType {
+    PL
+    CH
+    PLCH
 }
 
 @enduml
