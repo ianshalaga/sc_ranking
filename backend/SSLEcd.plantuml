@@ -1,5 +1,4 @@
-@startuml SSLEuml
-
+@startuml
 class Game {
     - name : String
     - code_name : String
@@ -30,6 +29,7 @@ class DuelType {
 class Player {
     - name : String
     - playlist : String
+    - points_earned : Float
     + team_duels_played() : Integer
     + team_duels_won() : Integer
     + team_duels_lost() : Integer
@@ -67,8 +67,9 @@ class GameVersionPlatform {
     - version : String
 }
 
-Game "0..*" -- "1..*" Platform
-(Game, Platform) .. GameVersionPlatform
+Game "1" --- "1..*" GameVersionPlatform
+Platform "1" -- "1..*" GameVersionPlatform
+
 
 class SocialMedia {
     - link : String
@@ -87,14 +88,16 @@ class PlayerCharacter {
     + player_level() : Float
 }
 
-Player "0..*" -- "1..*" Character
-(Player, Character) .. PlayerCharacter
+PlayerCharacter "0..*" -- "1" Character
+PlayerCharacter "0..*" -- "1" Player
+
 
 class Event {
     - name : String
     - code_name : String
     - playlist : String
     - bracket : String
+    - date : Date
     + teams() : List
     + players(): List
     + characters() : List
@@ -118,7 +121,7 @@ class Duel {
 
 Duel "1..*" -- "1" DuelType : Is of >
 Duel "1..*" --* "1" Event : Belongs >
-Duel "1" -- "0..*" Team : Participate >
+Event "1" *-- "2..*" Team : Participate >
 
 class Team {
     - name : String
@@ -137,18 +140,14 @@ Team "0..*" -- "2..*" Player
 
 class Combat {
     - combat_order : Integer
+    + get_player(Integer) : Player
     + rounds_played() : Integer
-    + won_rounds_player1() : Integer
-    + won_rounds_player2() : Integer
-    + raw_points_player1() : Integer
-    + raw_points_player2() : Integer
-    + beating_factor_player1() : Float
-    + beating_factor_player2() : Float
-    + won_points_player1() : Float
-    + won_points_player2() : Float
-    + result_player1() : String
-    + result_player2() : String
-    + winner() : String
+    + won_rounds_player(Player) : Integer
+    + raw_points_player(Player) : Integer
+    + beating_factor_player(Player) : Float
+    + won_points_player(Player) : Float
+    + result_player(Player) : CombatResult
+    + winner() : Player
 }
 
 Combat "1..*" -- "1" Player : Player1 >
@@ -156,6 +155,12 @@ Combat "1..*" -- "1" Player : Player2 >
 Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
 Combat "1..*" --* "1" Duel : Belongs >
+
+enum CombatResult {
+    Victory
+    Defeat
+    Draw
+}
 
 enum RoundResult {
     W
@@ -189,5 +194,4 @@ enum RankingType {
     CH
     PLCH
 }
-
 @enduml
