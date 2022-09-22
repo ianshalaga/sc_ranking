@@ -1,4 +1,7 @@
-@startuml
+@startuml SSLEcd
+
+' Classes
+
 class Game {
     - name : String
     - code_name : String
@@ -15,8 +18,12 @@ class Region {
 }
 
 class EventType {
+    ' Attributes
     - name : String
     - code_name : String
+    - system : EventSystem
+    ' Methods
+    + event_system() : EventSystem
 }
 
 class DuelType {
@@ -27,9 +34,29 @@ class DuelType {
 }
 
 class Player {
+    ' Attributes
     - name : String
     - playlist : String
     - points_earned : Float
+    - team_duels_played : Integer
+    - team_duels_won : Integer
+    - team_duels_lost : Integer
+    - duels_played : Integer
+    - duels_won : Integer
+    - duels_lost : Integer
+    - battles_played : Integer
+    - battles_won : Integer
+    - battles_lost : Integer
+    - battles_draw : Integer
+    - team_duels_win_rate : Float
+    - duels_win_rate : Float
+    - battles_win_rate : Float
+    - team_duels_wlr : Float
+    - duels_wlr : Float
+    - battles_wlr : Float
+    - points_earned : Float
+    - player_level : Float
+    ' Methods
     + team_duels_played() : Integer
     + team_duels_won() : Integer
     + team_duels_lost() : Integer
@@ -51,8 +78,18 @@ class Player {
 }
 
 class Character {
+    ' Attributes
     - name : String
     - playlist : String
+    - played_battles : Integer
+    - won_battles : Integer
+    - lost_battles : Integer
+    - draw_battles : Integer
+    - win_rate : Float
+    - wlr : Float
+    - points_earned : Float
+    - player_level : Float
+    ' Methods
     + played_battles() : Integer
     + won_battles() : Integer
     + lost_battles() : Integer
@@ -67,18 +104,22 @@ class GameVersionPlatform {
     - version : String
 }
 
-Game "1" --- "1..*" GameVersionPlatform
-Platform "1" -- "1..*" GameVersionPlatform
-
-
 class SocialMedia {
     - link : String
 }
 
-Player "1" *-- "0..*" SocialMedia : Have >
-
 class PlayerCharacter {
-    + played_battles() : Integer
+    ' Attributes
+    - battles_played : Integer
+    - won_battles : Integer
+    - lost_battles : Integer
+    - draw_battles : Integer
+    - win_rate : Float
+    - wlr : Float
+    - points_earned : Float
+    - player_level : Float
+    ' Methods
+    + battles_played() : Integer
     + won_battles() : Integer
     + lost_battles() : Integer
     + draw_battles() : Integer
@@ -88,110 +129,189 @@ class PlayerCharacter {
     + player_level() : Float
 }
 
-PlayerCharacter "0..*" -- "1" Character
-PlayerCharacter "0..*" -- "1" Player
-
-
 class Event {
+    ' Attributes
     - name : String
     - code_name : String
     - playlist : String
     - bracket : String
     - date : Date
+    - duels_played : Integer
+    - combats_played : Integer
+    ' Methods
     + teams() : List
     + players(): List
     + characters() : List
-    + played_duels() : Integer
-    + played_battles() : Integer
+    + duels_played() : Integer
+    + combats_played() : Integer
+    + team_rivals(Team) : List
+    + player_rivals(Player) : List
+    + team_duels_won(Team) : Integer
+    + team_duels_lost(Team) : Integer
+    + team_duels_wlr(Team) : Float
+    + team_duels_buchholz_wlr(Team) : Float
+    + player_duels_won(Player) : Integer
+    + player_duels_lost(Player) : Integer
+    + player_duels_wlr(Player) : Float
+    + player_duels_buchholz_wlr(Player) : Float
     + results() : List
 }
 
-Event "1..*" -- "1" EventType : Is of >
-Event "1..*" -- "1" Region : Belongs >
-Event "1..*" -- "1" GameVersionPlatform : Is played >
-
 class Duel {
+    ' Attributes
     - duel_order : Integer
     - video : String
+    - combats_played : Integer
+    ' Methods
+    + combats_played() : Integer
     + teams() : List
     + players() : List
-    + player_winner() : String
-    + team_winner() : String
+    + characters() : List
+    + team_winner() : Team
+    + player_winner() : Player
 }
 
-Duel "1..*" -- "1" DuelType : Is of >
-Duel "1..*" --* "1" Event : Belongs >
-Event "1" *-- "2..*" Team : Participate >
-
 class Team {
+    ' Attributes
     - name : String
     - initials : String
+    - duels_played : Integer
+    - duels_won : Integer
+    - duels_lost : Integer
+    - win_rate : Float
+    - wlr : Float
+    - points_earned : Float
+    - level : Float
+    ' Methods
     + players() : List
+    + characters() : List
     + duels_played() : Integer
     + duels_won() : Integer
     + duels_lost() : Integer
     + win_rate() : Float
     + wlr() : Float
     + points_earned() : Float
-    + team_level() : Float
+    + level() : Float
 }
 
-Team "0..*" -- "2..*" Player
-
 class Combat {
+    ' Attributes
     - combat_order : Integer
-    + get_player(Integer) : Player
+    - rounds_played : Integer
+    ' Methods
     + rounds_played() : Integer
+    + get_player(PlayerSide) : Player
     + won_rounds_player(Player) : Integer
-    + raw_points_player(Player) : Integer
     + beating_factor_player(Player) : Float
+    + raw_points_player(Player) : Integer
+    + lvl_factor(Player, LvlFactor) : Float
     + won_points_player(Player) : Float
     + result_player(Player) : CombatResult
     + winner() : Player
 }
 
+class Round {
+    ' Attributes
+    - round_order : Integer
+    - result_player1 : RoundResult
+    - result_player2 : RoundResult
+}
+
+class Stage {
+    ' Attributes
+    - name : String
+    - teams_count : Integer
+    - players_count : Integer
+    - characters_count : Integer
+    - duels : Integer
+    - combats : Integer
+    ' Methods
+    + events() : List
+    + teams() : List
+    + players() : List
+    + characters() : List
+    + teams_count() : List
+    + players_count() : List
+    + characters_count() : List
+    + duels() : Integer
+    + combats() : Integer
+    + generate_ranking() : void
+}
+
+class Execution {
+    + create_database() : void
+    + generate_ranking(GameVersionPlatform, RankingType) : void
+}
+
+class CombatHistory {
+
+}
+
+class DuelHistory {
+
+}
+
+' Relationships
+
+Game "1" --- "1..*" GameVersionPlatform
+Platform "1" -- "1..*" GameVersionPlatform
+Player "1" -- "0.." SocialMedia : Have >
+PlayerCharacter "0..*" -- "1" Character
+PlayerCharacter "0..*" -- "1" Player
+Event "1..*" -- "1" EventType : Is of >
+Event "1..*" -- "1" Region : Belongs >
+Event "1..*" -- "1" GameVersionPlatform : Is played >
+Duel "1..*" -- "1" DuelType : Is of >
+Duel "1.." -- "1" Event : Belongs >
+Event "1" -- "2.." Team : Participate >
+Team "0.." -- "2.." Player
 Combat "1..*" -- "1" Player : Player1 >
 Combat "1..*" -- "1" Player : Player2 >
 Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
-Combat "1..*" --* "1" Duel : Belongs >
+Combat "1.." -- "1" Duel : Belongs >
+Round "1.." -- "1" Combat : Belongs >
+Stage "1" *-- "1..*" Event : Have >
 
-enum CombatResult {
-    Victory
-    Defeat
-    Draw
-}
 
-enum RoundResult {
-    W
-    PW
-    LB
-    LY
-    PL
-    D
-}
-
-class Round {
-    - round_order : Integer
-    - result_player1 : RoundResult
-    - result_player2 : RoundResult
-    + points_player1() : Integer
-    + points_player2() : Integer
-}
-
-Round "1..*" --* "1" Combat : Belongs >
-
-class Main {
-    + create_database() : void
-    + generate_ranking() : void
-    + event_result(): void
-}
-
-Main "1" -- "0..*" Event : Have >
+' Enums
 
 enum RankingType {
     PL
     CH
     PLCH
 }
+
+enum CombatResult {
+    VICTORY
+    DEFEAT
+    DRAW
+}
+
+enum RoundResult {
+    D = 240
+    PW = 240
+    W = 240
+    WY = 168
+    WB = 84
+    LY = 168
+    LB = 84
+    PL = 0
+}
+
+enum PlayerSide {
+    PLAYER1
+    PLAYER2
+}
+
+enum LvlFactor {
+    A = -(25/132)
+    B = 1
+}
+
+enum EventSystem {
+    TEAM
+    INDIVIDUAL
+}
+
 @enduml
