@@ -21,9 +21,6 @@ class EventType {
     ' Attributes
     - name : String
     - code_name : String
-    - system : EventSystem
-    ' Methods
-    + event_system() : EventSystem
 }
 
 class DuelType {
@@ -157,6 +154,13 @@ class Event {
     + results() : List
 }
 
+class Position {
+    ' Attributes
+    - position : Integer
+    ' Methods
+    + position() : Integer
+}
+
 class Duel {
     ' Attributes
     - duel_order : Integer
@@ -199,14 +203,15 @@ class Combat {
     - combat_order : Integer
     - rounds_played : Integer
     ' Methods
-    + rounds_played() : Integer
     + get_player(PlayerSide) : Player
-    + won_rounds_player(Player) : Integer
-    + beating_factor_player(Player) : Float
-    + raw_points_player(Player) : Integer
+    + rounds_played() : Integer
+    + rounds_won(Player) : Integer
+    + rounds_lost(Player) : Integer
+    + beating_factor(Player) : Float
+    + raw_points(Player) : Integer
     + lvl_factor(Player, LvlFactor) : Float
-    + won_points_player(Player) : Float
-    + result_player(Player) : CombatResult
+    + won_points(Player) : Float
+    + result(Player) : CombatResult
     + winner() : Player
 }
 
@@ -220,6 +225,7 @@ class Round {
 class Stage {
     ' Attributes
     - name : String
+    - events_count : Integer
     - teams_count : Integer
     - players_count : Integer
     - characters_count : Integer
@@ -230,17 +236,19 @@ class Stage {
     + teams() : List
     + players() : List
     + characters() : List
-    + teams_count() : List
-    + players_count() : List
-    + characters_count() : List
+    + events_count() : Integer
+    + teams_count() : Integer
+    + players_count() : Integer
+    + characters_count() : Integer
     + duels() : Integer
     + combats() : Integer
-    + generate_ranking() : void
+    + generate_rankings() : void
 }
 
 class Execution {
+    ' Methods
     + create_database() : void
-    + generate_ranking(GameVersionPlatform, RankingType) : void
+    + generate_rankings() : void
 }
 
 class CombatHistory {
@@ -271,7 +279,9 @@ Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
 Combat "1.." -- "1" Duel : Belongs >
 Round "1.." -- "1" Combat : Belongs >
-Stage "1" *-- "1..*" Event : Have >
+Stage "1" -- "1.." Event : Have >
+Position "1.." -- "1" Event : Have <
+Position "1.." -- "1" Player : Obtained <
 
 
 ' Enums
@@ -308,10 +318,3 @@ enum LvlFactor {
     A = -(25/132)
     B = 1
 }
-
-enum EventSystem {
-    TEAM
-    INDIVIDUAL
-}
-
-@enduml
