@@ -133,32 +133,28 @@ class Event {
     - playlist : String
     - bracket : String
     - date : Date
-    - duels_played : Integer
-    - combats_played : Integer
+    - duels_count : Integer
+    - combats_count : Integer
     ' Methods
-    + teams() : List
-    + players(): List
+    + competitors() : List
     + characters() : List
-    + duels_played() : Integer
-    + combats_played() : Integer
-    + team_rivals(Team) : List
-    + player_rivals(Player) : List
-    + team_duels_won(Team) : Integer
-    + team_duels_lost(Team) : Integer
-    + team_duels_wlr(Team) : Float
-    + team_duels_buchholz_wlr(Team) : Float
-    + player_duels_won(Player) : Integer
-    + player_duels_lost(Player) : Integer
-    + player_duels_wlr(Player) : Float
-    + player_duels_buchholz_wlr(Player) : Float
+    + duels_count() : Integer
+    + combats_count() : Integer
+    + rivals(Competitor) : List
+    + duels_won(Competitor) : Integer
+    + duels_lost(Competitor) : Integer
+    + duels_wlr(Competitor) : Float
+    + duels_buchholz_wlr(Competitor) : Float
     + results() : List
 }
 
 class Position {
     ' Attributes
     - position : Integer
-    ' Methods
-    + position() : Integer
+    - duels_won : Integer
+    - duels_lost : Integer
+    - duels_wlr : Float
+    - duels_buchholz_wlr: Float
 }
 
 class Duel {
@@ -229,20 +225,35 @@ class Stage {
     - teams_count : Integer
     - players_count : Integer
     - characters_count : Integer
-    - duels : Integer
-    - combats : Integer
+    - team_duels_count : Integer
+    - player_duels_count : Integer
+    - total_duels_count : Integer
+    - combats_count : Integer
     ' Methods
     + events() : List
     + teams() : List
     + players() : List
     + characters() : List
+    + team_duels() : List
+    + player_duels() : List
+    + total_duels() : List
+    + combats() : List
     + events_count() : Integer
     + teams_count() : Integer
     + players_count() : Integer
     + characters_count() : Integer
-    + duels() : Integer
-    + combats() : Integer
+    + team_duels_count() : Integer
+    + player_duels_count() : Integer
+    + total_duels_count() : Integer
+    + combats_count() : Integer
     + generate_rankings() : void
+}
+
+class Competitor {
+    ' Attributes
+    - type : CompetitorType
+    ' Methods
+    + type() : CompetitorType
 }
 
 class Execution {
@@ -272,6 +283,7 @@ Event "1..*" -- "1" GameVersionPlatform : Is played >
 Duel "1..*" -- "1" DuelType : Is of >
 Duel "1.." -- "1" Event : Belongs >
 Event "1" -- "2.." Team : Participate >
+' Event "1" -- "2.." Competitor : Participate >
 Team "0.." -- "2.." Player
 Combat "1..*" -- "1" Player : Player1 >
 Combat "1..*" -- "1" Player : Player2 >
@@ -281,7 +293,9 @@ Combat "1.." -- "1" Duel : Belongs >
 Round "1.." -- "1" Combat : Belongs >
 Stage "1" -- "1.." Event : Have >
 Position "1.." -- "1" Event : Have <
-Position "1.." -- "1" Player : Obtained <
+Position "1.." -- "1" Competitor : Obtained <
+Competitor "1" -- "0..1" Player : Can be a >
+Competitor "1" -- "0..1" Team : Can be a >
 
 
 ' Enums
@@ -317,4 +331,9 @@ enum PlayerSide {
 enum LvlFactor {
     A = -(25/132)
     B = 1
+}
+
+enum CompetitorType {
+    TEAM
+    PLAYER
 }
