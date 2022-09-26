@@ -155,41 +155,49 @@ class Position {
     - duels_lost : Integer
     - duels_wlr : Float
     - duels_buchholz_wlr: Float
+    ' Methods
+    ' + position() : Integer
+    ' + duels_won() : Integer
+    ' + duels_lost() : Integer
+    ' + duels_wlr() : Float
+    ' + duels_buchholz_wlr() : Float
 }
 
 class Duel {
     ' Attributes
     - duel_order : Integer
     - video : String
-    - combats_played : Integer
+    - combats_count : Integer
     ' Methods
-    + combats_played() : Integer
-    + teams() : List
-    + players() : List
+    ' + duel_order() : Integer
+    ' + video() : String
+    + combats_count() : Integer
+    + competitors() : List
     + characters() : List
-    + team_winner() : Team
-    + player_winner() : Player
+    + winner() : Competitor
 }
 
 class Team {
     ' Attributes
     - name : String
     - initials : String
-    - duels_played : Integer
+    - duels_count : Integer
     - duels_won : Integer
     - duels_lost : Integer
-    - win_rate : Float
-    - wlr : Float
+    - duels_win_rate : Float
+    - duels_wlr : Float
     - points_earned : Float
     - level : Float
     ' Methods
+    ' + name() : String
+    ' + initials() : String
     + players() : List
     + characters() : List
-    + duels_played() : Integer
+    + duels_count() : Integer
     + duels_won() : Integer
     + duels_lost() : Integer
-    + win_rate() : Float
-    + wlr() : Float
+    + duels_win_rate() : Float
+    + duels_wlr() : Float
     + points_earned() : Float
     + level() : Float
 }
@@ -197,10 +205,11 @@ class Team {
 class Combat {
     ' Attributes
     - combat_order : Integer
-    - rounds_played : Integer
+    - rounds_count : Integer
     ' Methods
-    + get_player(PlayerSide) : Player
-    + rounds_played() : Integer
+    ' + combat_order() : Integer
+    + player_side(PlayerSide) : Player
+    + rounds_count() : Integer
     + rounds_won(Player) : Integer
     + rounds_lost(Player) : Integer
     + beating_factor(Player) : Float
@@ -216,6 +225,10 @@ class Round {
     - round_order : Integer
     - result_player1 : RoundResult
     - result_player2 : RoundResult
+    ' Methods
+    ' + round_order() : Integer
+    ' + result_player1() : RoundResult
+    ' + result_player2() : RoundResult
 }
 
 class Stage {
@@ -230,6 +243,7 @@ class Stage {
     - total_duels_count : Integer
     - combats_count : Integer
     ' Methods
+    ' + name() : String
     + events() : List
     + teams() : List
     + players() : List
@@ -270,6 +284,10 @@ class DuelHistory {
 
 }
 
+class Stats {
+
+}
+
 ' Relationships
 
 Game "1" --- "1..*" GameVersionPlatform
@@ -282,8 +300,6 @@ Event "1..*" -- "1" Region : Belongs >
 Event "1..*" -- "1" GameVersionPlatform : Is played >
 Duel "1..*" -- "1" DuelType : Is of >
 Duel "1.." -- "1" Event : Belongs >
-Event "1" -- "2.." Team : Participate >
-' Event "1" -- "2.." Competitor : Participate >
 Team "0.." -- "2.." Player
 Combat "1..*" -- "1" Player : Player1 >
 Combat "1..*" -- "1" Player : Player2 >
