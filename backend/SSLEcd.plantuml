@@ -78,23 +78,23 @@ class Character {
     ' Attributes
     - name : String
     - playlist : String
-    - played_battles : Integer
-    - won_battles : Integer
-    - lost_battles : Integer
-    - draw_battles : Integer
-    - win_rate : Float
-    - wlr : Float
+    - combats_count : Integer
+    - combats_won : Integer
+    - combats_lost : Integer
+    - combats_draw : Integer
+    - combats_win_rate : Float
+    - combats_wlr : Float
     - points_earned : Float
-    - player_level : Float
+    - level : Float
     ' Methods
-    + played_battles() : Integer
-    + won_battles() : Integer
-    + lost_battles() : Integer
-    + draw_battles() : Integer
-    + win_rate() : Float
-    + wlr() : Float
+    + combats_count() : Integer
+    + combats_won() : Integer
+    + combats_lost() : Integer
+    + combats_draw() : Integer
+    + combats_win_rate() : Float
+    + combats_wlr() : Float
     + points_earned() : Float
-    + player_level() : Float
+    + level() : Float
 }
 
 class GameVersionPlatform {
@@ -107,23 +107,25 @@ class SocialMedia {
 
 class PlayerCharacter {
     ' Attributes
-    - battles_played : Integer
-    - won_battles : Integer
-    - lost_battles : Integer
-    - draw_battles : Integer
-    - win_rate : Float
-    - wlr : Float
+    - combats_count : Integer
+    - combats_won : Integer
+    - combats_lost : Integer
+    - combats_draw : Integer
+    - combats_win_rate : Float
+    - combats_wlr : Float
     - points_earned : Float
-    - player_level : Float
+    - level : Float
     ' Methods
-    + battles_played() : Integer
-    + won_battles() : Integer
-    + lost_battles() : Integer
-    + draw_battles() : Integer
-    + win_rate() : Float
-    + wlr() : Float
+    + name(EntityType) : String
+    + playlist(EntityType) : String
+    + combats_count() : Integer
+    + combats_won() : Integer
+    + combats_lost() : Integer
+    + combats_draw() : Integer
+    + combats_win_rate() : Float
+    + combats_wlr() : Float
     + points_earned() : Float
-    + player_level() : Float
+    + level() : Float
 }
 
 class Event {
@@ -352,4 +354,9 @@ enum LvlFactor {
 enum CompetitorType {
     TEAM
     PLAYER
+}
+
+enum EntityType {
+    PLAYER
+    CHARACTER
 }
