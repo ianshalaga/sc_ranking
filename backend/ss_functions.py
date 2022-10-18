@@ -1,5 +1,6 @@
 import json
 import csv
+# from sc_ranking import player_data_generator
 
 
 
@@ -162,6 +163,14 @@ def get_win_lose_ratio(wins, loses):
     return wlr
 
 
+def duels_list_to_battles_list(duels_list):
+    battles_list = list()
+    for duel in duels_list:
+        for battle in duel:
+            battles_list.append(battle)
+    return battles_list
+
+
 def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
     '''
     Inputs:
@@ -200,7 +209,7 @@ def calculate_event_results(event_duels, battle_idx_dict, win_conditions):
     dic = dict(sorted(players_dict.items(), key=lambda item: (item[1]["wlr"], item[1]["buchholz_wlr"]), reverse=True))
     
     results = list()
-    for k, v in dic.items():
+    for k, _ in dic.items():
         # print(k, v, "\n")
         results.append(k)
 

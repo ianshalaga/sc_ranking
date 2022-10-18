@@ -23,6 +23,8 @@ def load_csv_fights(csv_fights_path):
             # if battle[-1] == "platform": # Avoids header row
             if battle[idx_dict["platform"]] == "platform": # Avoids header row
                 continue
+            if battle[idx_dict["season"]] != "S2":
+                continue
             for e in range(len(battle)):
                 if battle[e] == "0":
                     battle[e] = 0
@@ -480,7 +482,6 @@ def event_grouping(battles_list, idx_dict):
             event_list = [battle]
             event = battle[idx_dict["event"]]
     events_grouped.append(duel_grouping(event_list, idx_dict))
-    
     return events_grouped
 
 
@@ -500,8 +501,51 @@ def get_event_characters(event_duels, battle_idx_dict):
 events_type_dic = {
     "SSLT": "Seyfer Studios Lightning Tournament",
     "SSLTT": "Seyfer Studios Lightning Team Tournament",
-    "SSLTSE": "Seyfer Studios Lightning Tournament Special Edition"
+    "SSLTSE": "Seyfer Studios Lightning Tournament Special Edition",
+    "SSLL": "Seyfer Studios Lightning League"
 }
+
+
+def league_results(battles_list, point_system_obj, tier_list_type, platform, idx_dict):
+    '''
+    tier_list_type: "PL" or "CH" or "PL-CH"
+    platform: "PC" or "PS4" or "union"
+    '''
+    entities_dict = dict()
+
+    for battle in battles_list:
+        player1 = battle[idx_dict["player1"]]
+        player2 = battle[idx_dict["player2"]]
+        character1 = battle[idx_dict["character1"]]
+        character2 = battle[idx_dict["character2"]]
+        player_character1 = player1 + "-" + character1
+        player_character2 = player2 + "-" + character2
+
+        if tier_list_type == "PL-CH":  # Players - Characters
+            entity1 = player_character1
+            entity2 = player_character2
+        if tier_list_type == "PL":  # Players
+            entity1 = player1
+            entity2 = player2
+        if tier_list_type == "CH":  # Characters
+            entity1 = character1
+            entity2 = character2
+
+        if platform == "PC" and battle[idx_dict["platform"]] == "PC":
+            player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict, idx_dict)
+
+        if platform == "PS4" and battle[idx_dict["platform"]] == "PS4":
+            player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict, idx_dict)
+
+        if platform == "union":
+            player_data_generator(battle, point_system_obj, entity1, entity2, entities_dict, idx_dict)
+
+    dic = dict(sorted(entities_dict.items(), key=lambda item: item[1].player_level, reverse=True))
+
+    results = list()
+    for k, _ in dic.items():
+        results.append(k)
+    return results
 
 
 def event_stats_generator(battles_list, json_path, idx_dict):
@@ -509,14 +553,32 @@ def event_stats_generator(battles_list, json_path, idx_dict):
     events_grouped = event_grouping(battles_list, idx_dict)
     events_grouped.reverse()
     for event_duels in events_grouped:
-        events_stats_list.append({
-                "event": events_type_dic[event_duels[0][0][idx_dict["event"]].split(" ")[0]] + " " + event_duels[0][0][idx_dict["event"]].split(" ")[1],
-                "platform": event_duels[0][0][idx_dict["platform"]],
-                "players": ss_functions.calculate_event_results(event_duels, idx_dict, ss_functions.win_conditions),
-                "characters": get_event_characters(event_duels, idx_dict),
-                "playlist": event_duels[0][0][idx_dict["playlist"]],
-                "result": ss_functions.calculate_event_results(event_duels, idx_dict, ss_functions.win_conditions)
-        })
+        if event_duels[0][0][idx_dict["event"]].split(" ")[0] != "SSLL": # If is a league
+            events_stats_list.append({
+                    "event": events_type_dic[event_duels[0][0][idx_dict["event"]].split(" ")[0]] + " " + event_duels[0][0][idx_dict["event"]].split(" ")[1],
+                    "platform": event_duels[0][0][idx_dict["platform"]],
+                    "players": ss_functions.calculate_event_results(event_duels, idx_dict, ss_functions.win_conditions),
+                    "characters": get_event_characters(event_duels, idx_dict),
+                    "playlist": event_duels[0][0][idx_dict["playlist"]],
+                    "result": ss_functions.calculate_event_results(event_duels, idx_dict, ss_functions.win_conditions)
+            })
+        else: # If is not a league
+            events_stats_list.append({
+                    "event": events_type_dic[event_duels[0][0][idx_dict["event"]].split(" ")[0]] + " " + event_duels[0][0][idx_dict["event"]].split(" ")[1],
+                    "platform": event_duels[0][0][idx_dict["platform"]],
+                    "players": league_results(ss_functions.duels_list_to_battles_list(event_duels),
+                                              point_system_obj,
+                                              "PL",
+                                              event_duels[0][0][idx_dict["platform"]],
+                                              idx_dict),
+                    "characters": get_event_characters(event_duels, idx_dict),
+                    "playlist": event_duels[0][0][idx_dict["playlist"]],
+                    "result": league_results(ss_functions.duels_list_to_battles_list(event_duels),
+                                             point_system_obj,
+                                             "PL",
+                                             event_duels[0][0][idx_dict["platform"]],
+                                             idx_dict)
+            })
 
     with open(json_path, "w", encoding="utf8") as f:
         json.dump(events_stats_list, f)
