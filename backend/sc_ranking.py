@@ -1,6 +1,8 @@
 import csv
 import json
 import ss_functions
+import math
+import numpy as np
 
 
 def load_csv_fights(csv_fights_path):
@@ -251,7 +253,7 @@ class player_data:
         self.win_rate = self.won_battles / self.played_battles
 
     def calculate_wlr(self):
-        if self.lost_battles == 0:
+        if self.lost_battles == 0: # If there is no losses
             self.wlr = self.won_battles + (self.draw_battles / 2)
         elif self.won_battles + self.draw_battles == 0:
             # self.wlr = (1 + (self.draw_battles / 2)) / self.lost_battles
@@ -261,6 +263,9 @@ class player_data:
             self.wlr = (self.won_battles + (self.draw_battles / 2)) * 3/4
         else:
             self.wlr = (self.won_battles + (self.draw_battles / 2)) / self.lost_battles
+        # self.wlr = math.sqrt(self.wlr)
+        # self.wlr = -(1/self.wlr)+10
+        self.wlr = np.arctan(self.wlr)
 
     def calculate_player_lvl(self):
         self.player_level = self.wlr * self.points_earned
