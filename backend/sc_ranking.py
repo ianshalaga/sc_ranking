@@ -592,7 +592,7 @@ def event_stats_generator(battles_list, json_path, idx_dict):
 
 ''' Execution '''
 
-fights_path = "backend/SCMdb - SSLT.csv"
+fights_path = "backend/SSLEdb - SSLT.csv"
 fights_list, idx_dict = load_csv_fights(fights_path)
 
 point_system_obj = point_system(240, 240, 84, 168, 240, 0, 84, 168)
