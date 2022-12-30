@@ -236,33 +236,7 @@ class Round {
 class Stage {
     ' Attributes
     - name : String
-    - events_count : Integer
-    - teams_count : Integer
-    - players_count : Integer
-    - characters_count : Integer
-    - team_duels_count : Integer
-    - player_duels_count : Integer
-    - total_duels_count : Integer
-    - combats_count : Integer
     ' Methods
-    ' + name() : String
-    + events() : List
-    + teams() : List
-    + players() : List
-    + characters() : List
-    + team_duels() : List
-    + player_duels() : List
-    + total_duels() : List
-    + combats() : List
-    + events_count() : Integer
-    + teams_count() : Integer
-    + players_count() : Integer
-    + characters_count() : Integer
-    + team_duels_count() : Integer
-    + player_duels_count() : Integer
-    + total_duels_count() : Integer
-    + combats_count() : Integer
-    + generate_rankings() : void
 }
 
 class Competitor {
@@ -272,6 +246,12 @@ class Competitor {
     + type() : CompetitorType
 }
 
+class Country {
+    ' Attibutes
+    - name : String
+    - flag : String
+}
+
 class Execution {
     ' Methods
     + create_database() : void
@@ -279,11 +259,18 @@ class Execution {
 }
 
 class CombatHistory {
-
+    ' Attibutes
+    - combat_win_rate : Float
 }
 
 class DuelHistory {
+    ' Attibutes
+    - duel_win_rate : Float
+}
 
+class EventHistory {
+    ' Attibutes
+    - event_win_rate : Float
 }
 
 class Stats {
@@ -292,8 +279,8 @@ class Stats {
 
 ' Relationships
 
-Game "1" --- "1..*" GameVersionPlatform
-Platform "1" -- "1..*" GameVersionPlatform
+Game "1" --- "1..*" GameVersionPlatform : Have a <
+Platform "1" -- "1..*" GameVersionPlatform : Have a <
 Player "1" -- "0.." SocialMedia : Have >
 PlayerCharacter "0..*" -- "1" Character
 PlayerCharacter "0..*" -- "1" Player
@@ -309,12 +296,18 @@ Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
 Combat "1.." -- "1" Duel : Belongs >
 Round "1.." -- "1" Combat : Belongs >
-Stage "1" -- "1.." Event : Have >
+Stage "1" -- "1..*" Combat : Have <
 Position "1.." -- "1" Event : Have <
 Position "1.." -- "1" Competitor : Obtained <
 Competitor "1" -- "0..1" Player : Can be a >
 Competitor "1" -- "0..1" Team : Can be a >
-
+Competitor "1..*" -- "1" Country : Belongs to >
+Competitor "1" -- "1..*" CombatHistory : Have a <
+Combat "1" -- "1..*" CombatHistory : Have a <
+Competitor "1" -- "1..*" DuelHistory : Have a <
+Duel "1" -- "1..*" DuelHistory : Have a <
+Competitor "1" -- "1..*" EventHistory : Have a <
+Event "1" -- "1..*" EventHistory : Have a <
 
 ' Enums
 
@@ -347,7 +340,7 @@ enum PlayerSide {
 }
 
 enum LvlFactor {
-    A = -(25/132)
+    A = -0.04
     B = 1
 }
 
