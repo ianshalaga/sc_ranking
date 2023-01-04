@@ -150,20 +150,20 @@ class Event {
     + results() : List
 }
 
-class Position {
-    ' Attributes
-    - position : Integer
-    - duels_won : Integer
-    - duels_lost : Integer
-    - duels_wlr : Float
-    - duels_buchholz_wlr: Float
-    ' Methods
-    ' + position() : Integer
-    ' + duels_won() : Integer
-    ' + duels_lost() : Integer
-    ' + duels_wlr() : Float
-    ' + duels_buchholz_wlr() : Float
-}
+' class Position {
+'     ' Attributes
+'     - position : Integer
+'     - duels_won : Integer
+'     - duels_lost : Integer
+'     - duels_wlr : Float
+'     - duels_buchholz_wlr: Float
+'     ' Methods
+'     ' + position() : Integer
+'     ' + duels_won() : Integer
+'     ' + duels_lost() : Integer
+'     ' + duels_wlr() : Float
+'     ' + duels_buchholz_wlr() : Float
+' }
 
 class Duel {
     ' Attributes
@@ -239,12 +239,12 @@ class Stage {
     ' Methods
 }
 
-class Competitor {
-    ' Attributes
-    - type : CompetitorType
-    ' Methods
-    + type() : CompetitorType
-}
+' class Competitor {
+'     ' Attributes
+'     - type : CompetitorType
+'     ' Methods
+'     + type() : CompetitorType
+' }
 
 class Country {
     ' Attibutes
@@ -252,30 +252,35 @@ class Country {
     - flag : String
 }
 
-class Execution {
-    ' Methods
-    + create_database() : void
-    + generate_rankings() : void
-}
-
-class CombatHistory {
+class CompetitorType {
     ' Attibutes
-    - combat_win_rate : Float
+    - type : String
 }
 
-class DuelHistory {
-    ' Attibutes
-    - duel_win_rate : Float
-}
+' class Execution {
+'     ' Methods
+'     + create_database() : void
+'     + generate_rankings() : void
+' }
 
-class EventHistory {
-    ' Attibutes
-    - event_win_rate : Float
-}
+' class CombatHistory {
+'     ' Attibutes
+'     - combat_win_rate : Float
+' }
 
-class Stats {
+' class DuelHistory {
+'     ' Attibutes
+'     - duel_win_rate : Float
+' }
 
-}
+' class EventHistory {
+'     ' Attibutes
+'     - event_win_rate : Float
+' }
+
+' class Stats {
+
+' }
 
 ' Relationships
 
@@ -285,6 +290,7 @@ Player "1" -- "0.." SocialMedia : Have >
 PlayerCharacter "0..*" -- "1" Character
 PlayerCharacter "0..*" -- "1" Player
 Event "1..*" -- "1" EventType : Is of >
+Event "1..*" -- "1" CompetitorType : Is of >
 Event "1..*" -- "1" Region : Belongs >
 Event "1..*" -- "1" GameVersionPlatform : Is played >
 Duel "1..*" -- "1" DuelType : Is of >
@@ -294,20 +300,22 @@ Combat "1..*" -- "1" Player : Player1 >
 Combat "1..*" -- "1" Player : Player2 >
 Combat "1..*" -- "1" Character : Character1 >
 Combat "1..*" -- "1" Character : Character2 >
+Combat "1..*" -- "1" Team : Team1 >
+Combat "1..*" -- "1" Team : Team2 >
 Combat "1.." -- "1" Duel : Belongs >
 Round "1.." -- "1" Combat : Belongs >
 Stage "1" -- "1..*" Combat : Have <
 Position "1.." -- "1" Event : Have <
-Position "1.." -- "1" Competitor : Obtained <
-Competitor "1" -- "0..1" Player : Can be a >
-Competitor "1" -- "0..1" Team : Can be a >
-Competitor "1..*" -- "1" Country : Belongs to >
-Competitor "1" -- "1..*" CombatHistory : Have a <
-Combat "1" -- "1..*" CombatHistory : Have a <
-Competitor "1" -- "1..*" DuelHistory : Have a <
-Duel "1" -- "1..*" DuelHistory : Have a <
-Competitor "1" -- "1..*" EventHistory : Have a <
-Event "1" -- "1..*" EventHistory : Have a <
+' Position "1.." -- "1" Competitor : Obtained <
+' Competitor "1" -- "0..1" Player : Can be a >
+' Competitor "1" -- "0..1" Team : Can be a >
+' Competitor "1..*" -- "1" Country : Belongs to >
+' Competitor "1" -- "1..*" CombatHistory : Have a <
+' Combat "1" -- "1..*" CombatHistory : Have a <
+' Competitor "1" -- "1..*" DuelHistory : Have a <
+' Duel "1" -- "1..*" DuelHistory : Have a <
+' Competitor "1" -- "1..*" EventHistory : Have a <
+' Event "1" -- "1..*" EventHistory : Have a <
 
 ' Enums
 
@@ -342,11 +350,6 @@ enum PlayerSide {
 enum LvlFactor {
     A = -0.04
     B = 1
-}
-
-enum CompetitorType {
-    TEAM
-    PLAYER
 }
 
 enum EntityType {
