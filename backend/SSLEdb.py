@@ -44,6 +44,26 @@ class Scoreboard:
         self.player1 = result_player1
         self.player2 = result_player2
 
+    ''' Methods '''
+    # Getters
+    def get_player1(self):
+        return self.player1
+    
+    def get_player2(self):
+        return self.player2
+
+    def get_total(self):
+        return self.player1 + self.player2
+
+    # Setters
+    def add_to_player1(self, number):
+        self.player1 += number
+
+    def add_to_player2(self, number):
+        self.player2 += number
+
+    
+
 class EventSystem(Enum):
     TOURNAMENT = 1
     LEAGUE = 2
@@ -62,10 +82,17 @@ class ChallengeType(Enum):
     DUEL = 3
     EVENT = 4
 
+class ChallengeStatus(Enum):
+    PLAYED = 1
+    WON = 2
+    LOST = 3
+    DRAW = 4
+
 class EntityType(Enum):
     PLAYER = 1
     CHARACTER = 2
-    TEAM = 3
+    PLAYERCHARACTER = 3
+    TEAM = 4
 
 class CombatStatus(Enum):
     PLAYED = 1
@@ -81,12 +108,18 @@ class RoundStatus(Enum):
 class PlayerSide(Enum):
     P1 = 1
     P2 = 2
+    BOTH = 3
 
 class LvlFactor(Enum):
     A = -0.04
     B = 1
 
-func = np.arctan
+class PerformanceMetric(Enum):
+    WIN_RATE = 1
+    WIN_LOSE_RATIO = 2
+
+FUNC = np.arctan
+
 
 ''' ClassTables '''
 
@@ -190,6 +223,7 @@ class Event(Base):
     playlist = Column(String, nullable=False)
     bracket = Column(String, nullable=False)
     date = Column(DateTime, nullable=False)
+    event_order = Column(Integer, nullable=False)
 
     game_version_platform_id = Column(Integer, ForeignKey("game_version_platform.id"), nullable=False)
     region_id = Column(Integer, ForeignKey("region.id"), nullable=False)
@@ -241,7 +275,7 @@ class Event(Base):
     def get_characters_number(self):
         return len(self.get_characters_list())
     
-    def get_results_dict_number(self):
+    def get_results_dict(self):
         # for duel in self.duels:
         #     duel.get_points_earned()
         return
@@ -1019,15 +1053,417 @@ player_team = Table(
 )
 
 
-class Player(Base):
-    __tablename__ = "player"
+class Entity(Base):
+    __tablename__ = "entity"
+    __abstract__ = True
 
     ''' Attributes '''
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
+    type = Column(String, nullable=False) # Childs column
+
+    __mapper_args__ = {
+        "polymorphic_on": type,
+    }
+
+    ''' Methods '''
+    # Getters
+    def get_name(self):
+        return self.name
+    
+    # Performance
+    def get_win_rate(self, victories, played):
+        return victories / played
+    
+    def get_win_lose_ratio(self, func, victories, defeats):
+        win_lose_ratio = 0
+        if defeats == 0:
+            win_lose_ratio = victories
+        elif victories == 0:
+            win_lose_ratio = 0.5 / defeats
+        elif defeats == 1:
+            win_lose_ratio = victories * (3 / 4)
+        else:
+            win_lose_ratio = victories / defeats
+        return func(win_lose_ratio)
+
+    # Events
+    def get_events_played_list(self, combats_list):
+        ''' List of events played by an entity '''
+        events_played_set = set()
+        for combat in combats_list:
+            events_played_set.add(combat.get_event())
+        events_played_list = list(sorted(list(events_played_set), key=lambda x:x.event_order))
+        return events_played_list
+    
+    def get_events_played_number(self, combats_list):
+        ''' Number of events played by an entity '''
+        return len(self.get_events_played_list(combats_list))
+    
+    # Combats lists
+    def get_combats_status_list(self, challenge_status, combats_list):
+        combats_status_list = list()
+        for combat in combats_list:
+            if challenge_status == ChallengeStatus.PLAYED.name:
+                combats_status_list.append(combat)
+            if challenge_status == ChallengeStatus.WON.name:
+                if self in combat.get_winners_entities_list():
+                    combats_status_list.append(combat)
+            if challenge_status == ChallengeStatus.LOST.name:
+                if self in combat.get_losers_entities_list():
+                    combats_status_list.append(combat)
+            if challenge_status == ChallengeStatus.DRAW.name:
+                if combat.is_draw():
+                    combats_status_list.append(combat)
+        combats_status_list = list(sorted(combats_status_list, key=lambda x:x.combat_order))
+        return combats_status_list
+    
+    def get_combats_played_list(self, combats_list):
+        return self.get_combats_status_list(ChallengeStatus.PLAYED.name, combats_list)
+
+    def get_combats_won_list(self, combats_list):
+        return self.get_combats_status_list(ChallengeStatus.WON.name, combats_list)
+    
+    def get_combats_lost_list(self, combats_list):
+        return self.get_combats_status_list(ChallengeStatus.LOST.name, combats_list)
+    
+    def get_combats_draw_list(self, combats_list):
+        return self.get_combats_status_list(ChallengeStatus.DRAW.name, combats_list)
+    
+    # Combats numbers
+    def get_combats_played_number(self, combats_list):
+        return len(self.get_combats_played_list(combats_list))
+
+    def get_combats_won_number(self, combats_list):
+        return len(self.get_combats_won_list(combats_list))
+
+    def get_combats_lost_number(self, combats_list):
+        return len(self.get_combats_lost_list(combats_list))
+
+    def get_combats_draw_number(self, combats_list):
+        return len(self.get_combats_draw_list(combats_list))
+
+    # Combats performance
+    def get_combats_performance(self, func, performance_metric, combats_list):
+        combats_performance = 0
+        victories = self.get_combats_won_number(combats_list) + (self.get_combats_draw_number(combats_list) / 2)
+        defeats = self.get_combats_lost_number(combats_list)
+        played = self.get_combats_played_number(combats_list)
+        if performance_metric == PerformanceMetric.WIN_RATE.name:
+            combats_performance = self.get_win_rate(victories, played)
+        if performance_metric == PerformanceMetric.WIN_LOSE_RATIO.name:
+            combats_performance = self.get_win_lose_ratio(func, victories, defeats)
+        return combats_performance
+    
+    def get_combats_win_rate(self, func, combats_list):
+        return self.get_combats_performance(func, PerformanceMetric.WIN_RATE.name, combats_list)
+    
+    def get_combats_win_lose_ratio(self, func, combats_list):
+        return self.get_combats_performance(func, PerformanceMetric.WIN_LOSE_RATIO.name, combats_list)
+
+    # Combats stages lists
+    def get_stages_list(self, combats_list):
+        stages_set = set()
+        for combat in combats_list:
+            stages_set.add(combat.get_stage())
+        return list(stages_set)
+    
+    def get_combats_stage_status_dict_list(self, challenge_status, combats_list):
+        combats_stage_status_dict_list = dict()
+        for stage in self.get_stages_list(combats_list):
+            combats_stage_status_dict_list[stage] = list()
+        for combat in combats_list:
+            if challenge_status == ChallengeStatus.PLAYED.name:
+                combats_stage_status_dict_list[combat.get_stage()].append(combat)
+            if challenge_status == ChallengeStatus.WON.name:
+                if self in combat.get_winners_entities_list():
+                    combats_stage_status_dict_list[combat.get_stage()].append(combat)
+            if challenge_status == ChallengeStatus.LOST.name:
+                if self in combat.get_losers_entities_list():
+                    combats_stage_status_dict_list[combat.get_stage()].append(combat)
+            if challenge_status == ChallengeStatus.DRAW.name:
+                if combat.is_draw():
+                    combats_stage_status_dict_list[combat.get_stage()].append(combat)
+        return combats_stage_status_dict_list
+
+    def get_combats_stage_played_dict_list(self, combats_list):
+        return self.get_combats_stage_status_dict_list(ChallengeStatus.PLAYED.name, combats_list)
+
+    def get_combats_stage_won_dict_list(self, combats_list):
+        return self.get_combats_stage_status_dict_list(ChallengeStatus.WON.name, combats_list)
+
+    def get_combats_stage_lost_dict_list(self, combats_list):
+        return self.get_combats_stage_status_dict_list(ChallengeStatus.LOST.name, combats_list)
+
+    def get_combats_stage_draw_dict_list(self, combats_list):
+        return self.get_combats_stage_status_dict_list(ChallengeStatus.DRAW.name, combats_list)
+
+    # Combats stages numbers
+    def get_combats_stage_status_dict_number(self, combats_stage_dict_list):
+        combats_stage_status_dict_number = dict()
+        for stage, combats_stage_list in combats_stage_dict_list.items():
+            combats_stage_status_dict_number[stage] = len(combats_stage_list)
+        return combats_stage_status_dict_number
+
+    def get_combats_stage_played_dict_number(self, combats_list):
+        return self.get_combats_stage_status_dict_number(self.get_combats_stage_played_dict_list(combats_list))
+
+    def get_combats_stage_won_dict_number(self, combats_list):
+        return self.get_combats_stage_status_dict_number(self.get_combats_stage_won_dict_list(combats_list))
+
+    def get_combats_stage_lost_dict_number(self, combats_list):
+        return self.get_combats_stage_status_dict_number(self.get_combats_stage_lost_dict_list(combats_list))
+
+    def get_combats_stage_draw_dict_number(self, combats_list):
+        return self.get_combats_stage_status_dict_number(self.get_combats_stage_draw_dict_list(combats_list))
+
+    # Combats stages performance
+    def get_combats_stage_performance_dict(self, func, performance_metric, combats_list):
+        get_combats_stage_performance_dict = dict()
+        stages_list = self.get_stages_list(combats_list)
+        for stage in stages_list:
+            victories = self.get_combats_stage_won_dict_number(combats_list)[stage] + ((self.get_combats_stage_draw_dict_number(combats_list)[stage]) / 2)
+            defeats = self.get_combats_stage_lost_dict_number(combats_list)[stage]
+            played = self.get_combats_stage_played_dict_number(combats_list)[stage]
+            if performance_metric == PerformanceMetric.WIN_RATE.name:
+                get_combats_stage_performance_dict[stage] = self.get_win_rate(victories, played)
+            if performance_metric == PerformanceMetric.WIN_LOSE_RATIO.name:
+                get_combats_stage_performance_dict[stage] = self.get_win_lose_ratio(func, victories, defeats)
+        return get_combats_stage_performance_dict
+    
+    def get_combats_stage_win_rate_dict(self, func, combats_list):
+        return self.get_combats_stage_performance_dict(func, PerformanceMetric.WIN_RATE.name, combats_list)
+
+    def get_combats_stage_win_lose_ratio_dict(self, func, combats_list):
+        return self.get_combats_stage_performance_dict(func, PerformanceMetric.WIN_LOSE_RATIO.name, combats_list)
+
+    # Rounds
+    def get_rounds_played_number(self, combats_list):
+        rounds_played_number = 0
+        for combat in combats_list:
+            rounds_played_number += combat.get_rounds_played_number()
+
+    def get_rounds_status_number(self, challenge_status, combats_list):
+        rounds_status_number_obj = Scoreboard(0, 0)
+        for combat in combats_list:
+            if challenge_status == ChallengeStatus.WON.name:
+                rounds_status_number_obj.add_to_player1(combat.get_rounds_won_p1_number())
+                rounds_status_number_obj.add_to_player2(combat.get_rounds_won_p2_number())
+            if challenge_status == ChallengeStatus.LOST.name:
+                rounds_status_number_obj.add_to_player1(combat.get_rounds_lost_p1_number())
+                rounds_status_number_obj.add_to_player2(combat.get_rounds_lost_p2_number())
+        return rounds_status_number_obj
+
+    def get_rounds_won_number(self, combats_list):
+        return self.get_rounds_status_number(ChallengeStatus.WON.name, combats_list) # Scoreboard
+    
+    def get_rounds_lost_number(self, combats_list):
+        return self.get_rounds_status_number(ChallengeStatus.LOST.name, combats_list) # Scoreboard
+
+    # Rounds performance
+    def get_rounds_performance(self, func, performance_metric, combats_list):
+        get_rounds_performance = 0
+        victories = self.get_rounds_won_number(combats_list)
+        defeats = self.get_rounds_lost_number(combats_list)
+        played = self.get_rounds_played_number(combats_list)
+        if performance_metric == PerformanceMetric.WIN_RATE.name:
+            rounds_side_performance = self.get_win_rate(victories, played)
+        if performance_metric == PerformanceMetric.WIN_LOSE_RATIO.name:
+            rounds_side_performance = self.get_win_lose_ratio(func, victories, defeats)
+        return rounds_side_performance
+
+    def get_rounds_win_rate(self, func, combats_list):
+        return self.get_rounds_performance(func, PerformanceMetric.WIN_RATE.name, combats_list)
+
+    def get_rounds_win_lose_ratio(self, func, combats_list):
+        return self.get_rounds_performance(func, PerformanceMetric.WIN_LOSE_RATIO.name, combats_list)
+
+
+class Competitor(Entity):
+    __tablename__ = "competitor"
+    __abstract__ = True
+
+    ''' Attributes '''
+    id = Column(Integer, ForeignKey('entity.id'), primary_key=True, nullable=False)
+    type = Column(String, nullable=False) # Childs column
+
+    __mapper_args__ = {
+        "polymorphic_on": type,
+    }
+
+    ''' Methods '''
+    # Getters
+    def get_name(self):
+        return super().get_name()
+
+    # Performance
+    def get_win_rate(self, victories, played):
+        return super().get_win_rate(victories, played)
+
+    def get_win_lose_ratio(self, func, victories, defeats):
+        return super().get_win_lose_ratio(func, victories, defeats)
+
+    # Events
+    def get_events_played_list(self, combats_list):
+        return super().get_events_played_list(combats_list)
+    
+    def get_events_played_number(self, combats_list):
+        return super().get_events_played_number(combats_list)
+
+    def get_events_result_dict(self, combats_list):
+        events_results_dict = dict() # Output
+        events_played_list = self.get_events_played_list(combats_list)
+        for event in events_played_list:
+            events_results_dict[event] = event.get_results_dict()[self]
+        return events_results_dict
+
+    # Combats lists
+    def get_combats_played_list(self, combats_list):
+        return super().get_combats_played_list(combats_list)
+    
+    def get_combats_won_list(self, combats_list):
+        return super().get_combats_won_list(combats_list)
+    
+    def get_combats_lost_list(self, combats_list):
+        return super().get_combats_lost_list(combats_list)
+    
+    def get_combats_draw_list(self, combats_list):
+        return super().get_combats_draw_list(combats_list)
+    
+    # Combats numbers
+    def get_combats_played_number(self, combats_list):
+        return super().get_combats_played_number(combats_list)
+    
+    def get_combats_won_number(self, combats_list):
+        return super().get_combats_won_number(combats_list)
+    
+    def get_combats_lost_number(self, combats_list):
+        return super().get_combats_lost_number(combats_list)
+    
+    def get_combats_draw_number(self, combats_list):
+        return super().get_combats_draw_number(combats_list)
+
+    # Combats perfomance
+    def get_combats_win_rate(self, func, combats_list):
+        return super().get_combats_win_rate(func, combats_list)
+    
+    def get_combats_win_lose_ratio(self, func, combats_list):
+        return super().get_combats_win_lose_ratio(func, combats_list)
+
+    # Combats stages list
+    def get_combats_stage_played_dict_list(self, combats_list):
+        return super().get_combats_stage_played_dict_list(combats_list)
+
+    def get_combats_stage_won_dict_list(self, combats_list):
+        return super().get_combats_stage_won_dict_list(combats_list)
+
+    def get_combats_stage_lost_dict_list(self, combats_list):
+        return super().get_combats_stage_lost_dict_list(combats_list)
+    
+    def get_combats_stage_draw_dict_list(self, combats_list):
+        return super().get_combats_stage_draw_dict_list(combats_list)
+
+    # Combats stages numbers
+    def get_combats_stage_played_dict_number(self, combats_list):
+        return super().get_combats_stage_played_dict_number(combats_list)
+
+    def get_combats_stage_won_dict_number(self, combats_list):
+        return super().get_combats_stage_won_dict_number(combats_list)
+    
+    def get_combats_stage_lost_dict_number(self, combats_list):
+        return super().get_combats_stage_lost_dict_number(combats_list)
+
+    def get_combats_stage_draw_dict_number(self, combats_list):
+        return super().get_combats_stage_draw_dict_number(combats_list)
+
+    # Combats stages performance
+    def get_combats_stage_win_rate_dict(self, func, combats_list):
+        return super().get_combats_stage_win_rate_dict(func, combats_list)
+
+    def get_combats_stage_win_lose_ratio_dict(self, func, combats_list):
+        return super().get_combats_stage_win_lose_ratio_dict(func, combats_list)
+
+    # Rounds
+    def get_rounds_played_number(self, combats_list):
+        return super().get_rounds_played_number(combats_list)
+
+    def get_rounds_won_number(self, combats_list):
+        return super().get_rounds_won_number(combats_list)
+
+    def get_rounds_lost_number(self, combats_list):
+        return super().get_rounds_lost_number(combats_list)
+
+    # Rounds performance
+    def get_rounds_win_rate(self, func, combats_list):
+        return super().get_rounds_win_rate(func, combats_list)
+
+    def get_rounds_win_lose_ratio(self, func, combats_list):
+        return super().get_rounds_win_lose_ratio(func, combats_list)
+
+    # Duels lists
+    def get_duels_status_list(self, challenge_status, combats_list):
+        duels_status_set = set()
+        for combat in combats_list:
+            duel = combat.get_duel()
+            if challenge_status == ChallengeStatus.PLAYED.name:
+                duels_status_set.add(duel)
+            if challenge_status == ChallengeStatus.WON.name:
+                if duel.get_winner() == self:
+                    duels_status_set.add(duel)
+            if challenge_status == ChallengeStatus.LOST.name:
+                if self in duel.get_losers_list():
+                    duels_status_set.add(duel)
+        duels_status_list = list(sorted(list(duels_status_set), key=lambda x:x.duel_order))
+        return duels_status_list
+
+    def get_duels_played_list(self, combats_list):
+        return self.get_duels_status_list(ChallengeStatus.PLAYED.name, combats_list)
+    
+    def get_duels_won_list(self, combats_list):
+        return self.get_duels_status_list(ChallengeStatus.WON.name, combats_list)
+    
+    def get_duels_lost_list(self, combats_list):
+        return self.get_duels_status_list(ChallengeStatus.LOST.name, combats_list)
+    
+    # Duels numbers
+    def get_duels_played_number(self, combats_list):
+        return len(self.get_duels_played_list(combats_list))
+    
+    def get_duels_won_number(self, combats_list):
+        return len(self.get_duels_won_list(combats_list))
+    
+    def get_duels_lost_number(self, combats_list):
+        return len(self.get_duels_lost_list(combats_list))
+    
+    # Duels performance
+    def get_duels_performance(self, func, performance_metric, combats_list):
+        duels_performance = 0
+        victories = self.get_duels_won_number(combats_list)
+        defeats = self.get_duels_lost_number(combats_list)
+        played = self.get_duels_played_number(combats_list)
+        if performance_metric == PerformanceMetric.WIN_RATE.name:
+            duels_performance = self.get_win_rate(victories, played)
+        if performance_metric == PerformanceMetric.WIN_LOSE_RATIO.name:
+            duels_performance = self.get_win_lose_ratio(func, victories, defeats)
+        return duels_performance
+
+    def get_duels_win_rate(self, func, combats_list):
+        return self.get_duels_performance(func, PerformanceMetric.WIN_RATE.name, combats_list)
+
+    def get_duels_win_lose_ratio(self, func, combats_list):
+        return self.get_duels_performance(func, PerformanceMetric.WIN_LOSE_RATIO.name, combats_list)
+
+
+class Player(Competitor):
+    __tablename__ = "player"
+
+    ''' Attributes '''
+    id = Column(Integer, ForeignKey('competitor.id'), primary_key=True, nullable=False)
     playlist = Column(String, nullable=True)
 
     country_id = Column(Integer, ForeignKey("country.id"), nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "player"}
 
     ''' Relationships '''
     country = relationship("Country", back_populates="players")
@@ -1040,7 +1476,7 @@ class Player(Base):
     ''' Methods '''
     # Getters
     def get_name(self):
-        return self.name
+        return super().get_name()
 
     def get_playlist(self):
         return self.playlist
@@ -1048,344 +1484,698 @@ class Player(Base):
     def get_country(self):
         return self.country
 
-    # Events
-    def get_events_played_list(self):
-        events_set = set()
-        for combat in self.get_combats_played_list():
-            events_set.add(combat.get_event())
-        events_list = list(events_set).sort()
-        return events_list
+    def get_social_medias_list(self):
+        return self.social_medias
 
-    def get_events_played_number(self):
-        return len(self.get_events_played_list())
+    # Performance
+    def get_win_rate(self, victories, played):
+        return super().get_win_rate(victories, played)
     
-    def get_events_results_dict(self):
-        events_results_dict = dict()
-        for event in self.get_events_played_list():
-            events_results_dict[event] = event.get_result_dict()[self]
-        return events_results_dict
+    def get_win_lose_ratio(self, func, victories, defeats):
+        return super().get_win_lose_ratio(func, victories, defeats)
+
+    # Combats lists
+    # P1
+    def get_combats_played_p1_list(self):
+        return super().get_combats_played_list(self.combats_p1)
+
+    def get_combats_won_p1_list(self):
+        return super().get_combats_won_list(self.combats_p1)
+
+    def get_combats_lost_p1_list(self):
+        return super().get_combats_lost_list(self.combats_p1)
+
+    def get_combats_draw_p1_list(self):
+        return super().get_combats_draw_list(self.combats_p1)
+    
+    # P2
+    def get_combats_played_p2_list(self):
+        return super().get_combats_played_list(self.combats_p2)
+
+    def get_combats_won_p2_list(self):
+        return super().get_combats_won_list(self.combats_p2)
+
+    def get_combats_lost_p2_list(self):
+        return super().get_combats_lost_list(self.combats_p2)
+
+    def get_combats_draw_p2_list(self):
+        return super().get_combats_draw_list(self.combats_p2)
+
+    # BOTH
+    def get_combats_played_list(self):
+        return super().get_combats_played_list(self.combats_p1 + self.combats_p2)
+
+    def get_combats_won_list(self):
+        return super().get_combats_won_list(self.combats_p1 + self.combats_p2)
+
+    def get_combats_lost_list(self):
+        return super().get_combats_lost_list(self.combats_p1 + self.combats_p2)
+
+    def get_combats_draw_list(self):
+        return super().get_combats_draw_list(self.combats_p1 + self.combats_p2)
+
+    # Combats numbers
+    # P1
+    def get_combats_played_p1_number(self):
+        return super().get_combats_played_number(self.combats_p1)
+
+    def get_combats_won_p1_number(self):
+        return super().get_combats_won_number(self.combats_p1)
+
+    def get_combats_lost_p1_number(self):
+        return super().get_combats_lost_number(self.combats_p1)
+
+    def get_combats_draw_p1_number(self):
+        return super().get_combats_draw_number(self.combats_p1)
+    
+    # P2
+    def get_combats_played_p2_number(self):
+        return super().get_combats_played_number(self.combats_p2)
+
+    def get_combats_won_p2_number(self):
+        return super().get_combats_won_number(self.combats_p2)
+
+    def get_combats_lost_p2_number(self):
+        return super().get_combats_lost_number(self.combats_p2)
+
+    def get_combats_draw_p2_number(self):
+        return super().get_combats_draw_number(self.combats_p2)
+
+    # BOTH
+    def get_combats_played_number(self):
+        return super().get_combats_played_number(self.combats_p1 + self.combats_p2)
+
+    def get_combats_won_number(self):
+        return super().get_combats_won_number(self.combats_p1 + self.combats_p2)
+
+    def get_combats_lost_number(self):
+        return super().get_combats_lost_number(self.combats_p1 + self.combats_p2)
+
+    def get_combats_draw_number(self):
+        return super().get_combats_draw_number(self.combats_p1 + self.combats_p2)
+    
+    # Combats performance
+    # Win rate
+    def get_combats_p1_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p1)
+
+    def get_combats_p2_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p2)
+
+    def get_combats_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p1 + self.combats_p2)
 
     # Win lose ratio
-    def get_win_lose_ratio(self, func, challenge_type, competitor_type):
-        win_lose_ratio = 0
-        victories = 0
-        defeats = 0
-        if challenge_type == ChallengeType.ROUND.name:
-            victories = self.get_rounds_won_number()
-            defeats = self.get_rounds_lost_number()
-        if challenge_type == ChallengeType.COMBAT.name:
-            victories = self.get_combats_won_number() + self.get_combats_draw_number()
-            defeats = self.get_combats_lost_number()
-        if challenge_type == ChallengeType.DUEL.name:
-            if competitor_type == CompetitorType.PLAYER.name:
-                victories = self.get_duels_won_number()
-                defeats = self.get_duels_lost_number()
-            elif competitor_type == CompetitorType.TEAM.name:
-                victories = self.get_team_duels_won_number()
-                defeats = self.get_team_duels_lost_number()
-        if defeats == 0:
-            win_lose_ratio = victories
-        elif victories == 0:
-            win_lose_ratio = 0.5 / defeats
-        elif defeats == 1:
-            win_lose_ratio = victories * (3 / 4)
-        else:
-            win_lose_ratio = victories / defeats
-        return func(win_lose_ratio)
+    def get_combats_p1_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p1)
 
-    # Duels
+    def get_combats_p2_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p2)
+
+    def get_combats_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p1 + self.combats_p2)
+
+    # Combats stage lists
+    # P1
+    def get_combats_stage_played_p1_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_won_p1_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_lost_p1_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_draw_p1_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_p1_list())
+
+    # P2
+    def get_combats_stage_played_p2_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_won_p2_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_lost_p2_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_draw_p2_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_p2_list())
+
+    # BOTH
+    def get_combats_stage_played_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_won_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_lost_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_draw_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_list())
+
+    # Combats stage numbers
+    # P1
+    def get_combats_stage_played_p1_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_won_p1_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_lost_p1_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_draw_p1_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_p1_list())
+    
+    # P2
+    def get_combats_stage_played_p2_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_won_p2_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_lost_p2_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_draw_p2_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_p2_list())
+    
+    # BOTH
+    def get_combats_stage_played_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_won_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_lost_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_draw_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_list())
+
+    # Combats stage performance
+    # Win rate
+    def get_combats_stage_win_rate_p1_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_p1_list())
+    
+    def get_combats_stage_win_rate_p2_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_p2_list())
+    
+    def get_combats_stage_win_rate_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_list())
+
+    # Win lose ratio
+    def get_combats_stage_win_lose_ratio_p1_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_p1_list())
+    
+    def get_combats_stage_win_lose_ratio_p2_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_p2_list())
+    
+    def get_combats_stage_win_lose_ratio_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_list())
+
+    # Events
+    def get_events_played_list(self):
+        return super().get_events_played_list(self.get_combats_played_list())
+
+    def get_events_played_number(self):
+        return super().get_events_played_number(self.get_combats_played_list())
+    
+    def get_events_result_dict(self):
+        return super().get_events_result_dict(self.get_combats_played_list())
+
+    # Duels lists
     def get_duels_played_list(self):
-        duels_list = list()
-        for combat in self.get_combats_played_list():
-            duels_list.append(combat.get_duel())
-        duels_list = list(set(duels_list)).sort()
-        return duels_list
-
-    def get_duels_played_number(self):
-        return len(self.get_duels_played_list())
+        return super().get_duels_played_list(self.get_combats_played_list())
 
     def get_duels_won_list(self):
-        duels_list = list()
-        for duel in self.get_duels_played_list():
-            if duel.get_winner() == self:
-                duels_list.append(duel)
-        return duels_list
-
-    def get_duels_won_number(self):
-        return len(self.get_duels_won_list())
+        return super().get_duels_won_list(self.get_combats_played_list())
 
     def get_duels_lost_list(self):
-        duels_list = list()
-        for duel in self.get_duels_played_list():
-            if self in duel.get_losers_list():
-                duels_list.append(duel)
-        return duels_list
+        return super().get_duels_lost_list(self.get_combats_played_list())
+
+    # Duels numbers
+    def get_duels_played_number(self):
+        return super().get_duels_played_number(self.get_combats_played_list())
+
+    def get_duels_won_number(self):
+        return super().get_duels_won_number(self.get_combats_played_list())
 
     def get_duels_lost_number(self):
-        return len(self.get_duels_lost_list())
-    
-    def get_duels_win_rate(self):
-        return self.get_duels_won_number() / self.get_duels_played_number()
-    
+        return super().get_duels_lost_number(self.get_combats_played_list())
+
+    # Duels performance
+    def get_duels_win_rate(self, func):
+        return super().get_duels_win_rate(func, self.get_combats_played_list())
+
     def get_duels_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.DUEL.name, CompetitorType.PLAYER.name)
+        return super().get_duels_win_lose_ratio(func, self.get_combats_played_list())
 
-    # Team duels
+    # Rounds
+    # P1
+    def get_rounds_played_p1_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_p1_list())
+    
+    def get_rounds_won_p1_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_player1()
+    
+    def get_rounds_lost_p1_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_player1()
+
+    # P2
+    def get_rounds_played_p2_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_p2_list())
+    
+    def get_rounds_won_p2_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_player2()
+    
+    def get_rounds_lost_p2_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_player2()
+
+    # BOTH
+    def get_rounds_played_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_list())
+    
+    def get_rounds_won_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_total()
+    
+    def get_rounds_lost_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_total()
+
+    # Rounds performance
+    # Win rate
+    def get_rounds_p1_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_p1_list())
+    
+    def get_rounds_p2_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_p2_list())
+    
+    def get_rounds_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_list())
+
+    # Win lose ratio
+    def get_rounds_p1_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_p1_list())
+
+    def get_rounds_p2_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_p2_list())
+    
+    def get_rounds_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_list())
+
+    # Team duels lists
+    def get_team_duels_status_list(self, challenge_status):
+        team_duels_status_list = list()
+        duels_status_list = list()
+        if challenge_status == ChallengeStatus.PLAYED.name:
+            duels_status_list = self.get_duels_played_list()
+        if challenge_status == ChallengeStatus.WON.name:
+            duels_status_list = self.get_duels_won_list()
+        if challenge_status == ChallengeStatus.LOST.name:
+            duels_status_list = self.get_duels_lost_list()
+        for duel in duels_status_list:
+            if duel.is_team_duel():
+                team_duels_status_list.append(duel)
+        return team_duels_status_list
+
     def get_team_duels_played_list(self):
-        duels_list = list()
-        for duel in self.get_duels_played_list():
-            if duel.is_teams_duel():
-                duels_list.append(duel)
-        return duels_list
+        return self.get_team_duels_status_list(ChallengeStatus.PLAYED.name)
+    
+    def get_team_duels_won_list(self):
+        return self.get_team_duels_status_list(ChallengeStatus.WON.name)
+    
+    def get_team_duels_lost_list(self):
+        return self.get_team_duels_status_list(ChallengeStatus.LOST.name)
 
+    # Team duels numbers
     def get_team_duels_played_number(self):
         return len(self.get_team_duels_played_list())
-
-    def get_team_duels_won_list(self):
-        duels_list = list()
-        for duel in self.get_team_duels_played_list():
-            if self in duel.get_winner_team_members_list():
-                duels_list.append(duel)
-        return duels_list
-
+    
     def get_team_duels_won_number(self):
         return len(self.get_team_duels_won_list())
-
-    def get_team_duels_lost_list(self):
-        duels_list = list()
-        for duel in self.get_team_duels_played_list():
-            if self in duel.get_losers_teams_members_list():
-                duels_list.append(duel)
-        return duels_list
-
+    
     def get_team_duels_lost_number(self):
         return len(self.get_team_duels_lost_list())
 
-    def get_team_duels_win_rate(self):
-        return self.get_team_duels_won_number() / self.get_team_duels_played_number()
+    # Team duels performance
+    def get_team_duels_performance(self, func, performance_metric):
+        team_duels_performance = 0
+        victories = self.get_team_duels_won_number()
+        defeats = self.get_team_duels_lost_number()
+        played = self.get_team_duels_played_number()
+        if performance_metric == PerformanceMetric.WIN_RATE.name:
+            team_duels_performance = self.get_win_rate(victories, played)
+        if performance_metric == PerformanceMetric.WIN_LOSE_RATIO.name:
+            team_duels_performance = self.get_win_lose_ratio(func, victories, defeats)
+        return team_duels_performance
+    
+    def get_team_duels_win_rate(self, func):
+        return self.get_team_duels_performance(func, PerformanceMetric.WIN_RATE.name)
     
     def get_team_duels_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.DUEL.name, CompetitorType.TEAM.name)
-
-    # Combats
-    def get_combats_played_p1_list(self):
-        return self.combats_p1
-
-    def get_combats_played_p1_number(self):
-        return len(self.combats_p1)
-    
-    def get_combats_played_p2_list(self):
-        return self.combats_p2
-
-    def get_combats_played_p2_number(self):
-        return len(self.combats_p2)
-
-    def get_combats_played_list(self):
-        return self.combats_p1 + self.combats_p2
-
-    def get_combats_played_number(self):
-        return len(self.get_combats_played_list())
-
-    def get_combats_won_list(self):
-        combats_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.get_winner_player() == self:
-                combats_list.append(combat)
-        return combats_list
-
-    def get_combats_won_number(self):
-        return len(self.get_combats_won_list())
-
-    def get_combats_lost_list(self):
-        combats_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.get_loser_player() == self:
-                combats_list.append(combat)
-        return combats_list
-
-    def get_combats_lost_number(self):
-        return len(self.get_combats_lost_list())
-
-    def get_combats_draw_list(self):
-        combats_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.is_draw():
-                combats_list.append(combat)
-        return combats_list
-
-    def get_combats_draw_number(self):
-        return len(self.get_combats_draw_list())
-
-    def get_combats_win_rate(self):
-        return (self.get_combats_won_number + (self.get_combats_draw_number / 2)) / self.get_combats_played_number()
-
-    def get_combats_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.COMBAT.name, CompetitorType.PLAYER.name)
-    
-    # Combats stage
-    def get_stages_list(self):
-        ''' List of stages where the player played '''
-        stages_set = set()
-        for combat in self.get_combats_played_list():
-            stages_set.add(combat.get_stage())
-        stages_list = list(stages_set)
-        return stages_list
-
-    def get_combats_status_stage_dict_list(self, combat_status):
-        ''' List of combats status by stage '''
-        combats_status_stage_dict_list = dict()
-        for stage in self.get_stages_list():
-            combats_status_stage_dict_list[stage] = list()
-        for combat in self.get_combats_played_list():
-            if combat_status == CombatStatus.PLAYED.name:
-                combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.WON.name:
-                if combat.get_winner_player() == self:
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.LOST.name:
-                if combat.get_loser_player() == self:
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.DRAW.name:
-                if combat.is_draw():
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-        return combats_status_stage_dict_list
-    
-    def get_combats_status_stage_dict_number(self, combat_status):
-        ''' Number of combats status by stage '''
-        combats_status_stage_dict_number = dict()
-        combats_status_stage_dict_list = dict()
-        if combat_status == CombatStatus.PLAYED.name:
-            combats_status_stage_dict_list = self.get_combats_played_stage_dict_list()
-        if combat_status == CombatStatus.WON.name:
-            combats_status_stage_dict_list = self.get_combats_won_stage_dict_list()
-        if combat_status == CombatStatus.LOST.name:
-            combats_status_stage_dict_list = self.get_combats_lost_stage_dict_list()
-        if combat_status == CombatStatus.DRAW.name:
-            combats_status_stage_dict_list = self.get_combats_draw_stage_dict_list()
-        for stage, combats_list in combats_status_stage_dict_list:
-            combats_status_stage_dict_number[stage] = len(combats_list)
-        return combats_status_stage_dict_number
-
-    def get_combats_played_stage_dict_list(self):
-        ''' List of combats played by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.PLAYED.name)
-    
-    def get_combats_played_stage_dict_number(self):
-        ''' Number of combats played by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.PLAYED.name)
-    
-    def get_combats_won_stage_dict_list(self):
-        ''' List of combats won by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.WON.name)
-    
-    def get_combats_won_stage_dict_number(self):
-        ''' Number of combats won by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.WON.name)
-
-    def get_combats_lost_stage_dict_list(self):
-        ''' List of combats lost by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.LOST.name)
-    
-    def get_combats_lost_stage_dict_number(self):
-        ''' Number of combats lost by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.LOST.name)
-    
-    def get_combats_draw_stage_dict_list(self):
-        ''' List of combats draw by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.DRAW.name)
-
-    def get_combats_draw_stage_dict_number(self):
-        ''' Number of combats draw by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.DRAW.name)
-    
-    def get_combats_win_rate_stage_dict(self):
-        ''' Combats win rate by stage '''
-        combats_stage_win_rate_dict = dict()
-        stages_list = self.get_stages_list()
-        for stage in stages_list:
-            combats_stage_win_rate_dict[stage] = (self.get_combats_won_stage_dict_number()[stage] + (self.get_combats_draw_stage_dict_number()[stage] / 2)) / self.get_combats_played_stage_dict_number()[stage]
-        return combats_stage_win_rate_dict
-    
-    def get_combats_win_lose_ratio_stage_dict(self, func):
-        ''' Combats win lose ratio by stage '''
-        combats_win_lose_ratio_stage_dict = dict()
-        stages_list = self.get_stages_list()
-        for stage in stages_list:
-            victories = self.get_combats_won_stage_dict_number()[stage] + (self.get_combats_draw_stage_dict_number()[stage] / 2)
-            defeats = self.get_combats_lost_stage_dict_number()[stage]
-            if defeats == 0:
-                combats_win_lose_ratio_stage_dict[stage] = victories
-            elif victories == 0:
-                combats_win_lose_ratio_stage_dict[stage] = 0.5 / defeats
-            elif defeats == 1:
-                combats_win_lose_ratio_stage_dict[stage] = victories * (3 / 4)
-            else:
-                combats_win_lose_ratio_stage_dict[stage] = victories / defeats
-        for stage, win_lose_ratio in combats_win_lose_ratio_stage_dict.items():
-            combats_win_lose_ratio_stage_dict[stage] = func(win_lose_ratio)
-        return combats_win_lose_ratio_stage_dict
-    
-    # Rounds
-    def get_rounds_played_p1_number(self):
-        rounds_played = 0
-        for combat in self.combats_p1:
-            rounds_played += combat.get_rounds_played_number()
-        return rounds_played
-
-    def get_rounds_played_p2_number(self):
-        rounds_played = 0
-        for combat in self.combats_p2:
-            rounds_played += combat.get_rounds_played_number()
-        return rounds_played
-
-    def get_rounds_played_number(self):
-        return self.get_rounds_played_p1_number() + self.get_rounds_played_p2_number()
-
-    def get_rounds_won_p1_number(self):
-        rounds_won = 0
-        for combat in self.combats_p1:
-            rounds_won += combat.get_rounds_won_p1_number()
-        return rounds_won
-
-    def get_rounds_won_p2_number(self):
-        rounds_won = 0
-        for combat in self.combats_p2:
-            rounds_won += combat.get_rounds_won_p2_number()
-        return rounds_won
-
-    def get_rounds_won_number(self):
-        return self.get_rounds_won_p1_number() + self.get_rounds_won_p2_number()
-
-    def get_rounds_lost_p1_number(self):
-        rounds_won = 0
-        for combat in self.combats_p1:
-            rounds_won += combat.get_rounds_lost_p1_number()
-        return rounds_won
-
-    def get_rounds_lost_p2_number(self):
-        rounds_won = 0
-        for combat in self.combats_p2:
-            rounds_won += combat.get_rounds_lost_p2_number()
-        return rounds_won
-
-    def get_rounds_lost_number(self):
-        return self.get_rounds_lost_p1_number() + self.get_rounds_lost_p2_number()
-
-    def get_rounds_win_rate(self):
-        return self.get_rounds_won_number() / self.get_rounds_played_number()
-
-    def get_rounds_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.ROUND.name, CompetitorType.PLAYER.name)
+        return self.get_team_duels_performance(func, PerformanceMetric.WIN_LOSE_RATIO.name)
 
 
-class Character(Base):
-    __tablename__ = "character"
+class Team(Competitor):
+    __tablename__ = "team"
 
     ''' Attributes '''
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
+    id = Column(Integer, ForeignKey('competitor.id'), primary_key=True, nullable=False)
+    initials = Column(String, nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "team"}
+
+    ''' Relationships '''
+    players = relationship('Player', secondary=player_team, back_populates='teams')
+    combats_p1 = relationship("Combat", back_populates="team1", cascade="all, delete-orphan")
+    combats_p2 = relationship("Combat", back_populates="team2", cascade="all, delete-orphan")
+
+    ''' Methods '''
+    # Getters
+    def get_name(self):
+        return super().get_name()
+    
+    def get_initials(self):
+        return self.initials
+
+    def get_team_members_list(self):
+        return self.players
+    
+    # Country
+    def get_country(self):
+        country = None # When is an international team
+        countries_set = set()
+        for player in self.players:
+            countries_set.add(player.get_country())
+        if len(countries_set) == 1:
+            country = list(countries_set)[0]
+        return country
+    
+    # Combats lists
+    # P1
+    def get_combats_played_p1_list(self):
+        return super().get_combats_played_list(self.combats_p1)
+
+    def get_combats_won_p1_list(self):
+        return super().get_combats_won_list(self.combats_p1)
+    
+    def get_combats_lost_p1_list(self):
+        return super().get_combats_lost_list(self.combats_p1)
+    
+    def get_combats_draw_p1_list(self):
+        return super().get_combats_draw_list(self.combats_p1)
+
+    # P2
+    def get_combats_played_p2_list(self):
+        return super().get_combats_played_list(self.combats_p2)
+
+    def get_combats_won_p2_list(self):
+        return super().get_combats_won_list(self.combats_p2)
+    
+    def get_combats_lost_p2_list(self):
+        return super().get_combats_lost_list(self.combats_p2)
+    
+    def get_combats_draw_p2_list(self):
+        return super().get_combats_draw_list(self.combats_p2)
+
+    # BOTH
+    def get_combats_played_list(self):
+        return super().get_combats_played_list(self.combats_p1 + self.combats_p2)
+
+    def get_combats_won_list(self):
+        return super().get_combats_won_list(self.combats_p1 + self.combats_p2)
+    
+    def get_combats_lost_list(self):
+        return super().get_combats_lost_list(self.combats_p1 + self.combats_p2)
+    
+    def get_combats_draw_list(self):
+        return super().get_combats_draw_list(self.combats_p1 + self.combats_p2)
+
+    # Combats numbers
+    # P1
+    def get_combats_played_p1_number(self):
+        return super().get_combats_played_number(self.combats_p1)
+    
+    def get_combats_won_p1_number(self):
+        return super().get_combats_won_number(self.combats_p1)
+    
+    def get_combats_lost_p1_number(self):
+        return super().get_combats_lost_number(self.combats_p1)
+    
+    def get_combats_draw_p1_number(self):
+        return super().get_combats_draw_number(self.combats_p1)
+
+    # P2
+    def get_combats_played_p2_number(self):
+        return super().get_combats_played_number(self.combats_p2)
+    
+    def get_combats_won_p2_number(self):
+        return super().get_combats_won_number(self.combats_p2)
+    
+    def get_combats_lost_p2_number(self):
+        return super().get_combats_lost_number(self.combats_p2)
+    
+    def get_combats_draw_p2_number(self):
+        return super().get_combats_draw_number(self.combats_p2)
+
+    # BOTH
+    def get_combats_played_number(self):
+        return super().get_combats_played_number(self.combats_p1 + self.combats_p2)
+    
+    def get_combats_won_number(self):
+        return super().get_combats_won_number(self.combats_p1 + self.combats_p2)
+    
+    def get_combats_lost_number(self):
+        return super().get_combats_lost_number(self.combats_p1 + self.combats_p2)
+    
+    def get_combats_draw_number(self):
+        return super().get_combats_draw_number(self.combats_p1 + self.combats_p2)
+    
+    # Combats performance
+    # Win rate
+    def get_combats_p1_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p1)
+    
+    def get_combats_p2_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p2)
+    
+    def get_combats_win_rate(self, func):
+        return super().get_combats_win_rate(func, self.combats_p1 + self.combats_p2)
+
+    # Win lose ratio
+    def get_combats_p1_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p1)
+
+    def get_combats_p2_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p2)
+    
+    def get_combats_win_lose_ratio(self, func):
+        return super().get_combats_win_lose_ratio(func, self.combats_p1 + self.combats_p2)
+
+    # Combats stage lists
+    # P1
+    def get_combats_stage_played_p1_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_won_p1_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_lost_p1_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_p1_list())
+
+    def get_combats_stage_draw_p1_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_p1_list())
+
+    # P2
+    def get_combats_stage_played_p2_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_won_p2_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_lost_p2_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_p2_list())
+
+    def get_combats_stage_draw_p2_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_p2_list())
+
+    # BOTH
+    def get_combats_stage_played_dict_list(self):
+        return super().get_combats_stage_played_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_won_dict_list(self):
+        return super().get_combats_stage_won_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_lost_dict_list(self):
+        return super().get_combats_stage_lost_dict_list(self.get_combats_played_list())
+
+    def get_combats_stage_draw_dict_list(self):
+        return super().get_combats_stage_draw_dict_list(self.get_combats_played_list())
+
+    # Combats stage numbers
+    # P1
+    def get_combats_stage_played_p1_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_won_p1_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_lost_p1_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_p1_list())
+    
+    def get_combats_stage_draw_p1_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_p1_list())
+    
+    # P2
+    def get_combats_stage_played_p2_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_won_p2_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_lost_p2_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_p2_list())
+    
+    def get_combats_stage_draw_p2_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_p2_list())
+    
+    # BOTH
+    def get_combats_stage_played_dict_number(self):
+        return super().get_combats_stage_played_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_won_dict_number(self):
+        return super().get_combats_stage_won_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_lost_dict_number(self):
+        return super().get_combats_stage_lost_dict_number(self.get_combats_played_list())
+    
+    def get_combats_stage_draw_dict_number(self):
+        return super().get_combats_stage_draw_dict_number(self.get_combats_played_list())
+
+    # Combats stage performance
+    # Win rate
+    def get_combats_stage_win_rate_p1_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_p1_list())
+    
+    def get_combats_stage_win_rate_p2_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_p2_list())
+    
+    def get_combats_stage_win_rate_dict(self, func):
+        return super().get_combats_stage_win_rate_dict(func, self.get_combats_played_list())
+
+    # Win lose ratio
+    def get_combats_stage_win_lose_ratio_p1_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_p1_list())
+    
+    def get_combats_stage_win_lose_ratio_p2_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_p2_list())
+    
+    def get_combats_stage_win_lose_ratio_dict(self, func):
+        return super().get_combats_stage_win_lose_ratio_dict(func, self.get_combats_played_list())
+
+    # Events
+    def get_events_played_list(self):
+        return super().get_events_played_list(self.get_combats_played_list())
+
+    def get_events_played_number(self):
+        return super().get_events_played_number(self.get_combats_played_list())
+    
+    def get_events_result_dict(self):
+        return super().get_events_result_dict(self.get_combats_played_list())
+    
+    # Duels lists
+    def get_duels_played_list(self):
+        return super().get_duels_played_list(self.get_combats_played_list())
+
+    def get_duels_won_list(self):
+        return super().get_duels_won_list(self.get_combats_played_list())
+
+    def get_duels_lost_list(self):
+        return super().get_duels_lost_list(self.get_combats_played_list())
+
+    # Duels numbers
+    def get_duels_played_number(self):
+        return super().get_duels_played_number(self.get_combats_played_list())
+
+    def get_duels_won_number(self):
+        return super().get_duels_won_number(self.get_combats_played_list())
+
+    def get_duels_lost_number(self):
+        return super().get_duels_lost_number(self.get_combats_played_list())
+
+    # Duels performance
+    def get_duels_win_rate(self, func):
+        return super().get_duels_win_rate(func, self.get_combats_played_list())
+
+    def get_duels_win_lose_ratio(self, func):
+        return super().get_duels_win_lose_ratio(func, self.get_combats_played_list())
+
+    # Rounds
+    # P1
+    def get_rounds_played_p1_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_p1_list())
+    
+    def get_rounds_won_p1_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_player1()
+    
+    def get_rounds_lost_p1_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_player1()
+
+    # P2
+    def get_rounds_played_p2_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_p2_list())
+    
+    def get_rounds_won_p2_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_player2()
+    
+    def get_rounds_lost_p2_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_player2()
+
+    # BOTH
+    def get_rounds_played_number(self):
+        return super().get_rounds_played_number(self.get_combats_played_list())
+    
+    def get_rounds_won_number(self):
+        return super().get_rounds_won_number(self.get_combats_played_list()).get_total()
+    
+    def get_rounds_lost_number(self):
+        return super().get_rounds_lost_number(self.get_combats_played_list()).get_total()
+
+    # Rounds performance
+    # Win rate
+    def get_rounds_p1_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_p1_list())
+    
+    def get_rounds_p2_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_p2_list())
+    
+    def get_rounds_win_rate(self, func):
+        return super().get_rounds_win_rate(func, self.get_combats_played_list())
+
+    # Win lose ratio
+    def get_rounds_p1_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_p1_list())
+
+    def get_rounds_p2_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_p2_list())
+    
+    def get_rounds_win_lose_ratio(self, func):
+        return super().get_rounds_win_lose_ratio(func, self.get_combats_played_list())
+
+
+class Character(Entity):
+    __tablename__ = "character"
+    
+    ''' Attributes '''
+    id = Column(Integer, ForeignKey('entity.id'), primary_key=True, nullable=False)
+    # id = Column(Integer, primary_key=True, nullable=False)
+    # name = Column(String, nullable=False)
     playlist = Column(String, nullable=True)
 
+    __mapper_args__ = {"polymorphic_identity": "character"}
+    
     ''' Relationships '''
     combats_p1 = relationship("Combat", back_populates="character1", cascade="all, delete-orphan")
     combats_p2 = relationship("Combat", back_populates="character2", cascade="all, delete-orphan")
@@ -1642,321 +2432,20 @@ class Character(Base):
         return self.get_rounds_won_number() / self.get_rounds_lost_number()
 
 
-class Team(Base):
-    __tablename__ = "team"
-
-    ''' Attributes '''
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
-    initials = Column(String, nullable=False)
-
-    ''' Relationships '''
-    players = relationship('Player', secondary=player_team, back_populates='teams')
-    combats_p1 = relationship("Combat", back_populates="team1", cascade="all, delete-orphan")
-    combats_p2 = relationship("Combat", back_populates="team2", cascade="all, delete-orphan")
-
-    ''' Methods '''
-    # Getters
-    def get_name(self):
-        return self.name
-    
-    def get_initials(self):
-        return self.initials
-
-    def get_team_members_list(self):
-        return self.players
-    
-    def get_combats_played_p1_list(self):
-        return self.combats_p1
-
-    def get_combats_played_p2_list(self):
-        return self.combats_p2
-
-    # Events
-    def get_events_played_list(self):
-        events_played_set = set()
-        for combat in self.get_combats_played_list():
-            events_played_set.add(combat.get_event())
-        events_played_list = list(events_played_set).sort()
-        return events_played_list
-    
-    def get_events_played_number(self):
-        return len(self.get_events_played_list())
-    
-    def get_events_results_dict(self):
-        events_results_dict = dict()
-        for event in self.get_events_played_list():
-            events_results_dict[event] = event.get_results_dict()[self]
-        return events_results_dict
-    
-    # Win lose ratio
-    def get_win_lose_ratio(self, func, challenge_type):
-        win_lose_ratio = 0
-        victories = 0
-        defeats = 0
-        if challenge_type == ChallengeType.ROUND.name:
-            victories = self.get_rounds_won_number()
-            defeats = self.get_rounds_lost_number()
-        if challenge_type == ChallengeType.COMBAT.name:
-            victories = self.get_combats_won_number() + (self.get_combats_draw_number() / 2)
-            defeats = self.get_combats_lost_number()
-        if challenge_type == ChallengeType.DUEL.name:
-            victories = self.get_duels_won_number()
-            defeats = self.get_duels_lost_number()
-        if defeats == 0:
-            win_lose_ratio = victories
-        elif victories == 0:
-            win_lose_ratio = 0.5 / defeats
-        elif defeats == 1:
-            win_lose_ratio = victories * (3 / 4)
-        else:
-            win_lose_ratio = victories / defeats
-        return func(win_lose_ratio)
-
-    # Duels
-    def get_duels_played_list(self):
-        duels_played_set = set()
-        for combat in self.get_combats_played_list():
-            duels_played_set.add(combat.get_duel())
-        duels_played_list = list(duels_played_set).sort()
-        return duels_played_list
-    
-    def get_duels_played_number(self):
-        return len(self.get_duels_played_list())
-    
-    def get_duels_won_list(self):
-        duels_won_list = list()
-        for duel in self.get_duels_played_list():
-            if duel.get_winner_team() == self:
-                duels_won_list.append(duel)
-        return duels_won_list
-    
-    def get_duels_won_number(self):
-        return len(self.get_duels_won_list())
-
-    def get_duels_lost_list(self):
-        duels_lost_list = list()
-        for duel in self.get_duels_played_list():
-            if self in duel.get_losers_team_list():
-                duels_lost_list.append(duel)
-        return duels_lost_list
-    
-    def get_duels_lost_number(self):
-        return len(self.get_duels_lost_list())
-    
-    def get_duels_win_rate(self):
-        return self.get_duels_won_number() / self.get_duels_played_number()
-    
-    def get_duels_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.DUEL.name)
-    
-    # Combats
-    def get_combats_played_list(self):
-        return self.combats_p1 + self.combats_p2
-    
-    def get_combats_played_number(self):
-        return len(self.get_combats_played_list())
-    
-    def get_combats_won_list(self):
-        combats_won_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.get_winner_team() == self:
-                combats_won_list.append(combat)
-        return combats_won_list
-    
-    def get_combats_won_number(self):
-        return len(self.get_combats_won_list())
-
-    def get_combats_lost_list(self):
-        combats_lost_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.get_loser_team() == self:
-                combats_lost_list.append(combat)
-        return combats_lost_list
-    
-    def get_combats_lost_number(self):
-        return len(self.get_combats_lost_list())
-    
-    def get_combats_draw_list(self):
-        combats_draw_list = list()
-        for combat in self.get_combats_played_list():
-            if combat.is_draw():
-                combats_draw_list.append(combat)
-        return combats_draw_list
-    
-    def get_combats_draw_number(self):
-        return len(self.get_combats_draw_list())
-    
-    def get_combats_win_rate(self):
-        return (self.get_combats_won_number + (self.get_combats_draw_number / 2)) / self.get_combats_played_number()
-
-    def get_combats_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.COMBAT.name)
-    
-    # Combats stage
-    def get_stages_list(self):
-        ''' List of stages where the player played '''
-        stages_set = set()
-        for combat in self.get_combats_played_list():
-            stages_set.add(combat.get_stage())
-        stages_list = list(stages_set)
-        return stages_list
-
-    def get_combats_status_stage_dict_list(self, combat_status):
-        ''' List of combats status by stage '''
-        combats_status_stage_dict_list = dict()
-        for stage in self.get_stages_list():
-            combats_status_stage_dict_list[stage] = list()
-        for combat in self.get_combats_played_list():
-            if combat_status == CombatStatus.PLAYED.name:
-                combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.WON.name:
-                if combat.get_winner_team() == self:
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.LOST.name:
-                if combat.get_loser_team() == self:
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-            if combat_status == CombatStatus.DRAW.name:
-                if combat.is_draw():
-                    combats_status_stage_dict_list[combat.get_stage()].append(combat)
-        return combats_status_stage_dict_list
-    
-    def get_combats_status_stage_dict_number(self, combat_status):
-        ''' Number of combats status by stage '''
-        combats_status_stage_dict_number = dict()
-        combats_status_stage_dict_list = dict()
-        if combat_status == CombatStatus.PLAYED.name:
-            combats_status_stage_dict_list = self.get_combats_played_stage_dict_list()
-        if combat_status == CombatStatus.WON.name:
-            combats_status_stage_dict_list = self.get_combats_won_stage_dict_list()
-        if combat_status == CombatStatus.LOST.name:
-            combats_status_stage_dict_list = self.get_combats_lost_stage_dict_list()
-        if combat_status == CombatStatus.DRAW.name:
-            combats_status_stage_dict_list = self.get_combats_draw_stage_dict_list()
-        for stage, combats_list in combats_status_stage_dict_list:
-            combats_status_stage_dict_number[stage] = len(combats_list)
-        return combats_status_stage_dict_number
-
-    def get_combats_played_stage_dict_list(self):
-        ''' List of combats played by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.PLAYED.name)
-    
-    def get_combats_played_stage_dict_number(self):
-        ''' Number of combats played by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.PLAYED.name)
-    
-    def get_combats_won_stage_dict_list(self):
-        ''' List of combats won by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.WON.name)
-    
-    def get_combats_won_stage_dict_number(self):
-        ''' Number of combats won by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.WON.name)
-
-    def get_combats_lost_stage_dict_list(self):
-        ''' List of combats lost by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.LOST.name)
-    
-    def get_combats_lost_stage_dict_number(self):
-        ''' Number of combats lost by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.LOST.name)
-    
-    def get_combats_draw_stage_dict_list(self):
-        ''' List of combats draw by stage '''
-        return self.get_combats_status_stage_dict_list(CombatStatus.DRAW.name)
-
-    def get_combats_draw_stage_dict_number(self):
-        ''' Number of combats draw by stage '''
-        return self.get_combats_status_stage_dict_number(CombatStatus.DRAW.name)
-    
-    def get_combats_win_rate_stage_dict(self):
-        ''' Combats win rate by stage '''
-        combats_stage_win_rate_dict = dict()
-        stages_list = self.get_stages_list()
-        for stage in stages_list:
-            combats_stage_win_rate_dict[stage] = (self.get_combats_won_stage_dict_number()[stage] + (self.get_combats_draw_stage_dict_number()[stage] / 2)) / self.get_combats_played_stage_dict_number()[stage]
-        return combats_stage_win_rate_dict
-    
-    def get_combats_win_lose_ratio_stage_dict(self, func):
-        ''' Combats win lose ratio by stage '''
-        combats_win_lose_ratio_stage_dict = dict()
-        stages_list = self.get_stages_list()
-        for stage in stages_list:
-            victories = self.get_combats_won_stage_dict_number()[stage] + (self.get_combats_draw_stage_dict_number()[stage] / 2)
-            defeats = self.get_combats_lost_stage_dict_number()[stage]
-            if defeats == 0:
-                combats_win_lose_ratio_stage_dict[stage] = victories
-            elif victories == 0:
-                combats_win_lose_ratio_stage_dict[stage] = 0.5 / defeats
-            elif defeats == 1:
-                combats_win_lose_ratio_stage_dict[stage] = victories * (3 / 4)
-            else:
-                combats_win_lose_ratio_stage_dict[stage] = victories / defeats
-        for stage, win_lose_ratio in combats_win_lose_ratio_stage_dict.items():
-            combats_win_lose_ratio_stage_dict[stage] = func(win_lose_ratio)
-        return combats_win_lose_ratio_stage_dict
-
-    # Rounds
-    def get_rounds_played_p1_number(self):
-        rounds_played_p1_number = 0
-        for combat in self.combats_p1:
-            rounds_played_p1_number += combat.get_rounds_played_number()
-        return rounds_played_p1_number
-    
-    def get_rounds_played_p2_number(self):
-        rounds_played_p2_number = 0
-        for combat in self.combats_p2:
-            rounds_played_p2_number += combat.get_rounds_played_number()
-        return rounds_played_p2_number
-    
-    def get_rounds_played_number(self):
-        return self.get_rounds_played_p1_number() + self.get_rounds_played_p2_number()
-    
-    def get_rounds_won_p1_number(self):
-        rounds_won_p1_number = 0
-        for combat in self.combats_p1:
-            rounds_won_p1_number += combat.get_rounds_won_p1_number()
-        return rounds_won_p1_number
-    
-    def get_rounds_won_p2_number(self):
-        rounds_won_p2_number = 0
-        for combat in self.combats_p2:
-            rounds_won_p2_number += combat.get_rounds_won_p2_number()
-        return rounds_won_p2_number
-    
-    def get_rounds_won_number(self):
-        return self.get_rounds_won_p1_number() + self.get_rounds_won_p2_number()
-
-    def get_rounds_lost_p1_number(self):
-        rounds_won = 0
-        for combat in self.combats_p1:
-            rounds_won += combat.get_rounds_lost_p1_number()
-        return rounds_won
-
-    def get_rounds_lost_p2_number(self):
-        rounds_won = 0
-        for combat in self.combats_p2:
-            rounds_won += combat.get_rounds_lost_p2_number()
-        return rounds_won
-
-    def get_rounds_lost_number(self):
-        return self.get_rounds_lost_p1_number() + self.get_rounds_lost_p2_number()
-
-    def get_rounds_win_rate(self):
-        return self.get_rounds_won_number() / self.get_rounds_played_number()
-
-    def get_rounds_win_lose_ratio(self, func):
-        return self.get_win_lose_ratio(func, ChallengeType.ROUND.name)
 
 
-class PlayerCharacter(Base):
+
+class PlayerCharacter(Entity):
     __tablename__ = "player_character"
 
     ''' Attributes '''
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, ForeignKey('entity.id'), primary_key=True, nullable=False)
+    # id = Column(Integer, primary_key=True, nullable=False)
 
     player_id = Column(Integer, ForeignKey("player.id"), nullable=False)
     character_id = Column(Integer, ForeignKey("character.id"), nullable=False)
+
+    __mapper_args__ = {"polymorphic_identity": "player_character"}
 
     ''' Relationships '''
     player = relationship("Player", back_populates="players_characters")
