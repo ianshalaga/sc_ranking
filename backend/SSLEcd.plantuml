@@ -1,6 +1,33 @@
 @startuml SSLEcd
 
-' CLASSES
+' CLASSES data
+
+class Scoreboard {
+
+}
+
+class EventsStats {
+
+}
+
+class DuelsStats {
+
+}
+
+class CombatsStats {
+
+}
+
+class RoundsStats {
+
+}
+
+class RoundStats {
+
+}
+
+
+' CLASSESdb
 
 class Game {
     - name : String
@@ -25,16 +52,6 @@ class SocialMedia {
     - link : String
 }
 
-enum CompetitorType {
-    PLAYER
-    TEAM
-}
-
-enum EventSystem {
-    TOURNAMENT
-    LEAGUE
-}
-
 class EventModality {
     - competitor_type : CompetitorType
     - event_system : EventSystem
@@ -47,9 +64,7 @@ class Season {
 
 class Event {
     - name : String
-    ' Seyfer Studios Lightning <Team> <Tournament/League>
     - code_name : String
-    ' SSL <T> <T/L>
     - playlist : String
     - bracket : String
     - date : Date
@@ -71,15 +86,19 @@ class DuelType {
     - code_name_synonymous : String
 }
 
-abstract Entity {
+abstract class Entity {
     -name
 }
 
-abstract Competitor {
+abstract class Competitor {
 }
 
 class Player {
     - playlist : String
+}
+
+class Team {
+    - initials : String
 }
 
 class Character {
@@ -89,16 +108,11 @@ class Character {
 class PlayerCharacter {
 }
 
-class Team {
-    - initials : String
-}
-
 class Combat {
     - combat_order : Integer
 }
 
 class Round {
-    ' Attributes
     - round_order : Integer
     - result_player1 : RoundResult
     - result_player2 : RoundResult
@@ -155,6 +169,16 @@ Round "1.." -- "1" Combat : Belongs >
 
 
 ' ENUMS
+
+enum CompetitorType {
+    PLAYER
+    TEAM
+}
+
+enum EventSystem {
+    TOURNAMENT
+    LEAGUE
+}
 
 enum RankingType {
     PL
