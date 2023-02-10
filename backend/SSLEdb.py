@@ -12,6 +12,8 @@ from sqlalchemy.orm import declarative_base, \
                            relationship, \
                            Session
 
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from enum import Enum
 import numpy as np
 import utils as ut
@@ -638,541 +640,6 @@ class Video(Base):
     ''' Relationships '''
     duel = relationship("Duel", back_populates="videos")
 
-
-class Duel(Base):
-    __tablename__ = "duel"
-    
-    ''' Attributes '''
-    id = Column(Integer, primary_key=True, nullable=False)
-    duel_order = Column(Integer, nullable=False)
-
-    event_id = Column(Integer, ForeignKey("event.id"), nullable=False)
-    duel_type_id = Column(Integer, ForeignKey("duel_type.id"), nullable=False)
-
-    ''' Relationships '''
-    event = relationship("Event", back_populates="duels")
-    duel_type = relationship("DuelType", back_populates="duels")
-    videos = relationship("Video", back_populates="duel", cascade="all, delete-orphan")
-    combats = relationship("Combat", back_populates="duel", cascade="all, delete-orphan")
-
-    ''' Methods '''
-    # Getters
-    def get_duel_type(self):
-        return self.duel_type
-
-    def get_event(self):
-        return self.event
-
-    def get_videos_list(self):
-        return self.videos
-
-    def get_combats_list(self):
-        return self.combats
-    
-    # Members
-    def get_teams_list(self):
-        teams_list = list()
-        for combat in self.combats:
-            teams_list += combat.get_teams_list()
-        teams_list = list(set(teams_list)).sort()
-        return teams_list
-
-    def get_teams_number(self):
-        return len(self.get_teams_list())
-
-    def get_players_list(self):
-        players_list = list()
-        for combat in self.combats:
-            players_list += combat.get_players_list()
-        players_list = list(set(players_list)).sort()
-        return players_list
-    
-    def get_teams_members_dict_list(self):
-        teams_members_dict_list = dict()
-        teams_list = self.get_teams_list()
-        for team in teams_list:
-            teams_members_dict_list[team] = set()
-        for combat in self.combats:
-            teams_members_dict_list[combat.get_team1()].add(combat.get_player1())
-            teams_members_dict_list[combat.get_team2()].add(combat.get_player2())
-        for team in teams_list:
-            teams_members_dict_list[team] = list(teams_members_dict_list[team])
-        return teams_members_dict_list
-
-    def get_players_number(self):
-        return len(self.get_players_list())
-
-    def get_characters_list(self):
-        characters_list = list()
-        for combat in self.combats:
-            characters_list += combat.get_characters_list()
-        characters_list = list(set(characters_list)).sort()
-        return characters_list
-
-    def get_characters_number(self):
-        return len(self.get_characters_list())
-
-    def is_team_duel(self):
-        team_duel = False
-        if self.event.get_competitors_type() == CompetitorType.TEAM.name:
-            team_duel = True
-        return team_duel
-
-    # Combats
-    def get_combats_played_list(self):
-        ''' List of combats played in a duel '''
-        return self.combats
-
-    def get_combats_played_number(self):
-        ''' Number of combats played in a duel '''
-        return len(self.combats)
-    
-    # Combats entities
-    def get_combats_status_entity_dict_list(self, combat_status, entity_type):
-        ''' List of some status combats in a duel by entity '''
-        combats_status_dict_list = dict() # Output
-        entities_list = list() # List of entities in the duel
-        if entity_type == EntityType.PLAYER.name: # Players
-            entities_list = self.get_players_list()
-        if entity_type == EntityType.CHARACTER.name: # Characters
-            entities_list = self.get_characters_list()
-        if entity_type == EntityType.TEAM.name: # Teams
-            entities_list = self.get_characters_list()
-        for entity in entities_list:
-            combats_status_dict_list[entity] = list() # Output
-            for combat in self.combats:
-                combat_entities = list()
-                entity_winner = None
-                entity_loser = None
-                if entity_type == EntityType.PLAYER.name:
-                    combat_entities = combat.get_players_list()
-                    entity_winner = combat.get_winner_player()
-                    entity_loser = combat.get_loser_player()
-                if entity_type == EntityType.CHARACTER.name:
-                    combat_entities = combat.get_characters_list()
-                    entity_winner = combat.get_winner_character()
-                    entity_loser = combat.get_loser_character()
-                if entity_type == EntityType.TEAM.name:
-                    combat_entities = combat.get_teams_list()
-                    entity_winner = combat.get_winner_team()
-                    entity_loser = combat.get_loser_team()
-                if combat_status == CombatStatus.PLAYED.name: # Combats played
-                    if entity in combat_entities:
-                        combats_status_dict_list[entity].append(combat)
-                if combat_status == CombatStatus.WON.name: # Combats won
-                    if entity_winner == entity:
-                        combats_status_dict_list[entity].append(combat)
-                if combat_status == CombatStatus.LOST.name: # Combats lost
-                    if entity_loser == entity:
-                        combats_status_dict_list[entity].append(combat)
-                if combat_status == CombatStatus.DRAW.name: # Combats draw
-                    if combat.is_draw():
-                        for entity in combat_entities:
-                            combats_status_dict_list[entity].append(combat)
-        return combats_status_dict_list
-
-    def get_combats_status_entity_dict_number(self, combat_status, entity_type):
-        ''' Number of some status combats in a duel by entity '''
-        combats_status_entity_dict_number = dict()
-        combats_status_entity_dict_list = self.get_combats_status_entity_dict_list(combat_status, entity_type)
-        for entity, combats_status_entity_list in combats_status_entity_dict_list.items():
-            combats_status_entity_dict_number[entity] = len(combats_status_entity_list)
-        return combats_status_entity_dict_number
-    
-    def get_combats_beating_factors_entity(self, entity_type):
-        ''' Combats beating factors by entity '''
-        combats_beating_factors_entities_dict = dict() # Output
-        combats_played_entity_dict_number = dict()
-        combats_won_entity_dict_number = dict()
-        combats_draw_entity_dict_number = dict()
-        entities_list = list()
-        if entity_type == EntityType.PLAYER.name: # Players
-            combats_played_entity_dict_number = self.get_combats_played_player_dict_number()
-            combats_won_entity_dict_number = self.get_combats_won_player_dict_number()
-            combats_draw_entity_dict_number = self.get_combats_draw_player_dict_number()
-            entities_list = self.get_players_list()
-        if entity_type == EntityType.CHARACTER.name: # Characters
-            combats_played_entity_dict_number = self.get_combats_played_character_dict_number()
-            combats_won_entity_dict_number = self.get_combats_won_character_dict_number()
-            combats_draw_entity_dict_number = self.get_combats_draw_character_dict_number()
-            entities_list = self.get_characters_list()
-        if entity_type == EntityType.TEAM.name: # Teams
-            combats_played_entity_dict_number = self.get_combats_played_team_dict_number()
-            combats_won_entity_dict_number = self.get_combats_won_team_dict_number()
-            combats_draw_entity_dict_number = self.get_combats_draw_team_dict_number()
-            entities_list = self.get_teams_list()
-        for entity in entities_list:
-            if combats_won_entity_dict_number[entity] + combats_draw_entity_dict_number[entity] == 0:
-                combats_beating_factors_entities_dict[entity] = (1 / combats_played_entity_dict_number[entity]) / 2
-            else:
-                combats_beating_factors_entities_dict[entity] = (combats_won_entity_dict_number[entity] + combats_draw_entity_dict_number[entity]) / combats_played_entity_dict_number[entity]
-        return combats_beating_factors_entities_dict
-    
-    def get_results_entity_dict(self, entity_type):
-        results_entity_dict = dict() # Output
-        combats_beating_factors_entity_dict = dict()
-        if entity_type == EntityType.PLAYER.name:
-            combats_beating_factors_entity_dict = self.get_combats_beating_factors_players()
-        if entity_type == EntityType.TEAM.name:
-            combats_beating_factors_entity_dict = self.get_combats_beating_factors_teams()
-        combats_beating_factors_entity_dict = dict(sorted(combats_beating_factors_entity_dict.items(), key=lambda x:x[1]))
-        for i, entity in enumerate(combats_beating_factors_entity_dict.keys()):
-            results_entity_dict[i+1] = entity
-        return results_entity_dict
-    
-    def get_winner_entity(self, entity_type):
-        results_entity_dict = dict()
-        if entity_type == EntityType.PLAYER.name:
-            results_entity_dict = self.get_results_players_dict()
-        if entity_type == EntityType.TEAM.name:
-            results_entity_dict = self.get_results_teams_dict()
-        return list(results_entity_dict.values())[0]
-    
-    def get_losers_entity_list(self, entity_type):
-        results_entity_dict = dict()
-        if entity_type == EntityType.PLAYER.name:
-            results_entity_dict = self.get_results_players_dict()
-        if entity_type == EntityType.TEAM.name:
-            results_entity_dict = self.get_results_teams_dict()
-        return list(results_entity_dict.values())[1:]
-
-    # Combats players
-    def get_combats_played_player_dict_list(self):
-        ''' List of combats played in a duel by player '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.PLAYER.name)
-
-    def get_combats_played_player_dict_number(self):
-        ''' Number of combats played in a duel by player '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.PLAYER.name)
-
-    def get_combats_won_player_dict_list(self):
-        ''' List of combats won in a duel by player '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.PLAYER.name)
-
-    def get_combats_won_player_dict_number(self):
-        ''' Number of combats won in a duel by player '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.PLAYER.name)
-    
-    def get_combats_lost_player_dict_list(self):
-        ''' List of combats lost in a duel by player '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.PLAYER.name)
-
-    def get_combats_lost_player_dict_number(self):
-        ''' Number of combats lost in a duel by player '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.PLAYER.name)
-
-    def get_combats_draw_player_dict_list(self):
-        ''' List of combats draw in a duel by player '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.PLAYER.name)
-
-    def get_combats_draw_player_dict_number(self):
-        ''' Number of combats draw in a duel by player '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.PLAYER.name)
-
-    def get_combats_beating_factors_players(self):
-        ''' Combats beating factors by player '''
-        return self.get_combats_beating_factors_entity(EntityType.PLAYER.name)
-    
-    def get_results_players_dict(self):
-        ''' Duels results by player '''
-        return self.get_results_entity_dict(EntityType.PLAYER.name)
-
-    def get_winner_player(self):
-        ''' Duel winner by player '''
-        return self.get_winner_entity(EntityType.PLAYER.name)
-    
-    def get_losers_player_list(self):
-        ''' Duel losers list by player '''
-        return self.get_losers_entity_list(EntityType.PLAYER.name)
-    
-    # Combats characters
-    def get_combats_played_character_dict_list(self):
-        ''' List of combats played in a duel by character '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.CHARACTER.name)
-
-    def get_combats_played_character_dict_number(self):
-        ''' Number of combats played in a duel by character '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.CHARACTER.name)
-
-    def get_combats_won_character_dict_list(self):
-        ''' List of combats won in a duel by character '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.CHARACTER.name)
-
-    def get_combats_won_character_dict_number(self):
-        ''' Number of combats won in a duel by character '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.CHARACTER.name)
-    
-    def get_combats_lost_character_dict_list(self):
-        ''' List of combats lost in a duel by character '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.CHARACTER.name)
-
-    def get_combats_lost_character_dict_number(self):
-        ''' Number of combats lost in a duel by character '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.CHARACTER.name)
-
-    def get_combats_draw_character_dict_list(self):
-        ''' List of combats draw in a duel by character '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.CHARACTER.name)
-
-    def get_combats_draw_character_dict_number(self):
-        ''' Number of combats draw in a duel by character '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.CHARACTER.name)
-    
-    def get_combats_beating_factors_characters(self):
-        ''' Combats beating factors by character '''
-        return self.get_combats_beating_factors_entity(EntityType.CHARACTER.name)
-
-    # Combats teams
-    def get_combats_played_team_dict_list(self):
-        ''' List of combats played in a duel by team '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.TEAM.name)
-
-    def get_combats_played_team_dict_number(self):
-        ''' Number of combats played in a duel by team '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.TEAM.name)
-
-    def get_combats_won_team_dict_list(self):
-        ''' List of combats won in a duel by team '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.TEAM.name)
-
-    def get_combats_won_team_dict_number(self):
-        ''' Number of combats won in a duel by team '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.TEAM.name)
-    
-    def get_combats_lost_team_dict_list(self):
-        ''' List of combats lost in a duel by team '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.TEAM.name)
-
-    def get_combats_lost_team_dict_number(self):
-        ''' Number of combats lost in a duel by team '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.TEAM.name)
-
-    def get_combats_draw_team_dict_list(self):
-        ''' List of combats draw in a duel by team '''
-        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.TEAM.name)
-
-    def get_combats_draw_team_dict_number(self):
-        ''' Number of combats draw in a duel by team '''
-        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.TEAM.name)
-    
-    def get_combats_beating_factors_teams(self):
-        ''' Combats beating factors by team '''
-        return self.get_combats_beating_factors_entity(EntityType.TEAM.name)
-
-    def get_results_teams_dict(self):
-        ''' Duels results by team '''
-        return self.get_results_entity_dict(EntityType.TEAM.name)
-
-    def get_winner_team(self):
-        ''' Duel winner by team '''
-        return self.get_winner_entity(EntityType.TEAM.name)
-    
-    def get_winner_team_members_list(self):
-        ''' Members of winner team in a duel '''
-        winner_team = self.get_winner_team()
-        teams_members_dict_list = self.get_teams_members_dict_list()
-        return teams_members_dict_list[winner_team]
-    
-    def get_losers_team_list(self):
-        ''' Duel losers list by team '''
-        return self.get_losers_entity_list(EntityType.TEAM.name)
-
-    def get_losers_teams_members_list(self):
-        ''' Members of losers teams in a duel '''
-        losers_teams_members_list = list()
-        teams_members_dict_list = self.get_teams_members_dict_list()
-        losers_teams = self.get_losers_team_list()
-        for team in losers_teams:
-            losers_teams_members_list += teams_members_dict_list[team]
-        return losers_teams_members_list
-
-    # Rounds 
-    def get_rounds_played_number(self):
-        rounds_number = 0
-        for combat in self.combats:
-            rounds_number += combat.get_rounds_played_number()
-        return rounds_number
-
-    # Rounds entities
-    def get_rounds_status_entity_dict_number(self, round_status, entity_type):
-        ''' Number of some status rounds in a duel by entity '''
-        combats_status_dict_number = dict() # Output
-        entities_list = list() # List of entities in the duel
-        if entity_type == EntityType.PLAYER.name: # Players
-            entities_list = self.get_players_list()
-        if entity_type == EntityType.CHARACTER.name: # Characters
-            entities_list = self.get_characters_list()
-        if entity_type == EntityType.TEAM.name: # Teams
-            entities_list = self.get_characters_list()
-        for entity in entities_list:
-            combats_status_dict_number[entity] = 0 # Output
-            for combat in self.combats:
-                combat_entities = list()
-                entity_p1 = None
-                entity_p2 = None
-                if entity_type == EntityType.PLAYER.name:
-                    combat_entities = combat.get_players_list()
-                    entity_p1 = combat.get_player1()
-                    entity_p2 = combat.get_player2()
-                if entity_type == EntityType.CHARACTER.name:
-                    combat_entities = combat.get_characters_list()
-                    entity_p1 = combat.get_character1()
-                    entity_p2 = combat.get_character2()
-                if entity_type == EntityType.TEAM.name:
-                    combat_entities = combat.get_teams_list()
-                    entity_p1 = combat.get_team1()
-                    entity_p2 = combat.get_team2()
-                if round_status == CombatStatus.PLAYED.name: # Rounds played
-                    if entity in combat_entities:
-                        combats_status_dict_number[entity] += combat.get_rounds_played_number()
-                if round_status == CombatStatus.WON.name: # Rounds won
-                    if entity in entities_list:
-                        if entity_p1 == entity:
-                            combats_status_dict_number[entity] += combat.get_rounds_won_p1_number()
-                        elif entity_p2 == entity:
-                            combats_status_dict_number[entity] += combat.get_rounds_won_p2_number()
-                if round_status == CombatStatus.LOST.name: # Rounds lost
-                    if entity in entities_list:
-                        if entity_p1 == entity:
-                            combats_status_dict_number[entity] += combat.get_rounds_lost_p1_number()
-                        elif entity_p2 == entity:
-                            combats_status_dict_number[entity] += combat.get_rounds_lost_p2_number()
-        return combats_status_dict_number
-
-    def get_rounds_win_rate_entity(self, entity_type):
-        ''' Rounds win rate by entity '''
-        rounds_win_rate_entities_dict = dict() # Output
-        rounds_played_entity_dict_number = dict()
-        rounds_won_entity_dict_number = dict()
-        entities_list = list()
-        if entity_type == EntityType.PLAYER.name: # Players
-            rounds_played_entity_dict_number = self.get_rounds_played_player_dict_number()
-            rounds_won_entity_dict_number = self.get_rounds_won_player_dict_number()
-            entities_list = self.get_players_list()
-        if entity_type == EntityType.CHARACTER.name: # Characters
-            rounds_played_entity_dict_number = self.get_rounds_played_character_dict_number()
-            rounds_won_entity_dict_number = self.get_rounds_won_character_dict_number()
-            entities_list = self.get_characters_list()
-        if entity_type == EntityType.TEAM.name: # Teams
-            rounds_played_entity_dict_number = self.get_rounds_played_team_dict_number()
-            rounds_won_entity_dict_number = self.get_rounds_won_team_dict_number()
-            entities_list = self.get_teams_list()
-        for entity in entities_list:
-            rounds_win_rate_entities_dict[entity] = rounds_won_entity_dict_number[entity] / rounds_played_entity_dict_number[entity]
-        return rounds_win_rate_entities_dict
-
-    # Rounds players
-    def get_rounds_played_player_dict_number(self):
-        ''' Number of rounds played in a duel by player '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.PLAYER.name)
-    
-    def get_rounds_won_player_dict_number(self):
-        ''' Number of rounds won in a duel by player '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.PLAYER.name)
-    
-    def get_rounds_lost_player_dict_number(self):
-        ''' Number of rounds lost in a duel by player '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.PLAYER.name)
-    
-    def get_rounds_win_rate_players(self):
-        ''' Rounds win rates by player '''
-        return self.get_rounds_win_rate_entity(EntityType.PLAYER.name)
-    
-    # Rounds characters
-    def get_rounds_played_character_dict_number(self):
-        ''' Number of rounds played in a duel by character '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.CHARACTER.name)
-    
-    def get_rounds_won_character_dict_number(self):
-        ''' Number of rounds won in a duel by character '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.CHARACTER.name)
-    
-    def get_rounds_lost_character_dict_number(self):
-        ''' Number of rounds lost in a duel by character '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.CHARACTER.name)
-    
-    def get_rounds_win_rate_characters(self):
-        ''' Rounds win rates by character '''
-        return self.get_rounds_win_rate_entity(EntityType.CHARACTER.name)
-    
-    # Rounds team
-    def get_rounds_played_team_dict_number(self):
-        ''' Number of rounds played in a duel by team '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.TEAM.name)
-    
-    def get_rounds_won_team_dict_number(self):
-        ''' Number of rounds won in a duel by team '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.TEAM.name)
-    
-    def get_rounds_lost_team_dict_number(self):
-        ''' Number of rounds lost in a duel by team '''
-        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.TEAM.name)
-    
-    def get_rounds_win_rate_teams(self):
-        ''' Rounds win rates by player '''
-        return self.get_rounds_win_rate_entity(EntityType.TEAM.name)
-    
-    # Ranking
-    def get_duel_points_raw_dict(self, entity_type):
-        duel_points_raw_dict = dict()
-        entities_list = list()
-        if entity_type == EntityType.PLAYER.name:
-            entities_list = self.get_players_list()
-        if entity_type == EntityType.CHARACTER.name:
-            entities_list = self.get_characters_list()
-        if  entity_type == EntityType.TEAM.name:
-            entities_list = self.get_teams_list()
-        for entity in entities_list:
-            duel_points_raw_dict[entity] = 0
-        for combat in self.combats:
-            if entity_type == EntityType.PLAYER.name:
-                combat_points_earned_dict = combat.get_combat_points_earned_player_dict()
-            if entity_type == EntityType.CHARACTER.name:
-                combat_points_earned_dict = combat.get_combat_points_earned_character_dict()
-            if  entity_type == EntityType.TEAM.name:
-                combat_points_earned_dict = combat.get_combat_points_earned_team_dict()
-            for entity, points_earned in combat_points_earned_dict.items():
-                duel_points_raw_dict[entity] += points_earned
-        return duel_points_raw_dict
-
-    def get_duel_points_raw_player_dict(self):
-        return self.get_duel_points_raw_dict(EntityType.PLAYER.name)
-
-    def get_duel_points_raw_character_dict(self):
-        return self.get_duel_points_raw_dict(EntityType.CHARACTER.name)
-
-    def get_duel_points_raw_team_dict(self):
-        return self.get_duel_points_raw_dict(EntityType.TEAM.name)
-
-    def get_combats_level_factor_dict(self, entity_type): # Pendiente de análisis
-        return
-        
-    def get_duel_points_earned_dict(self, entity_type):
-        duel_points_earned_dict = dict()
-        if entity_type == EntityType.PLAYER.name:
-            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
-            combats_beating_factors = self.get_combats_beating_factors_players()
-        if entity_type == EntityType.CHARACTER.name:
-            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
-            combats_beating_factors = self.get_combats_beating_factors_characters()
-        if  entity_type == EntityType.TEAM.name:
-            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
-            combats_beating_factors = self.get_combats_beating_factors_teams()
-        for entity, points_raw in duel_points_raw_dict.items():
-            duel_points_earned_dict[entity] = points_raw * combats_beating_factors[entity]
-        return duel_points_earned_dict
-
-    def get_duel_points_earned_player_dict(self):
-        return self.get_duel_points_earned_dict(self, EntityType.PLAYER.name)
-
-    def get_duel_points_earned_character_dict(self):
-        return self.get_duel_points_earned_dict(self, EntityType.CHARACTER.name)
-
-    def get_duel_points_earned_team_dict(self):
-        return self.get_duel_points_earned_dict(self, EntityType.TEAM.name)
-
-
-# Combat group
 
 class Stage(Base):
     __tablename__ = "stage"
@@ -1852,12 +1319,558 @@ class PlayerCharacter(Entity):
         return round_stats_obj
 
 
+class Duel(Base):
+    __tablename__ = "duel"
+    
+    ''' Attributes '''
+    id = Column(Integer, primary_key=True, nullable=False)
+    _duel_order = Column(Integer, nullable=False)
+
+    event_id = Column(Integer, ForeignKey("event.id"), nullable=False)
+    duel_type_id = Column(Integer, ForeignKey("duel_type.id"), nullable=False)
+
+    ''' Relationships '''
+    _event = relationship("Event", back_populates="duels")
+    _duel_type = relationship("DuelType", back_populates="duels")
+    _videos = relationship("Video", back_populates="duel", cascade="all, delete-orphan")
+    _combats = relationship("Combat", back_populates="duel", cascade="all, delete-orphan")
+
+    ''' Methods '''
+    # Getters
+    @hybrid_property
+    def duel_order(self):
+        return self._duel_order
+
+    @hybrid_property
+    def event(self):
+        return self._event
+    
+    @hybrid_property
+    def duel_type(self):
+        return self._duel_type
+    
+    @hybrid_property
+    def videos(self):
+        return self._videos
+    
+    @hybrid_property
+    def combats(self):
+        return self._combats
+    
+    # @@@@
+    # Entities
+
+
+
+    # Members
+    def get_teams_list(self):
+        teams_list = list()
+        for combat in self.combats:
+            teams_list += combat.get_teams_list()
+        teams_list = list(set(teams_list)).sort()
+        return teams_list
+
+    def get_teams_number(self):
+        return len(self.get_teams_list())
+
+    def get_players_list(self):
+        players_list = list()
+        for combat in self.combats:
+            players_list += combat.get_players_list()
+        players_list = list(set(players_list)).sort()
+        return players_list
+    
+    def get_teams_members_dict_list(self):
+        teams_members_dict_list = dict()
+        teams_list = self.get_teams_list()
+        for team in teams_list:
+            teams_members_dict_list[team] = set()
+        for combat in self.combats:
+            teams_members_dict_list[combat.get_team1()].add(combat.get_player1())
+            teams_members_dict_list[combat.get_team2()].add(combat.get_player2())
+        for team in teams_list:
+            teams_members_dict_list[team] = list(teams_members_dict_list[team])
+        return teams_members_dict_list
+
+    def get_players_number(self):
+        return len(self.get_players_list())
+
+    def get_characters_list(self):
+        characters_list = list()
+        for combat in self.combats:
+            characters_list += combat.get_characters_list()
+        characters_list = list(set(characters_list)).sort()
+        return characters_list
+
+    def get_characters_number(self):
+        return len(self.get_characters_list())
+
+    def is_team_duel(self):
+        team_duel = False
+        if self.event.get_competitors_type() == CompetitorType.TEAM.name:
+            team_duel = True
+        return team_duel
+
+    # Combats
+    def get_combats_played_list(self):
+        ''' List of combats played in a duel '''
+        return self.combats
+
+    def get_combats_played_number(self):
+        ''' Number of combats played in a duel '''
+        return len(self.combats)
+    
+    # Combats entities
+    def get_combats_status_entity_dict_list(self, combat_status, entity_type):
+        ''' List of some status combats in a duel by entity '''
+        combats_status_dict_list = dict() # Output
+        entities_list = list() # List of entities in the duel
+        if entity_type == EntityType.PLAYER.name: # Players
+            entities_list = self.get_players_list()
+        if entity_type == EntityType.CHARACTER.name: # Characters
+            entities_list = self.get_characters_list()
+        if entity_type == EntityType.TEAM.name: # Teams
+            entities_list = self.get_characters_list()
+        for entity in entities_list:
+            combats_status_dict_list[entity] = list() # Output
+            for combat in self.combats:
+                combat_entities = list()
+                entity_winner = None
+                entity_loser = None
+                if entity_type == EntityType.PLAYER.name:
+                    combat_entities = combat.get_players_list()
+                    entity_winner = combat.get_winner_player()
+                    entity_loser = combat.get_loser_player()
+                if entity_type == EntityType.CHARACTER.name:
+                    combat_entities = combat.get_characters_list()
+                    entity_winner = combat.get_winner_character()
+                    entity_loser = combat.get_loser_character()
+                if entity_type == EntityType.TEAM.name:
+                    combat_entities = combat.get_teams_list()
+                    entity_winner = combat.get_winner_team()
+                    entity_loser = combat.get_loser_team()
+                if combat_status == CombatStatus.PLAYED.name: # Combats played
+                    if entity in combat_entities:
+                        combats_status_dict_list[entity].append(combat)
+                if combat_status == CombatStatus.WON.name: # Combats won
+                    if entity_winner == entity:
+                        combats_status_dict_list[entity].append(combat)
+                if combat_status == CombatStatus.LOST.name: # Combats lost
+                    if entity_loser == entity:
+                        combats_status_dict_list[entity].append(combat)
+                if combat_status == CombatStatus.DRAW.name: # Combats draw
+                    if combat.is_draw():
+                        for entity in combat_entities:
+                            combats_status_dict_list[entity].append(combat)
+        return combats_status_dict_list
+
+    def get_combats_status_entity_dict_number(self, combat_status, entity_type):
+        ''' Number of some status combats in a duel by entity '''
+        combats_status_entity_dict_number = dict()
+        combats_status_entity_dict_list = self.get_combats_status_entity_dict_list(combat_status, entity_type)
+        for entity, combats_status_entity_list in combats_status_entity_dict_list.items():
+            combats_status_entity_dict_number[entity] = len(combats_status_entity_list)
+        return combats_status_entity_dict_number
+    
+    def get_combats_beating_factors_entity(self, entity_type):
+        ''' Combats beating factors by entity '''
+        combats_beating_factors_entities_dict = dict() # Output
+        combats_played_entity_dict_number = dict()
+        combats_won_entity_dict_number = dict()
+        combats_draw_entity_dict_number = dict()
+        entities_list = list()
+        if entity_type == EntityType.PLAYER.name: # Players
+            combats_played_entity_dict_number = self.get_combats_played_player_dict_number()
+            combats_won_entity_dict_number = self.get_combats_won_player_dict_number()
+            combats_draw_entity_dict_number = self.get_combats_draw_player_dict_number()
+            entities_list = self.get_players_list()
+        if entity_type == EntityType.CHARACTER.name: # Characters
+            combats_played_entity_dict_number = self.get_combats_played_character_dict_number()
+            combats_won_entity_dict_number = self.get_combats_won_character_dict_number()
+            combats_draw_entity_dict_number = self.get_combats_draw_character_dict_number()
+            entities_list = self.get_characters_list()
+        if entity_type == EntityType.TEAM.name: # Teams
+            combats_played_entity_dict_number = self.get_combats_played_team_dict_number()
+            combats_won_entity_dict_number = self.get_combats_won_team_dict_number()
+            combats_draw_entity_dict_number = self.get_combats_draw_team_dict_number()
+            entities_list = self.get_teams_list()
+        for entity in entities_list:
+            if combats_won_entity_dict_number[entity] + combats_draw_entity_dict_number[entity] == 0:
+                combats_beating_factors_entities_dict[entity] = (1 / combats_played_entity_dict_number[entity]) / 2
+            else:
+                combats_beating_factors_entities_dict[entity] = (combats_won_entity_dict_number[entity] + combats_draw_entity_dict_number[entity]) / combats_played_entity_dict_number[entity]
+        return combats_beating_factors_entities_dict
+    
+    def get_results_entity_dict(self, entity_type):
+        results_entity_dict = dict() # Output
+        combats_beating_factors_entity_dict = dict()
+        if entity_type == EntityType.PLAYER.name:
+            combats_beating_factors_entity_dict = self.get_combats_beating_factors_players()
+        if entity_type == EntityType.TEAM.name:
+            combats_beating_factors_entity_dict = self.get_combats_beating_factors_teams()
+        combats_beating_factors_entity_dict = dict(sorted(combats_beating_factors_entity_dict.items(), key=lambda x:x[1]))
+        for i, entity in enumerate(combats_beating_factors_entity_dict.keys()):
+            results_entity_dict[i+1] = entity
+        return results_entity_dict
+    
+    def get_winner_entity(self, entity_type):
+        results_entity_dict = dict()
+        if entity_type == EntityType.PLAYER.name:
+            results_entity_dict = self.get_results_players_dict()
+        if entity_type == EntityType.TEAM.name:
+            results_entity_dict = self.get_results_teams_dict()
+        return list(results_entity_dict.values())[0]
+    
+    def get_losers_entity_list(self, entity_type):
+        results_entity_dict = dict()
+        if entity_type == EntityType.PLAYER.name:
+            results_entity_dict = self.get_results_players_dict()
+        if entity_type == EntityType.TEAM.name:
+            results_entity_dict = self.get_results_teams_dict()
+        return list(results_entity_dict.values())[1:]
+
+    # Combats players
+    def get_combats_played_player_dict_list(self):
+        ''' List of combats played in a duel by player '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.PLAYER.name)
+
+    def get_combats_played_player_dict_number(self):
+        ''' Number of combats played in a duel by player '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.PLAYER.name)
+
+    def get_combats_won_player_dict_list(self):
+        ''' List of combats won in a duel by player '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.PLAYER.name)
+
+    def get_combats_won_player_dict_number(self):
+        ''' Number of combats won in a duel by player '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.PLAYER.name)
+    
+    def get_combats_lost_player_dict_list(self):
+        ''' List of combats lost in a duel by player '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.PLAYER.name)
+
+    def get_combats_lost_player_dict_number(self):
+        ''' Number of combats lost in a duel by player '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.PLAYER.name)
+
+    def get_combats_draw_player_dict_list(self):
+        ''' List of combats draw in a duel by player '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.PLAYER.name)
+
+    def get_combats_draw_player_dict_number(self):
+        ''' Number of combats draw in a duel by player '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.PLAYER.name)
+
+    def get_combats_beating_factors_players(self):
+        ''' Combats beating factors by player '''
+        return self.get_combats_beating_factors_entity(EntityType.PLAYER.name)
+    
+    def get_results_players_dict(self):
+        ''' Duels results by player '''
+        return self.get_results_entity_dict(EntityType.PLAYER.name)
+
+    def get_winner_player(self):
+        ''' Duel winner by player '''
+        return self.get_winner_entity(EntityType.PLAYER.name)
+    
+    def get_losers_player_list(self):
+        ''' Duel losers list by player '''
+        return self.get_losers_entity_list(EntityType.PLAYER.name)
+    
+    # Combats characters
+    def get_combats_played_character_dict_list(self):
+        ''' List of combats played in a duel by character '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.CHARACTER.name)
+
+    def get_combats_played_character_dict_number(self):
+        ''' Number of combats played in a duel by character '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.CHARACTER.name)
+
+    def get_combats_won_character_dict_list(self):
+        ''' List of combats won in a duel by character '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.CHARACTER.name)
+
+    def get_combats_won_character_dict_number(self):
+        ''' Number of combats won in a duel by character '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.CHARACTER.name)
+    
+    def get_combats_lost_character_dict_list(self):
+        ''' List of combats lost in a duel by character '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.CHARACTER.name)
+
+    def get_combats_lost_character_dict_number(self):
+        ''' Number of combats lost in a duel by character '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.CHARACTER.name)
+
+    def get_combats_draw_character_dict_list(self):
+        ''' List of combats draw in a duel by character '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.CHARACTER.name)
+
+    def get_combats_draw_character_dict_number(self):
+        ''' Number of combats draw in a duel by character '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.CHARACTER.name)
+    
+    def get_combats_beating_factors_characters(self):
+        ''' Combats beating factors by character '''
+        return self.get_combats_beating_factors_entity(EntityType.CHARACTER.name)
+
+    # Combats teams
+    def get_combats_played_team_dict_list(self):
+        ''' List of combats played in a duel by team '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.PLAYED.name, EntityType.TEAM.name)
+
+    def get_combats_played_team_dict_number(self):
+        ''' Number of combats played in a duel by team '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.PLAYED.name, EntityType.TEAM.name)
+
+    def get_combats_won_team_dict_list(self):
+        ''' List of combats won in a duel by team '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.WON.name, EntityType.TEAM.name)
+
+    def get_combats_won_team_dict_number(self):
+        ''' Number of combats won in a duel by team '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.WON.name, EntityType.TEAM.name)
+    
+    def get_combats_lost_team_dict_list(self):
+        ''' List of combats lost in a duel by team '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.LOST.name, EntityType.TEAM.name)
+
+    def get_combats_lost_team_dict_number(self):
+        ''' Number of combats lost in a duel by team '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.LOST.name, EntityType.TEAM.name)
+
+    def get_combats_draw_team_dict_list(self):
+        ''' List of combats draw in a duel by team '''
+        return self.get_combats_status_entity_dict_list(CombatStatus.DRAW.name, EntityType.TEAM.name)
+
+    def get_combats_draw_team_dict_number(self):
+        ''' Number of combats draw in a duel by team '''
+        return self.get_combats_status_entity_dict_number(CombatStatus.DRAW.name, EntityType.TEAM.name)
+    
+    def get_combats_beating_factors_teams(self):
+        ''' Combats beating factors by team '''
+        return self.get_combats_beating_factors_entity(EntityType.TEAM.name)
+
+    def get_results_teams_dict(self):
+        ''' Duels results by team '''
+        return self.get_results_entity_dict(EntityType.TEAM.name)
+
+    def get_winner_team(self):
+        ''' Duel winner by team '''
+        return self.get_winner_entity(EntityType.TEAM.name)
+    
+    def get_winner_team_members_list(self):
+        ''' Members of winner team in a duel '''
+        winner_team = self.get_winner_team()
+        teams_members_dict_list = self.get_teams_members_dict_list()
+        return teams_members_dict_list[winner_team]
+    
+    def get_losers_team_list(self):
+        ''' Duel losers list by team '''
+        return self.get_losers_entity_list(EntityType.TEAM.name)
+
+    def get_losers_teams_members_list(self):
+        ''' Members of losers teams in a duel '''
+        losers_teams_members_list = list()
+        teams_members_dict_list = self.get_teams_members_dict_list()
+        losers_teams = self.get_losers_team_list()
+        for team in losers_teams:
+            losers_teams_members_list += teams_members_dict_list[team]
+        return losers_teams_members_list
+
+    # Rounds 
+    def get_rounds_played_number(self):
+        rounds_number = 0
+        for combat in self.combats:
+            rounds_number += combat.get_rounds_played_number()
+        return rounds_number
+
+    # Rounds entities
+    def get_rounds_status_entity_dict_number(self, round_status, entity_type):
+        ''' Number of some status rounds in a duel by entity '''
+        combats_status_dict_number = dict() # Output
+        entities_list = list() # List of entities in the duel
+        if entity_type == EntityType.PLAYER.name: # Players
+            entities_list = self.get_players_list()
+        if entity_type == EntityType.CHARACTER.name: # Characters
+            entities_list = self.get_characters_list()
+        if entity_type == EntityType.TEAM.name: # Teams
+            entities_list = self.get_characters_list()
+        for entity in entities_list:
+            combats_status_dict_number[entity] = 0 # Output
+            for combat in self.combats:
+                combat_entities = list()
+                entity_p1 = None
+                entity_p2 = None
+                if entity_type == EntityType.PLAYER.name:
+                    combat_entities = combat.get_players_list()
+                    entity_p1 = combat.get_player1()
+                    entity_p2 = combat.get_player2()
+                if entity_type == EntityType.CHARACTER.name:
+                    combat_entities = combat.get_characters_list()
+                    entity_p1 = combat.get_character1()
+                    entity_p2 = combat.get_character2()
+                if entity_type == EntityType.TEAM.name:
+                    combat_entities = combat.get_teams_list()
+                    entity_p1 = combat.get_team1()
+                    entity_p2 = combat.get_team2()
+                if round_status == CombatStatus.PLAYED.name: # Rounds played
+                    if entity in combat_entities:
+                        combats_status_dict_number[entity] += combat.get_rounds_played_number()
+                if round_status == CombatStatus.WON.name: # Rounds won
+                    if entity in entities_list:
+                        if entity_p1 == entity:
+                            combats_status_dict_number[entity] += combat.get_rounds_won_p1_number()
+                        elif entity_p2 == entity:
+                            combats_status_dict_number[entity] += combat.get_rounds_won_p2_number()
+                if round_status == CombatStatus.LOST.name: # Rounds lost
+                    if entity in entities_list:
+                        if entity_p1 == entity:
+                            combats_status_dict_number[entity] += combat.get_rounds_lost_p1_number()
+                        elif entity_p2 == entity:
+                            combats_status_dict_number[entity] += combat.get_rounds_lost_p2_number()
+        return combats_status_dict_number
+
+    def get_rounds_win_rate_entity(self, entity_type):
+        ''' Rounds win rate by entity '''
+        rounds_win_rate_entities_dict = dict() # Output
+        rounds_played_entity_dict_number = dict()
+        rounds_won_entity_dict_number = dict()
+        entities_list = list()
+        if entity_type == EntityType.PLAYER.name: # Players
+            rounds_played_entity_dict_number = self.get_rounds_played_player_dict_number()
+            rounds_won_entity_dict_number = self.get_rounds_won_player_dict_number()
+            entities_list = self.get_players_list()
+        if entity_type == EntityType.CHARACTER.name: # Characters
+            rounds_played_entity_dict_number = self.get_rounds_played_character_dict_number()
+            rounds_won_entity_dict_number = self.get_rounds_won_character_dict_number()
+            entities_list = self.get_characters_list()
+        if entity_type == EntityType.TEAM.name: # Teams
+            rounds_played_entity_dict_number = self.get_rounds_played_team_dict_number()
+            rounds_won_entity_dict_number = self.get_rounds_won_team_dict_number()
+            entities_list = self.get_teams_list()
+        for entity in entities_list:
+            rounds_win_rate_entities_dict[entity] = rounds_won_entity_dict_number[entity] / rounds_played_entity_dict_number[entity]
+        return rounds_win_rate_entities_dict
+
+    # Rounds players
+    def get_rounds_played_player_dict_number(self):
+        ''' Number of rounds played in a duel by player '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.PLAYER.name)
+    
+    def get_rounds_won_player_dict_number(self):
+        ''' Number of rounds won in a duel by player '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.PLAYER.name)
+    
+    def get_rounds_lost_player_dict_number(self):
+        ''' Number of rounds lost in a duel by player '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.PLAYER.name)
+    
+    def get_rounds_win_rate_players(self):
+        ''' Rounds win rates by player '''
+        return self.get_rounds_win_rate_entity(EntityType.PLAYER.name)
+    
+    # Rounds characters
+    def get_rounds_played_character_dict_number(self):
+        ''' Number of rounds played in a duel by character '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.CHARACTER.name)
+    
+    def get_rounds_won_character_dict_number(self):
+        ''' Number of rounds won in a duel by character '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.CHARACTER.name)
+    
+    def get_rounds_lost_character_dict_number(self):
+        ''' Number of rounds lost in a duel by character '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.CHARACTER.name)
+    
+    def get_rounds_win_rate_characters(self):
+        ''' Rounds win rates by character '''
+        return self.get_rounds_win_rate_entity(EntityType.CHARACTER.name)
+    
+    # Rounds team
+    def get_rounds_played_team_dict_number(self):
+        ''' Number of rounds played in a duel by team '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.PLAYED.name, EntityType.TEAM.name)
+    
+    def get_rounds_won_team_dict_number(self):
+        ''' Number of rounds won in a duel by team '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.WON.name, EntityType.TEAM.name)
+    
+    def get_rounds_lost_team_dict_number(self):
+        ''' Number of rounds lost in a duel by team '''
+        return self.get_rounds_status_entity_dict_number(RoundStatus.LOST.name, EntityType.TEAM.name)
+    
+    def get_rounds_win_rate_teams(self):
+        ''' Rounds win rates by player '''
+        return self.get_rounds_win_rate_entity(EntityType.TEAM.name)
+    
+    # Ranking
+    def get_duel_points_raw_dict(self, entity_type):
+        duel_points_raw_dict = dict()
+        entities_list = list()
+        if entity_type == EntityType.PLAYER.name:
+            entities_list = self.get_players_list()
+        if entity_type == EntityType.CHARACTER.name:
+            entities_list = self.get_characters_list()
+        if  entity_type == EntityType.TEAM.name:
+            entities_list = self.get_teams_list()
+        for entity in entities_list:
+            duel_points_raw_dict[entity] = 0
+        for combat in self.combats:
+            if entity_type == EntityType.PLAYER.name:
+                combat_points_earned_dict = combat.get_combat_points_earned_player_dict()
+            if entity_type == EntityType.CHARACTER.name:
+                combat_points_earned_dict = combat.get_combat_points_earned_character_dict()
+            if  entity_type == EntityType.TEAM.name:
+                combat_points_earned_dict = combat.get_combat_points_earned_team_dict()
+            for entity, points_earned in combat_points_earned_dict.items():
+                duel_points_raw_dict[entity] += points_earned
+        return duel_points_raw_dict
+
+    def get_duel_points_raw_player_dict(self):
+        return self.get_duel_points_raw_dict(EntityType.PLAYER.name)
+
+    def get_duel_points_raw_character_dict(self):
+        return self.get_duel_points_raw_dict(EntityType.CHARACTER.name)
+
+    def get_duel_points_raw_team_dict(self):
+        return self.get_duel_points_raw_dict(EntityType.TEAM.name)
+
+    def get_combats_level_factor_dict(self, entity_type): # Pendiente de análisis
+        return
+        
+    def get_duel_points_earned_dict(self, entity_type):
+        duel_points_earned_dict = dict()
+        if entity_type == EntityType.PLAYER.name:
+            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
+            combats_beating_factors = self.get_combats_beating_factors_players()
+        if entity_type == EntityType.CHARACTER.name:
+            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
+            combats_beating_factors = self.get_combats_beating_factors_characters()
+        if  entity_type == EntityType.TEAM.name:
+            duel_points_raw_dict = self.get_duel_points_raw_player_dict()
+            combats_beating_factors = self.get_combats_beating_factors_teams()
+        for entity, points_raw in duel_points_raw_dict.items():
+            duel_points_earned_dict[entity] = points_raw * combats_beating_factors[entity]
+        return duel_points_earned_dict
+
+    def get_duel_points_earned_player_dict(self):
+        return self.get_duel_points_earned_dict(self, EntityType.PLAYER.name)
+
+    def get_duel_points_earned_character_dict(self):
+        return self.get_duel_points_earned_dict(self, EntityType.CHARACTER.name)
+
+    def get_duel_points_earned_team_dict(self):
+        return self.get_duel_points_earned_dict(self, EntityType.TEAM.name)
+
+
 class Combat(Base):
     __tablename__ = "combat"
 
     ''' Attributes '''
     id = Column(Integer, primary_key=True, nullable=False)
-    combat_order = Column(Integer, nullable=False)
+    _combat_order = Column(Integer, nullable=False)
 
     duel_id = Column(Integer, ForeignKey("duel.id"), nullable=False)
     stage_id = Column(Integer, ForeignKey("stage.id"), nullable=False)
@@ -1869,203 +1882,207 @@ class Combat(Base):
     team2_id = Column(Integer, ForeignKey("team.id"), nullable=True)
 
     ''' Relationships '''
-    duel = relationship("Duel", back_populates="combats")
-    stage = relationship("Stage", back_populates="combats")
-    player1 = relationship("Player", back_populates="combats_p1")
-    player2 = relationship("Player", back_populates="combats_p2")
-    character1 = relationship("Character", back_populates="combats_p1")
-    character2 = relationship("Character", back_populates="combats_p2")
-    team1 = relationship("Team", back_populates="combats_p1")
-    team2 = relationship("Team", back_populates="combats_p2")
-    rounds = relationship("Round", back_populates="combat", cascade="all, delete-orphan")
+    _duel = relationship("Duel", back_populates="combats")
+    _stage = relationship("Stage", back_populates="combats")
+    _player1 = relationship("Player", back_populates="combats_p1")
+    _player2 = relationship("Player", back_populates="combats_p2")
+    _character1 = relationship("Character", back_populates="combats_p1")
+    _character2 = relationship("Character", back_populates="combats_p2")
+    _team1 = relationship("Team", back_populates="combats_p1")
+    _team2 = relationship("Team", back_populates="combats_p2")
+    _rounds = relationship("Round", back_populates="combat", cascade="all, delete-orphan")
 
     ''' Methods '''
     # Getters
-    def get_combat_order(self):
-        return self.combat_order
+    @hybrid_property
+    def combat_order(self):
+        return self._combat_order
 
-    def get_stage(self):
-        return self.stage
+    @hybrid_property
+    def duel(self):
+        return self._duel
 
-    def get_duel(self):
-        return self.duel
+    @hybrid_property
+    def stage(self):
+        return self._stage
+    
+    @hybrid_property
+    def player1(self):
+        return self._player1
+
+    @hybrid_property
+    def player2(self):
+        return self._player2
+    
+    @hybrid_property
+    def character1(self):
+        return self._character1
+
+    @hybrid_property
+    def character2(self):
+        return self._character2
+    
+    @hybrid_property
+    def team1(self):
+        return self._team1
+
+    @hybrid_property
+    def team2(self):
+        return self._team2
+    
+    @hybrid_property
+    def rounds(self):
+        return self._rounds
 
     # Players
-    def get_player1(self):
-        return self.player1
-
-    def get_player2(self):
-        return self.player2
-
     def get_players_list(self):
-        players_list = [self.get_player1(), self.get_player2()]
-        players_list.sort()
-        return players_list
+        return list(sorted([self.player1, self.player2], key=lambda x:x.name))
 
     # Characters
-    def get_character1(self):
-        return self.character1
-
-    def get_character2(self):
-        return self.character2    
-
     def get_characters_list(self):
-        characters_list = [self.get_character1(), self.get_character2()]
-        characters_list.sort()
-        return characters_list
+        return list(sorted([self.character1, self.character2], key=lambda x:x.name))
 
     # Teams
-    def get_team1(self):
-        return self.team1
-
-    def get_team2(self):
-        return self.team1
-
     def get_teams_list(self):
-        teams_list = [self.get_team1(), self.get_team2()]
-        teams_list.sort()
-        return teams_list
-
-    # Events
-    def get_event(self):
-        return self.duel.get_event()
+        return list(sorted([self.team1, self.team2], key=lambda x:x.name))
 
     # Rounds
     def get_rounds_played_list(self):
-        return list(sorted(self.rounds, key=lambda x:x.get_round_order()))
+        return list(sorted(self.rounds, key=lambda x:x.round_order))
 
     def get_rounds_played_number(self):
         return len(self.rounds)
-
-    def get_rounds_won_number(self):
-        round_result_player1 = 0
-        round_result_player2 = 0
-        for round in self.get_rounds_played_list():
-            round_result_obj = round.get_round_result()
-            round_result_player1 += round_result_obj.get_player1()
-            round_result_player2 += round_result_obj.get_player2()
-        return Scoreboard(round_result_player1, round_result_player2)
-
+    
     def get_rounds_won_p1_number(self):
-        return self.get_rounds_won_number().get_player1()
-
+        rounds_won_number = 0
+        for round in self.rounds:
+            rounds_won_number += round.get_result_player1()
+        return rounds_won_number
+    
     def get_rounds_won_p2_number(self):
-        return self.get_rounds_won_number().get_player2()
-
-    def get_rounds_lost_number(self):
-        rounds_played_number = self.get_rounds_played_number()
-        rounds_won_number_obj = self.get_rounds_won_number()
-        rounds_lost_number_player1 = rounds_played_number - rounds_won_number_obj.get_player1()
-        rounds_lost_number_player2 = rounds_played_number - rounds_won_number_obj.get_player2()
-        return Scoreboard(rounds_lost_number_player1, rounds_lost_number_player2)
-
+        rounds_won_number = 0
+        for round in self.rounds:
+            rounds_won_number += round.get_result_player2()
+        return rounds_won_number
+    
     def get_rounds_lost_p1_number(self):
-        return self.get_rounds_lost_number().get_player1()
-
+        return self.get_rounds_played_number() - self.get_rounds_won_p1_number()
+    
     def get_rounds_lost_p2_number(self):
-        return self.get_rounds_lost_number().get_player2()
+        return self.get_rounds_played_number() - self.get_rounds_won_p2_number()
+    
+    # Beating factors
+    def get_beating_factor_p1(self):
+        return ut.beating_factor(self.get_rounds_won_p1_number(), self.get_rounds_played_number())
+    
+    def get_beating_factor_p2(self):
+        return ut.beating_factor(self.get_rounds_won_p2_number(), self.get_rounds_played_number())
+
+    # Points raw
+    def get_points_raw_p1(self):
+        points_raw = 0
+        for round in self.rounds:
+            points_raw += round.get_points_player1()
+        return points_raw
+    
+    def get_points_raw_p2(self):
+        points_raw = 0
+        for round in self.rounds:
+            points_raw += round.get_points_player2()
+        return points_raw
+    
+    # Level factors
+    def get_level_factor_p1(self):
+        win_rate_p1 = self.player1.get_rounds_stats().get_win_rate()
+        win_rate_p2 = self.player2.get_rounds_stats().get_win_rate()
+        return ut.level_factor(LvlFactor.A.value, LvlFactor.B.value, win_rate_p1 - win_rate_p2)
+    
+    def get_level_factor_p2(self):
+        win_rate_p1 = self.player1.get_rounds_stats().get_win_rate()
+        win_rate_p2 = self.player2.get_rounds_stats().get_win_rate()
+        return ut.level_factor(LvlFactor.A.value, LvlFactor.B.value, win_rate_p2 - win_rate_p1)
+    
+    # Points earned
+    def get_points_earned_player1(self):
+        return self.get_points_raw_p1() * self.get_beating_factor_p1() * self.get_level_factor_p1()
+
+    def get_points_earned_player2(self):
+        return self.get_points_raw_p2() * self.get_beating_factor_p2() * self.get_level_factor_p2()
+    
+    def get_points_earned_character1(self):
+        return self.get_points_raw_p1() * self.get_beating_factor_p1() * self.get_level_factor_p1()
+
+    def get_points_earned_character2(self):
+        return self.get_points_raw_p2() * self.get_beating_factor_p2() * self.get_level_factor_p2()
+    
+    def get_points_earned_team1(self):
+        return self.get_points_raw_p1() * self.get_beating_factor_p1() * self.get_level_factor_p1()
+
+    def get_points_earned_team2(self):
+        return self.get_points_raw_p2() * self.get_beating_factor_p2() * self.get_level_factor_p2()
 
     # Combat
-    def get_beating_factors(self):
-        beating_factor_p1 = ut.beating_factor(self.get_rounds_won_p1_number, self.get_rounds_played_number())
-        beating_factor_p2 = ut.beating_factor(self.get_rounds_won_p2_number, self.get_rounds_played_number())
-        return Scoreboard(beating_factor_p1, beating_factor_p2)
-    
-    def get_status_entity(self, competitor_status, entity_type):
-        status_entity = None
-        beating_factors_obj = self.get_beating_factors()
-        entity1 = None
-        entity2 = None
-        scoreboard_entity1 = beating_factors_obj.get_player1()
-        scoreboard_entity2 = beating_factors_obj.get_player2()
-        if entity_type == EntityType.PLAYER.name:
-            entity1 = self.player1
-            entity2 = self.player2
-        if entity_type == EntityType.CHARACTER.name:
-            entity1 = self.character1
-            entity2 = self.character2
-        if entity_type == EntityType.TEAM.name:
-            entity1 = self.team1
-            entity2 = self.team2
-        if competitor_status == CompetitorStatus.WINNER.name:
-            if scoreboard_entity1 > scoreboard_entity2:
-                status_entity = entity1
-            elif scoreboard_entity1 < scoreboard_entity2:
-                status_entity = entity2
-        if competitor_status == CompetitorStatus.LOSER.name:
-            if scoreboard_entity1 > scoreboard_entity2:
-                status_entity = entity2
-            elif scoreboard_entity1 < scoreboard_entity2:
-                status_entity = entity1
-        return status_entity
-    
-    def get_winner_player(self):
-        return self.get_status_entity(CompetitorStatus.WINNER.name, EntityType.PLAYER.name)
-
-    def get_winner_character(self):
-        return self.get_status_entity(CompetitorStatus.WINNER.name, EntityType.CHARACTER.name)
-
-    def get_winner_team(self):
-        return self.get_status_entity(CompetitorStatus.WINNER.name, EntityType.TEAM.name)
-
-    def get_loser_player(self):
-        return self.get_status_entity(CompetitorStatus.LOSER.name, EntityType.PLAYER.name)
-
-    def get_loser_character(self):
-        return self.get_status_entity(CompetitorStatus.LOSER.name, EntityType.CHARACTER.name)
-
-    def get_loser_team(self):
-        return self.get_status_entity(CompetitorStatus.LOSER.name, EntityType.TEAM.name)
-
     def is_draw(self):
         draw = False
-        scoreboard_obj = self.get_beating_factors()
-        if scoreboard_obj.get_player1() == scoreboard_obj.get_player2():
+        if self.get_beating_factor_p1() == self.get_beating_factor_p2():
             draw = True
         return draw
 
-    # Ranking    
-    def get_rounds_level_factor(self):
-        player1_win_rate = self.player1.get_rounds_stats().get_win_rate()
-        player2_win_rate = self.player2.get_rounds_stats().get_win_rate()
-        player1_rounds_lvl_factor = LvlFactor.A.value * (player1_win_rate - player2_win_rate) + LvlFactor.B.value
-        player2_rounds_lvl_factor = LvlFactor.A.value * (player2_win_rate - player1_win_rate) + LvlFactor.B.value
-        return Scoreboard(player1_rounds_lvl_factor, player2_rounds_lvl_factor)
-
-    def get_combat_points_raw(self):
-        points_p1 = 0
-        points_p2 = 0
-        for round in self.get_rounds_played_list():
-            points_p1 += round.get_points_player1()
-            points_p2 += round.get_points_player2()
-        return Scoreboard(points_p1, points_p2)
-
-    def get_combat_points_earned_dict(self, entity_type):
-        combat_points_earned_dict = dict()
-        combat_raw_points_obj = self.get_combat_points_raw() # Raw points
-        rounds_beating_factor_obj = self.get_beating_factors() # Beating factors
-        rounds_lvl_factor_obj = self.get_rounds_level_factor() # Level factors
-        combat_earned_points_player1 = combat_raw_points_obj.get_player1() * rounds_beating_factor_obj.get_player1() * rounds_lvl_factor_obj.get_player1()
-        combat_earned_points_player2 = combat_raw_points_obj.get_player2() * rounds_beating_factor_obj.get_player2() * rounds_lvl_factor_obj.get_player2()
-        if entity_type == EntityType.PLAYER.name:
-            combat_points_earned_dict[self.player1] = combat_earned_points_player1
-            combat_points_earned_dict[self.player2] = combat_earned_points_player2
-        if entity_type == EntityType.CHARACTER.name:
-            combat_points_earned_dict[self.character1] = combat_earned_points_player1
-            combat_points_earned_dict[self.character2] = combat_earned_points_player2
-        if entity_type == EntityType.TEAM.name:
-            combat_points_earned_dict[self.team1] = combat_earned_points_player1
-            combat_points_earned_dict[self.team2] = combat_earned_points_player2
-        return combat_points_earned_dict
+    def get_winner_player(self):
+        winner = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                winner = self.player1
+            else:
+                winner = self.player2
+        return winner
     
-    def get_combat_points_earned_player_dict(self):
-        return self.get_combat_points_earned_dict(EntityType.PLAYER.name)
+    def get_loser_player(self):
+        loser = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                loser = self.player2
+            else:
+                loser = self.player1
+        return loser
     
-    def get_combat_points_earned_character_dict(self):
-        return self.get_combat_points_earned_dict(EntityType.CHARACTER.name)
+    def get_winner_character(self):
+        winner = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                winner = self.character1
+            else:
+                winner = self.character2
+        return winner
     
-    def get_combat_points_earned_team_dict(self):
-        return self.get_combat_points_earned_dict(EntityType.TEAM.name)
+    def get_loser_character(self):
+        loser = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                loser = self.character2
+            else:
+                loser = self.character1
+        return loser
+    
+    def get_winner_team(self):
+        winner = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                winner = self.team1
+            else:
+                winner = self.team2
+        return winner
+    
+    def get_loser_team(self):
+        loser = None
+        if not self.is_draw():
+            if self.get_beating_factor_p1() > self.get_beating_factor_p2():
+                loser = self.team2
+            else:
+                loser = self.team1
+        return loser
+    
+    # Ver como hacer cuando hay equipos en el combate @@@@
 
 
 class Round(Base):
@@ -2073,9 +2090,9 @@ class Round(Base):
 
     ''' Attributes '''
     id = Column(Integer, primary_key=True, nullable=False)
-    round_order = Column(Integer, nullable=False) # 1, 2, ...
-    result_player1 = Column(String, nullable=False) # D, W, PW, WY, WB, LY, LB, PL
-    result_player2 = Column(String, nullable=False) # D, W, PW, WY, WB, LY, LB, PL
+    _round_order = Column(Integer, nullable=False) # 1, 2, ...
+    _result_player1 = Column(String, nullable=False) # D, W, PW, WY, WB, LY, LB, PL
+    _result_player2 = Column(String, nullable=False) # D, W, PW, WY, WB, LY, LB, PL
 
     combat_id = Column(Integer, ForeignKey("combat.id"), nullable=False)
 
@@ -2083,26 +2100,39 @@ class Round(Base):
     combat = relationship("Combat", back_populates="rounds")
 
     ''' Methods '''
-    def get_round_order(self):
-        return self.round_order
-
+    # Getters
+    @hybrid_property
+    def round_order(self):
+        return self._round_order
+    
+    @hybrid_property
+    def result_player1(self):
+        return self._result_player1
+    
+    @hybrid_property
+    def result_player2(self):
+        return self._result_player2
+    
+    # Points
     def get_points_player1(self):
         return ROUNDS_POINTS[self.result_player1]
 
     def get_points_player2(self):
         return ROUNDS_POINTS[self.result_player2]
 
-    def get_points(self):
-        return Scoreboard(self.get_points_player1(), self.get_points_player2())
-
-    def get_round_result(self):
-        result_player1 = 0
-        result_player2 = 0
+    # Results
+    def get_result_player1(self):
+        result = 0
         if self.result_player1 in ROUND_WIN_CONDITIONS:
-            result_player1 = 1
+            result = 1
+        return result
+
+    def get_result_player2(self):
+        result = 0
         if self.result_player2 in ROUND_WIN_CONDITIONS:
-            result_player2 = 1
-        return Scoreboard(result_player1, result_player2)
+            result = 1
+        return result
+    
 
 
 ''' Schema generation '''

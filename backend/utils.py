@@ -25,3 +25,7 @@ def beating_factor(victories, played):
     else:
         beating_factor = victories / played
     return beating_factor
+
+
+def level_factor(a, b, win_rates_diff):
+    return a * win_rates_diff + b
