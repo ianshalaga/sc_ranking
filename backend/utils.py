@@ -1,4 +1,42 @@
+import statistics as st
+import numbers
+
+
 ''' CLASES '''
+
+class Statistics:
+    def __init__(self,
+                 mean,
+                 median,
+                 mode,
+                 stdev,
+                 variance):
+        self._mean = mean,
+        self._median = median
+        self._mode = mode
+        self._stdev = stdev
+        self._variance = variance
+        
+    @property
+    def mean(self):
+        return self._mean
+    
+    @property
+    def median(self):
+        return self._median
+    
+    @property
+    def mode(self):
+        return self._mode
+    
+    @property
+    def stdev(self):
+        return self._stdev
+    
+    @property
+    def mean(self):
+        return self._mean
+
 
 class SeasonStats:
     def __init__(self,
@@ -184,3 +222,25 @@ def beating_factor(victories, played):
 def level_factor(a, b, win_rates_diff):
     return a * win_rates_diff + b
 
+
+# def is_numeric_list(data_list):
+#     return all(isinstance(element, numbers.Number) for element in data_list)
+        
+
+def get_statistics(data_list):
+    '''
+    data_list: numeric list
+    '''
+    mean = st.mean(data_list)
+    median = st.median(data_list)
+    mode = st.mode(data_list)
+    stdev = st.stdev(data_list)
+    variance = st.variance(data_list)
+    return Statistics(mean, median, mode, stdev, variance)
+
+
+def get_multimode(data_list):
+    '''
+    data_list: non numeric list
+    '''
+    return st.multimode(data_list)
