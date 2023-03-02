@@ -1,1 +1,3 @@
 termcolor
+SQLAlchemy
+numpy

@@ -460,7 +460,52 @@ class Season(Base):
         return self._season_order
     
     def get_season_stats(self):
-        ...
+        # Totals events
+        events_list = self.get_events_list()
+        events_number = self.get_events_number()
+        # Players events
+        events_player_list = self.get_events_player_list()
+        events_player_number = self.get_events_player_number()
+        events_player_rate = self.get_events_player_rate()
+        # Teams events
+        events_team_list = self.get_events_team_list()
+        events_team_number = self.get_events_team_number()
+        events_team_rate = self.get_events_team_rate()
+        # Tournaments events
+        events_tournament_list = self.get_events_tournament_list()
+        events_tournament_number = self.get_events_tournament_number()
+        events_tournament_rate = self.get_events_tournament_rate()
+        # Leagues events
+        events_league_list = self.get_events_league_list()
+        events_league_number = self.get_events_league_number()
+        events_league_rate = self.get_events_league_rate()
+        # Duels
+        duels_list = self.get_duels_list()
+        duels_number = self.get_duels_number()
+        duels_statistics = self.get_duels_statistics()
+        # Combats
+        combats_list = self.get_combats_list()
+        combats_number = self.get_combats_number()
+        combats_statistics = self.get_combats_statistics()
+        # Rounds
+        rounds_list = self.get_rounds_list()
+        rounds_number = self.get_rounds_number()
+        rounds_statistics = self.get_rounds_statistics()
+        # Players
+        players_list = self.get_players_list()
+        players_number = self.get_players_number()
+        players_statistics = self.get_players_statistics()
+        players_most_participations = self.get_players_most_participations()
+        # Teams
+
+        # Characters
+
+        # Player Characters
+
+        # Winners
+
+        # @@@@
+        return
 
     # Events
     def get_events_list(self):
