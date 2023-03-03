@@ -497,15 +497,69 @@ class Season(Base):
         players_statistics = self.get_players_statistics()
         players_most_participations = self.get_players_most_participations()
         # Teams
-
+        teams_list = self.get_teams_list()
+        teams_number = self.get_teams_number()
+        teams_statistics = self.get_teams_statistics()
+        teams_most_participations = self.get_teams_most_participations()
         # Characters
-
+        characters_list = self.get_characters_list()
+        characters_number = self.get_characters_number()
+        characters_statistics = self.get_characters_statistics()
+        characters_most_participations = self.get_characters_most_participations()
         # Player Characters
-
+        player_characters_list = self.get_player_characters_list()
+        player_characters_number = self.get_player_characters_number()
+        player_characters_statistics = self.get_player_characters_statistics()
+        player_characters_most_participations = self.get_player_characters_most_participations()
         # Winners
-
-        # @@@@
-        return
+        winners_player_list = self.get_winners_player_list()
+        winners_player_number = self.get_winners_player_number()
+        winners_team_list = self.get_winners_team_list()
+        winners_team_number = self.get_winners_team_number()
+        # Season stats
+        return ut.SeasonStats(events_list,
+                              events_number,
+                              events_player_list,
+                              events_player_number,
+                              events_player_rate,
+                              events_team_list,
+                              events_team_number,
+                              events_team_rate,
+                              events_tournament_list,
+                              events_tournament_number,
+                              events_tournament_rate,
+                              events_league_list,
+                              events_league_number,
+                              events_league_rate,
+                              duels_list,
+                              duels_number,
+                              duels_statistics,
+                              combats_list,
+                              combats_number,
+                              combats_statistics,
+                              rounds_list,
+                              rounds_number,
+                              rounds_statistics,
+                              players_list,
+                              players_number,
+                              players_statistics,
+                              players_most_participations,
+                              teams_list,
+                              teams_number,
+                              teams_statistics,
+                              teams_most_participations,
+                              characters_list,
+                              characters_number,
+                              characters_statistics,
+                              characters_most_participations,
+                              player_characters_list,
+                              player_characters_number,
+                              player_characters_statistics,
+                              player_characters_most_participations,
+                              winners_player_list,
+                              winners_player_number,
+                              winners_team_list,
+                              winners_team_number)
 
     # Events
     def get_events_list(self):
@@ -517,7 +571,7 @@ class Season(Base):
         return len(self.get_events_list())
 
     # Events modalities
-    def get_events_modality_list(self, event_modality, modality):
+    def _get_events_modality_list(self, event_modality, modality):
         modality_list = list()
         for event in self.get_events_list():
             if event_modality == Modality.EVENT_SYSTEM.name:
@@ -540,7 +594,7 @@ class Season(Base):
             
     # Modality: PLAYER
     def get_events_player_list(self):
-        return self.get_events_modality_list(Modality.COMPETITORS_TYPE.name, CompetitorType.PLAYER.name)
+        return self._get_events_modality_list(Modality.COMPETITORS_TYPE.name, CompetitorType.PLAYER.name)
 
     def get_events_player_number(self):
         return len(self.get_events_player_list())
@@ -550,7 +604,7 @@ class Season(Base):
 
     # Modality: TEAM
     def get_events_team_list(self):
-        return self.get_events_modality_list(Modality.COMPETITORS_TYPE.name, CompetitorType.TEAM.name)
+        return self._get_events_modality_list(Modality.COMPETITORS_TYPE.name, CompetitorType.TEAM.name)
 
     def get_events_team_number(self):
         return len(self.get_events_team_list())
@@ -560,7 +614,7 @@ class Season(Base):
     
     # Modality: TOURNAMENT
     def get_events_tournament_list(self):
-        return self.get_events_modality_list(Modality.EVENT_SYSTEM.name, EventSystem.TOURNAMENT.name)
+        return self._get_events_modality_list(Modality.EVENT_SYSTEM.name, EventSystem.TOURNAMENT.name)
 
     def get_events_tournament_number(self):
         return len(self.get_events_tournament_list())
@@ -570,7 +624,7 @@ class Season(Base):
 
     # Modality: LEAGUE
     def get_events_league_list(self):
-        return self.get_events_modality_list(Modality.EVENT_SYSTEM.name, EventSystem.LEAGUE.name)
+        return self._get_events_modality_list(Modality.EVENT_SYSTEM.name, EventSystem.LEAGUE.name)
 
     def get_events_league_number(self):
         return len(self.get_events_league_list())
@@ -579,14 +633,14 @@ class Season(Base):
         return self.get_events_league_number() / self.get_events_number()
 
     # Lists getters
-    def get_criterion_list(self, criterion):
+    def _get_criterion_list(self, criterion):
         ''' List of challenges of a season. '''
         criterion_list = list()
         for event in self.get_events_list():
             criterion_list += getattr(event, f"get_{criterion.lower()}s_list")
         return criterion_list
     
-    def get_criterion_number_by_event_list(self, criterion):
+    def _get_criterion_number_by_event_list(self, criterion):
         '''
         For statistics.
         List of numbers of criterion by event of a season.
@@ -598,129 +652,133 @@ class Season(Base):
 
     # Challenge: DUEL
     def get_duels_list(self):
-        return self.get_criterion_list(ChallengeType.DUEL.name)
+        return self._get_criterion_list(ChallengeType.DUEL.name)
     
     def get_duels_number(self):
         return len(self.get_duels_list())
 
     def get_duels_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(ChallengeType.DUEL.name)
+        return self._get_criterion_number_by_event_list(ChallengeType.DUEL.name)
 
     def get_duels_statistics(self):
         return ut.get_statistics(self.get_duels_number_by_event_list())
 
     # Challenge: COMBAT
     def get_combats_list(self):
-        return self.get_criterion_list(ChallengeType.COMBAT.name)
+        return self._get_criterion_list(ChallengeType.COMBAT.name)
     
     def get_combats_number(self):
         return len(self.get_combats_list())
     
     def get_combats_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(ChallengeType.COMBAT.name)
+        return self._get_criterion_number_by_event_list(ChallengeType.COMBAT.name)
 
     def get_combats_statistics(self):
         return ut.get_statistics(self.get_combats_number_by_event_list())
     
     # Challenge: ROUND
     def get_rounds_list(self):
-        return self.get_criterion_list(ChallengeType.ROUND.name)
+        return self._get_criterion_list(ChallengeType.ROUND.name)
     
     def get_rounds_number(self):
         return len(self.get_rounds_list())
     
     def get_rounds_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(ChallengeType.ROUND.name)
+        return self._get_criterion_number_by_event_list(ChallengeType.ROUND.name)
 
     def get_rounds_statistics(self):
         return ut.get_statistics(self.get_rounds_number_by_event_list())
 
     # Entities
-    def get_entity_most_participations(self, entity_type):
+    def _get_entity_most_participations(self, entity_type):
         ''' For statistics. '''
         entities_list = getattr(self, f"get_{entity_type}s_list")
         return ut.get_multimode(entities_list)
 
     # Entity: PLAYER
     def get_players_list(self):
-        return self.get_criterion_list(EntityType.PLAYER.name)
+        return self._get_criterion_list(EntityType.PLAYER.name)
     
     def get_players_number(self):
         return len(self.get_players_list())
     
     def get_players_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(EntityType.PLAYER.name)
+        return self._get_criterion_number_by_event_list(EntityType.PLAYER.name)
     
     def get_players_statistics(self):
         return ut.get_statistics(self.get_players_number_by_event_list())
     
     def get_players_most_participations(self):
-        return self.get_entity_most_participations(EntityType.PLAYER.name)
+        return self._get_entity_most_participations(EntityType.PLAYER.name)
 
     # Entity: TEAM
     def get_teams_list(self):
-        return self.get_criterion_list(EntityType.TEAM.name)
+        return self._get_criterion_list(EntityType.TEAM.name)
     
     def get_teams_number(self):
         return len(self.get_teams_list())
 
     def get_teams_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(EntityType.TEAM.name)
+        return self._get_criterion_number_by_event_list(EntityType.TEAM.name)
     
     def get_teams_statistics(self):
         return ut.get_statistics(self.get_teams_number_by_event_list())
     
     def get_teams_most_participations(self):
-        return self.get_entity_most_participations(EntityType.TEAM.name)
+        return self._get_entity_most_participations(EntityType.TEAM.name)
 
     # Entity: CHARACTER
     def get_characters_list(self):
-        return self.get_criterion_list(EntityType.CHARACTER.name)
+        return self._get_criterion_list(EntityType.CHARACTER.name)
     
     def get_characters_number(self):
         return len(self.get_characters_list())
     
     def get_characters_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(EntityType.CHARACTER.name)
+        return self._get_criterion_number_by_event_list(EntityType.CHARACTER.name)
     
     def get_characters_statistics(self):
         return ut.get_statistics(self.get_characters_number_by_event_list())
     
     def get_characters_most_participations(self):
-        return self.get_entity_most_participations(EntityType.CHARACTER.name)
+        return self._get_entity_most_participations(EntityType.CHARACTER.name)
 
     # Entity: PLAYER_CHARACTER
     def get_player_characters_list(self):
-        return self.get_criterion_list(EntityType.PLAYER_CHARACTER.name)
+        return self._get_criterion_list(EntityType.PLAYER_CHARACTER.name)
     
     def get_player_characters_number(self):
         return len(self.get_player_characters_list())
     
     def get_player_characters_number_by_event_list(self):
-        return self.get_criterion_number_by_event_list(EntityType.PLAYER_CHARACTER.name)
+        return self._get_criterion_number_by_event_list(EntityType.PLAYER_CHARACTER.name)
     
     def get_player_characters_statistics(self):
         return ut.get_statistics(self.get_player_characters_number_by_event_list())
     
     def get_player_characters_most_participations(self):
-        return self.get_entity_most_participations(EntityType.PLAYER_CHARACTER.name)
+        return self._get_entity_most_participations(EntityType.PLAYER_CHARACTER.name)
 
     # Winners
-    def get_entities_winner_list(self, competitor_type):
-        entities_winner_list = list()
+    def _get_winners_entity_list(self, competitor_type):
+        winners_entity_list = list()
         for event in self.get_events_list():
-            entities_winner_list.append(getattr(event, f"get_winner_{competitor_type}"))
-        return entities_winner_list
+            winners_entity_list.append(getattr(event, f"get_winner_{competitor_type}"))
+        return winners_entity_list
     
     # Winner: PLAYER
-    def get_players_winner_list(self):
-        return self.get_entities_winner_list(CompetitorType.PLAYER.name)
+    def get_winners_player_list(self):
+        return self._get_winners_entity_list(CompetitorType.PLAYER.name)
+    
+    def get_winners_player_number(self):
+        return len(self.get_winners_player_list())
     
     # Winner: TEAM
-    def get_teams_winner_list(self):
-        return self.get_entities_winner_list(CompetitorType.TEAM.name)
-
-    # @@@@
+    def get_winners_team_list(self):
+        return self._get_winners_entity_list(CompetitorType.TEAM.name)
+    
+    def get_winners_team_number(self):
+        return len(self.get_winners_team_list())
 
 
 class EventModality(Base):
@@ -732,7 +790,7 @@ class EventModality(Base):
     _event_system = Column(String, nullable=False) # Tournament, League, Duel
 
     ''' Relationships '''
-    _events = relationship("Event", back_populates="event_modality", cascade="all, delete-orphan")
+    events = relationship("Event", back_populates="event_modality", cascade="all, delete-orphan")
 
     ''' Methods '''
     @hybrid_property
@@ -743,24 +801,20 @@ class EventModality(Base):
     def event_system(self):
         return self._event_system
 
-    # @hybrid_property
-    # def events(self):
-    #     return self._events
-
 
 class Event(Base):
     __tablename__ = "event"
 
     ''' Attributes '''
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
-    code_name = Column(String, nullable=False)
-    link_raw = Column(String, nullable=False)
-    link_summarized = Column(String, nullable=False)
-    playlist = Column(String, nullable=False)
-    bracket = Column(String, nullable=False)
-    date = Column(DateTime, nullable=False)
-    event_order = Column(Integer, nullable=False)
+    _name = Column(String, nullable=False)
+    _code_name = Column(String, nullable=False)
+    _link_raw = Column(String, nullable=False)
+    _link_summarized = Column(String, nullable=False)
+    _playlist = Column(String, nullable=False)
+    _bracket = Column(String, nullable=False)
+    _date = Column(DateTime, nullable=False)
+    _event_order = Column(Integer, nullable=False)
 
     game_version_platform_id = Column(Integer, ForeignKey("game_version_platform.id"), nullable=False)
     region_id = Column(Integer, ForeignKey("region.id"), nullable=False)
@@ -776,76 +830,180 @@ class Event(Base):
 
     ''' Methods '''
     # Getters
-    def get_event_order(self):
-        return self.event_order
+    @hybrid_property
+    def name(self):
+        return self._name
+    
+    @hybrid_property
+    def code_name(self):
+        return self._code_name
+    
+    @hybrid_property
+    def link_raw(self):
+        return self._link_raw
+    
+    @hybrid_property
+    def link_summarized(self):
+        return self._link_summarized
+    
+    @hybrid_property
+    def playlist(self):
+        return self._playlist
+    
+    @hybrid_property
+    def bracket(self):
+        return self._bracket
+    
+    @hybrid_property
+    def date(self):
+        return self._date
+    
+    @hybrid_property
+    def event_order(self):
+        return self._event_order
 
     def get_event_system(self): # Tournament, League, Duel
         return self.event_modality.event_system
 
-    def get_competitors_type(self): # Player, Team
+    def get_competitor_type(self): # Player, Team
         return self.event_modality.competitor_type
     
-    # Members
-    def get_teams_list(self):
-        teams_list = list()
-        for duel in self.duels:
-            teams_list += duel.get_teams_list()
-        teams_list = list(set(teams_list)).sort()
-        return teams_list
+    # Duels
+    def get_duels_list(self):
+        ''' List of duels of an event. '''
+        return list(sorted(self.duels, key=lambda x:x.duel_order))
+         
+    def get_duels_number(self):
+        ''' Number of duels of an event. '''
+        return len(self.get_duels_list())
     
-    def get_teams_number(self):
-        return len(self.get_teams_list())
-
-    def get_players_list(self):
-        players_list = list()
+    # Lists getters
+    def _get_criterion_list(self, criterion):
+        ''' List of challenges of a season. '''
+        criterion_list = list()
         for duel in self.duels:
-            players_list += duel.get_players_list()
-        players_list = list(set(players_list)).sort()
-        return players_list
+            criterion_list += getattr(duel, f"get_{criterion.lower()}s_list")
+        return criterion_list
+    
+    def _get_criterion_number_by_duel_list(self, criterion):
+        '''
+        For statistics.
+        List of numbers of criterion by duel of an event.
+        '''
+        criterion_number_by_duel_list = list()
+        for duel in self.get_duels_list():
+            criterion_number_by_duel_list.append(getattr(duel, f"get_{criterion.lower()}s_number"))
+        return criterion_number_by_duel_list
+    
+    # @@@@
+    # Challenge: COMBAT
+    def get_combats_list(self):
+        return self._get_criterion_list(ChallengeType.COMBAT.name)
+    
+    def get_combats_number(self):
+        return len(self.get_combats_list())
+    
+    def get_combats_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(ChallengeType.COMBAT.name)
+    
+    def get_combats_statistics(self):
+        return ut.get_statistics(self.get_combats_number_by_duel_list())
+
+    # Challenge: ROUND
+    def get_rounds_list(self):
+        return self._get_criterion_list(ChallengeType.ROUND.name)
+    
+    def get_rounds_number(self):
+        return len(self.get_rounds_list())
+    
+    def get_rounds_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(ChallengeType.ROUND.name)
+    
+    def get_rounds_statistics(self):
+        return ut.get_statistics(self.get_rounds_number_by_duel_list())
+
+    # Entities
+    def _get_entity_most_participations(self, entity_type):
+        ''' For statistics. '''
+        entities_list = getattr(self, f"get_{entity_type}s_list")
+        return ut.get_multimode(entities_list)
+
+    # Entity: PLAYER
+    def get_players_list(self):
+        return self._get_criterion_list(EntityType.PLAYER.name)
     
     def get_players_number(self):
         return len(self.get_players_list())
+    
+    def get_players_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(EntityType.PLAYER.name)
+    
+    def get_players_statistics(self):
+        return ut.get_statistics(self.get_players_number_by_duel_list())
+    
+    def get_players_most_participations(self):
+        return self._get_entity_most_participations(EntityType.PLAYER.name)
+    
+    # Entity: TEAM
+    def get_teams_list(self):
+        return self._get_criterion_list(EntityType.TEAM.name)
+    
+    def get_teams_number(self):
+        return len(self.get_teams_list())
+    
+    def get_teams_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(EntityType.TEAM.name)
+    
+    def get_teams_statistics(self):
+        return ut.get_statistics(self.get_teams_number_by_duel_list())
+    
+    def get_teams_most_participations(self):
+        return self._get_entity_most_participations(EntityType.TEAM.name)
 
+    # Entity: CHARACTER
     def get_characters_list(self):
-        characters_list = list()
-        for duel in self.duels:
-            characters_list += duel.get_characters_list()
-        characters_list = list(set(characters_list)).sort()
-        return characters_list
-
+        return self._get_criterion_list(EntityType.CHARACTER.name)
+    
     def get_characters_number(self):
         return len(self.get_characters_list())
+    
+    def get_characters_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(EntityType.CHARACTER.name)
+    
+    def get_characters_statistics(self):
+        return ut.get_statistics(self.get_characters_number_by_duel_list())
+    
+    def get_characters_most_participations(self):
+        return self._get_entity_most_participations(EntityType.CHARACTER.name)
+
+    # Entity: PLAYER_CHARACTER
+    def get_player_characters_list(self):
+        return self._get_criterion_list(EntityType.PLAYER_CHARACTER.name)
+    
+    def get_player_characters_number(self):
+        return len(self.get_player_characters_list())
+    
+    def get_player_characters_number_by_duel_list(self):
+        return self._get_criterion_number_by_duel_list(EntityType.PLAYER_CHARACTER.name)
+    
+    def get_player_characters_statistics(self):
+        return ut.get_statistics(self.get_player_characters_number_by_duel_list())
+    
+    def get_player_characters_most_participations(self):
+        return self._get_entity_most_participations(EntityType.PLAYER_CHARACTER.name)
+
+    # Winners
+    def get_winner(self):
+        ''' The winner of the event is the winner of the last duel. '''
+        return self.get_duels_list()[-1].get_winner()
+
+
+    # @@@@
     
     def get_results_dict(self):
         # for duel in self.duels:
         #     duel.get_points_earned()
         return
-
-    # Duels
-    def get_duels_played_list(self):
-        return self.duels
-
-    def get_duels_played_number(self):
-        return len(self.duels)
-    
-    # Combats
-    def get_combats_played_list(self):
-        combats_list = list()
-        for duel in self.duels:
-            combats_list += duel.get_combats_played_list()
-        return combats_list
-
-    def get_combats_played_number(self):
-        return len(self.get_combats_played_list)
-
-    # Rounds
-    def get_rounds_played_number(self):
-        rounds_number = 0
-        for duel in self.duels:
-            rounds_number += duel.get_rounds_played_number()
-        return rounds_number
-
-
 
     def get_teams_rivals_list(self, team_obj):
         # for team in self.get_teams_list():
@@ -854,12 +1012,6 @@ class Event(Base):
         return
 
     def get_rivals_number(competitor):
-        return
-
-    def get_duels_played_list(competitor):
-        return
-
-    def get_duels_played_number(competitor):
         return
 
     def get_duels_won_list(competitor):
@@ -874,12 +1026,6 @@ class Event(Base):
     def get_duels_lost_number(competitor):
         return
 
-    def get_combats_played_list(competitor):
-        return
-
-    def get_combats_played_number(competitor):
-        return
-
     def get_combats_won_list(competitor):
         return
 
@@ -890,9 +1036,6 @@ class Event(Base):
         return
 
     def get_combats_lost_number(competitor):
-        return
-
-    def get_rounds_played_number(competitor):
         return
 
     def get_rounds_won_number(competitor):

@@ -48,17 +48,17 @@ class SeasonStats:
                  events_team_list,
                  events_team_number,
                  events_team_rate,
-                 tournaments_list,
-                 tournaments_number,
-                 torunaments_rate,
-                 leagues_list,
-                 leagues_number,
-                 leagues_rate,
+                 events_tournament_list,
+                 events_tournament_number,
+                 events_tournament_rate,
+                 events_league_list,
+                 events_league_number,
+                 events_league_rate,
                  duels_list,
                  duels_number,
                  duels_statistics,
                  combats_list,
-                 combats_numbers,
+                 combats_number,
                  combats_statistics,
                  rounds_list,
                  rounds_number,
@@ -69,70 +69,413 @@ class SeasonStats:
                  players_most_participations,
                  teams_list,
                  teams_number,
-                 teams_average,
-                 teams_stdev,
+                 teams_statistics,
+                 teams_most_participations,
                  characters_list,
                  characters_number,
-                 characters_average,
-                 characters_stdev,
-                 players_characters_list,
-                 players_characters_number,
-                 players_characters_average,
-                 players_characters_stdev,
+                 characters_statistics,
+                 characters_most_participations,
+                 player_characters_list,
+                 player_characters_number,
+                 player_characters_statistics,
+                 player_characters_most_participations,
                  winners_player_list,
                  winners_player_number,
                  winners_team_list,
                  winners_team_number):
-        self.events_list = events_list
-        self.events_number = events_number
-        self.events_player_list = events_player_list
-        self.events_player_number = events_player_number
-        self.events_player_rate = events_player_rate
-        self.events_team_list = events_team_list
-        self.events_team_number = events_team_number
-        self.events_team_rate = events_team_rate
-        self.tournaments_list = tournaments_list
-        self.tournaments_number = tournaments_number
-        self.torunaments_rate = torunaments_rate
-        self.leagues_list = leagues_list
-        self.leagues_number = leagues_number
-        self.leagues_rate = leagues_rate
-        self.duels_list = duels_list
-        self.duels_number = duels_number
-        self.duels_average = duels_average
-        self.duels_stdev = duels_stdev
-        self.combats_list = combats_list
-        self.combats_numbers = combats_numbers
-        self.combats_average = combats_average
-        self.combats_stdev = combats_stdev
-        self.rounds_number = rounds_number
-        self.rounds_average = rounds_average
-        self.rounds_stdev = rounds_stdev
-        self.players_list = players_list
-        self.players_number = players_number
-        self.players_average = players_average
-        self.players_stdev = players_stdev
-        self.teams_list = teams_list
-        self.teams_number = teams_number
-        self.teams_average = teams_average
-        self.teams_stdev = teams_stdev
-        self.characters_list = characters_list
-        self.characters_number = characters_number
-        self.characters_average = characters_average
-        self.characters_stdev = characters_stdev
-        self.players_characters_list = players_characters_list
-        self.players_characters_number = players_characters_number
-        self.players_characters_average = players_characters_average
-        self.players_characters_stdev = players_characters_stdev
-        self.winners_player_list = winners_player_list
-        self.winners_player_number = winners_player_number
-        self.winners_team_list = winners_team_list
-        self.winners_team_number = winners_team_number
+        self._events_list = events_list,
+        self._events_number = events_number,
+        self._events_player_list = events_player_list,
+        self._events_player_number = events_player_number,
+        self._events_player_rate = events_player_rate,
+        self._events_team_list = events_team_list,
+        self._events_team_number = events_team_number,
+        self._events_team_rate = events_team_rate,
+        self._events_tournament_list = events_tournament_list,
+        self._events_tournament_number = events_tournament_number,
+        self._events_tournament_rate = events_tournament_rate,
+        self._events_league_list = events_league_list,
+        self._events_league_number = events_league_number,
+        self._events_league_rate = events_league_rate,
+        self._duels_list = duels_list,
+        self._duels_number = duels_number,
+        self._duels_statistics = duels_statistics,
+        self._combats_list = combats_list,
+        self._combats_number = combats_number,
+        self._combats_statistics = combats_statistics,
+        self._rounds_list = rounds_list,
+        self._rounds_number = rounds_number,
+        self._rounds_statistics = rounds_statistics,
+        self._players_list = players_list,
+        self._players_number = players_number,
+        self._players_statistics = players_statistics,
+        self._players_most_participations = players_most_participations,
+        self._teams_list = teams_list,
+        self._teams_number = teams_number,
+        self._teams_statistics = teams_statistics,
+        self._teams_most_participations = teams_most_participations,
+        self._characters_list = characters_list,
+        self._characters_number = characters_number,
+        self._characters_statistics = characters_statistics,
+        self._characters_most_participations = characters_most_participations,
+        self._player_characters_list = player_characters_list,
+        self._player_characters_number = player_characters_number,
+        self._player_characters_statistics = player_characters_statistics,
+        self._player_characters_most_participations = player_characters_most_participations,
+        self._winners_player_list = winners_player_list,
+        self._winners_player_number = winners_player_number,
+        self._winners_team_list = winners_team_list,
+        self._winners_team_number = winners_team_number
+
+    @property
+    def events_list(self):
+        return self._events_list
+
+    @property
+    def events_number(self):
+        return self._events_number
+
+    @property
+    def events_player_list(self):
+        return self._events_player_list
+
+    @property
+    def events_player_number(self):
+        return self._events_player_number
+
+    @property
+    def events_player_rate(self):
+        return self._events_player_rate
+
+    @property
+    def events_team_list(self):
+        return self._events_team_list
+
+    @property
+    def events_team_number(self):
+        return self._events_team_number
+
+    @property
+    def events_team_rate(self):
+        return self._events_team_rate
+
+    @property
+    def events_tournament_list(self):
+        return self._events_tournament_list
+
+    @property
+    def events_tournament_number(self):
+        return self._events_tournament_number
+
+    @property
+    def events_tournament_rate(self):
+        return self._events_tournament_rate
+
+    @property
+    def events_league_list(self):
+        return self._events_league_list
+
+    @property
+    def events_league_number(self):
+        return self._events_league_number
+
+    @property
+    def events_league_rate(self):
+        return self._events_league_rate
+
+    @property
+    def duels_list(self):
+        return self._duels_list
+
+    @property
+    def duels_number(self):
+        return self._duels_number
+
+    @property
+    def duels_statistics(self):
+        return self._duels_statistics
+
+    @property
+    def combats_list(self):
+        return self._combats_list
+
+    @property
+    def combats_number(self):
+        return self._combats_number
+
+    @property
+    def combats_statistics(self):
+        return self._combats_statistics
+
+    @property
+    def rounds_list(self):
+        return self._rounds_list
+
+    @property
+    def rounds_number(self):
+        return self._rounds_number
+
+    @property
+    def rounds_statistics(self):
+        return self._rounds_statistics
+
+    @property
+    def players_list(self):
+        return self._players_list
+
+    @property
+    def players_number(self):
+        return self._players_number
+
+    @property
+    def players_statistics(self):
+        return self._players_statistics
+
+    @property
+    def players_most_participations(self):
+        return self._players_most_participations
+
+    @property
+    def teams_list(self):
+        return self._teams_list
+
+    @property
+    def teams_number(self):
+        return self._teams_number
+
+    @property
+    def teams_statistics(self):
+        return self._teams_statistics
+
+    @property
+    def teams_most_participations(self):
+        return self._teams_most_participations
+
+    @property
+    def characters_list(self):
+        return self._characters_list
+
+    @property
+    def characters_number(self):
+        return self._characters_number
+
+    @property
+    def characters_statistics(self):
+        return self._characters_statistics
+
+    @property
+    def characters_most_participations(self):
+        return self._characters_most_participations
+
+    @property
+    def player_characters_list(self):
+        return self._player_characters_list
+
+    @property
+    def player_characters_number(self):
+        return self._player_characters_number
+
+    @property
+    def player_characters_statistics(self):
+        return self._player_characters_statistics
+
+    @property
+    def player_characters_most_participations(self):
+        return self._player_characters_most_participations
+
+    @property
+    def winners_player_list(self):
+        return self._winners_player_list
+
+    @property
+    def winners_player_number(self):
+        return self._winners_player_number
+
+    @property
+    def winners_team_list(self):
+        return self._winners_team_list
+
+    @property
+    def winners_team_number(self):
+        return self._winners_team_number
 
     
-
 class EventStats:
-    ...
+    def __init__(self,
+                 duels_list,
+                 duels_number,
+                 duels_statistics,
+                 combats_list,
+                 combats_number,
+                 combats_statistics,
+                 rounds_list,
+                 rounds_number,
+                 rounds_statistics,
+                 players_list,
+                 players_number,
+                 players_statistics,
+                 players_most_participations,
+                 teams_list,
+                 teams_number,
+                 teams_statistics,
+                 teams_most_participations,
+                 characters_list,
+                 characters_number,
+                 characters_statistics,
+                 characters_most_participations,
+                 player_characters_list,
+                 player_characters_number,
+                 player_characters_statistics,
+                 player_characters_most_participations,
+                 winners_player_list,
+                 winners_player_number,
+                 winners_team_list,
+                 winners_team_number):
+        self._duels_list = duels_list,
+        self._duels_number = duels_number,
+        self._duels_statistics = duels_statistics,
+        self._combats_list = combats_list,
+        self._combats_number = combats_number,
+        self._combats_statistics = combats_statistics,
+        self._rounds_list = rounds_list,
+        self._rounds_number = rounds_number,
+        self._rounds_statistics = rounds_statistics,
+        self._players_list = players_list,
+        self._players_number = players_number,
+        self._players_statistics = players_statistics,
+        self._players_most_participations = players_most_participations,
+        self._teams_list = teams_list,
+        self._teams_number = teams_number,
+        self._teams_statistics = teams_statistics,
+        self._teams_most_participations = teams_most_participations,
+        self._characters_list = characters_list,
+        self._characters_number = characters_number,
+        self._characters_statistics = characters_statistics,
+        self._characters_most_participations = characters_most_participations,
+        self._player_characters_list = player_characters_list,
+        self._player_characters_number = player_characters_number,
+        self._player_characters_statistics = player_characters_statistics,
+        self._player_characters_most_participations = player_characters_most_participations,
+        self._winners_player_list = winners_player_list,
+        self._winners_player_number = winners_player_number,
+        self._winners_team_list = winners_team_list,
+        self._winners_team_number = winners_team_number
+
+    @property
+    def duels_list(self):
+        return self._duels_list
+
+    @property
+    def duels_number(self):
+        return self._duels_number
+
+    @property
+    def duels_statistics(self):
+        return self._duels_statistics
+
+    @property
+    def combats_list(self):
+        return self._combats_list
+
+    @property
+    def combats_number(self):
+        return self._combats_number
+
+    @property
+    def combats_statistics(self):
+        return self._combats_statistics
+
+    @property
+    def rounds_list(self):
+        return self._rounds_list
+
+    @property
+    def rounds_number(self):
+        return self._rounds_number
+
+    @property
+    def rounds_statistics(self):
+        return self._rounds_statistics
+
+    @property
+    def players_list(self):
+        return self._players_list
+
+    @property
+    def players_number(self):
+        return self._players_number
+
+    @property
+    def players_statistics(self):
+        return self._players_statistics
+
+    @property
+    def players_most_participations(self):
+        return self._players_most_participations
+
+    @property
+    def teams_list(self):
+        return self._teams_list
+
+    @property
+    def teams_number(self):
+        return self._teams_number
+
+    @property
+    def teams_statistics(self):
+        return self._teams_statistics
+
+    @property
+    def teams_most_participations(self):
+        return self._teams_most_participations
+
+    @property
+    def characters_list(self):
+        return self._characters_list
+
+    @property
+    def characters_number(self):
+        return self._characters_number
+
+    @property
+    def characters_statistics(self):
+        return self._characters_statistics
+
+    @property
+    def characters_most_participations(self):
+        return self._characters_most_participations
+
+    @property
+    def player_characters_list(self):
+        return self._player_characters_list
+
+    @property
+    def player_characters_number(self):
+        return self._player_characters_number
+
+    @property
+    def player_characters_statistics(self):
+        return self._player_characters_statistics
+
+    @property
+    def player_characters_most_participations(self):
+        return self._player_characters_most_participations
+
+    @property
+    def winners_player_list(self):
+        return self._winners_player_list
+
+    @property
+    def winners_player_number(self):
+        return self._winners_player_number
+
+    @property
+    def winners_team_list(self):
+        return self._winners_team_list
+
+    @property
+    def winners_team_number(self):
+        return self._winners_team_number
 
 class DuelStats:
     ...
