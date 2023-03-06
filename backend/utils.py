@@ -304,7 +304,6 @@ class EventStats:
     def __init__(self,
                  duels_list,
                  duels_number,
-                 duels_statistics,
                  combats_list,
                  combats_number,
                  combats_statistics,
@@ -327,13 +326,10 @@ class EventStats:
                  player_characters_number,
                  player_characters_statistics,
                  player_characters_most_participations,
-                 winners_player_list,
-                 winners_player_number,
-                 winners_team_list,
-                 winners_team_number):
+                 winner,
+                 results):
         self._duels_list = duels_list,
         self._duels_number = duels_number,
-        self._duels_statistics = duels_statistics,
         self._combats_list = combats_list,
         self._combats_number = combats_number,
         self._combats_statistics = combats_statistics,
@@ -356,10 +352,8 @@ class EventStats:
         self._player_characters_number = player_characters_number,
         self._player_characters_statistics = player_characters_statistics,
         self._player_characters_most_participations = player_characters_most_participations,
-        self._winners_player_list = winners_player_list,
-        self._winners_player_number = winners_player_number,
-        self._winners_team_list = winners_team_list,
-        self._winners_team_number = winners_team_number
+        self._winner = winner,
+        self._results = results
 
     @property
     def duels_list(self):
@@ -368,10 +362,6 @@ class EventStats:
     @property
     def duels_number(self):
         return self._duels_number
-
-    @property
-    def duels_statistics(self):
-        return self._duels_statistics
 
     @property
     def combats_list(self):
@@ -462,20 +452,13 @@ class EventStats:
         return self._player_characters_most_participations
 
     @property
-    def winners_player_list(self):
-        return self._winners_player_list
+    def winner(self):
+        return self._winner
 
     @property
-    def winners_player_number(self):
-        return self._winners_player_number
+    def results(self):
+        return self._results
 
-    @property
-    def winners_team_list(self):
-        return self._winners_team_list
-
-    @property
-    def winners_team_number(self):
-        return self._winners_team_number
 
 class DuelStats:
     ...
