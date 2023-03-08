@@ -310,14 +310,10 @@ class EventStats:
                  rounds_list,
                  rounds_number,
                  rounds_statistics,
-                 players_list,
-                 players_number,
-                 players_statistics,
-                 players_most_participations,
-                 teams_list,
-                 teams_number,
-                 teams_statistics,
-                 teams_most_participations,
+                 competitors_list,
+                 competitors_number,
+                 competitors_statistics,
+                 competitors_most_participations,
                  characters_list,
                  characters_number,
                  characters_statistics,
@@ -336,14 +332,10 @@ class EventStats:
         self._rounds_list = rounds_list,
         self._rounds_number = rounds_number,
         self._rounds_statistics = rounds_statistics,
-        self._players_list = players_list,
-        self._players_number = players_number,
-        self._players_statistics = players_statistics,
-        self._players_most_participations = players_most_participations,
-        self._teams_list = teams_list,
-        self._teams_number = teams_number,
-        self._teams_statistics = teams_statistics,
-        self._teams_most_participations = teams_most_participations,
+        self._competitors_list = competitors_list,
+        self._competitors_number = competitors_number,
+        self._competitors_statistics = competitors_statistics,
+        self._competitors_most_participations = competitors_most_participations,
         self._characters_list = characters_list,
         self._characters_number = characters_number,
         self._characters_statistics = characters_statistics,
@@ -388,36 +380,20 @@ class EventStats:
         return self._rounds_statistics
 
     @property
-    def players_list(self):
-        return self._players_list
+    def competitors_list(self):
+        return self._competitors_list
 
     @property
-    def players_number(self):
-        return self._players_number
+    def competitors_number(self):
+        return self._competitors_number
 
     @property
-    def players_statistics(self):
-        return self._players_statistics
+    def competitors_statistics(self):
+        return self._competitors_statistics
 
     @property
-    def players_most_participations(self):
-        return self._players_most_participations
-
-    @property
-    def teams_list(self):
-        return self._teams_list
-
-    @property
-    def teams_number(self):
-        return self._teams_number
-
-    @property
-    def teams_statistics(self):
-        return self._teams_statistics
-
-    @property
-    def teams_most_participations(self):
-        return self._teams_most_participations
+    def competitors_most_participations(self):
+        return self._competitors_most_participations
 
     @property
     def characters_list(self):
@@ -461,7 +437,31 @@ class EventStats:
 
 
 class DuelStats:
-    ...
+    def __init__(self,
+                 combats_list,
+                 combats_number,
+                 rounds_list,
+                 rounds_number,
+                 rounds_statistics,
+                 players_list,
+                 players_number,
+                 players_statistics,
+                 players_most_participations,
+                 teams_list,
+                 teams_number,
+                 teams_statistics,
+                 teams_most_participations,
+                 characters_list,
+                 characters_number,
+                 characters_statistics,
+                 characters_most_participations,
+                 player_characters_list,
+                 player_characters_number,
+                 player_characters_statistics,
+                 player_characters_most_participations,
+                 winner,
+                 results):
+        ...
 
 class CombatStats:
     ...
