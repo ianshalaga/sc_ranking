@@ -2,7 +2,7 @@ import statistics as st
 import numbers
 
 
-''' CLASES '''
+''' UTILITY CLASES '''
 
 class Statistics:
     def __init__(self,
@@ -443,14 +443,10 @@ class DuelStats:
                  rounds_list,
                  rounds_number,
                  rounds_statistics,
-                 players_list,
-                 players_number,
-                 players_statistics,
-                 players_most_participations,
-                 teams_list,
-                 teams_number,
-                 teams_statistics,
-                 teams_most_participations,
+                 competitors_list,
+                 competitors_number,
+                 competitors_statistics,
+                 competitors_most_participations,
                  characters_list,
                  characters_number,
                  characters_statistics,
@@ -459,15 +455,143 @@ class DuelStats:
                  player_characters_number,
                  player_characters_statistics,
                  player_characters_most_participations,
-                 winner,
-                 results):
-        ...
+                 results,
+                 winner):
+        self._combats_list = combats_list
+        self._combats_number = combats_number
+        self._rounds_list = rounds_list
+        self._rounds_number = rounds_number
+        self._rounds_statistics = rounds_statistics
+        self._competitors_list = competitors_list
+        self._competitors_number = competitors_number
+        self._competitors_statistics = competitors_statistics
+        self._competitors_most_participations = competitors_most_participations
+        self._characters_list = characters_list
+        self._characters_number = characters_number
+        self._characters_statistics = characters_statistics
+        self._characters_most_participations = characters_most_participations
+        self._player_characters_list = player_characters_list
+        self._player_characters_number = player_characters_number
+        self._player_characters_statistics = player_characters_statistics
+        self._player_characters_most_participations = player_characters_most_participations
+        self._results = results
+        self._winner = winner
+
+    @property
+    def combats_list(self):
+        return self._combats_list
+
+    @property
+    def combats_number(self):
+        return self._combats_number
+
+    @property
+    def rounds_list(self):
+        return self._rounds_list
+
+    @property
+    def rounds_number(self):
+        return self._rounds_number
+
+    @property
+    def rounds_statistics(self):
+        return self._rounds_statistics
+
+    @property
+    def competitors_list(self):
+        return self._competitors_list
+
+    @property
+    def competitors_number(self):
+        return self._competitors_number
+
+    @property
+    def competitors_statistics(self):
+        return self._competitors_statistics
+
+    @property
+    def competitors_most_participations(self):
+        return self._competitors_most_participations
+
+    @property
+    def characters_list(self):
+        return self._characters_list
+
+    @property
+    def characters_number(self):
+        return self._characters_number
+
+    @property
+    def characters_statistics(self):
+        return self._characters_statistics
+
+    @property
+    def characters_most_participations(self):
+        return self._characters_most_participations
+
+    @property
+    def player_characters_list(self):
+        return self._player_characters_list
+
+    @property
+    def player_characters_number(self):
+        return self._player_characters_number
+
+    @property
+    def player_characters_statistics(self):
+        return self._player_characters_statistics
+
+    @property
+    def player_characters_most_participations(self):
+        return self._player_characters_most_participations
+
+    @property
+    def results(self):
+        return self._results
+
+    @property
+    def winner(self):
+        return self._winner
+
 
 class CombatStats:
-    ...
+    def __init__(self,
+        rounds_list,
+        rounds_number,
+        competitors_list,
+        characters_list,
+        player_characters_list,
+        results,
+        winner):
+        ...
 
-class RoundStats: # ???
-    ...
+class RoundStats:
+    def __init__(self,
+                 points_player1,
+                 points_player2,
+                 result_player1,
+                 result_player2):
+        self._points_player1 = points_player1
+        self._points_player2 = points_player2
+        self._result_player1 = result_player1
+        self._result_player2 = result_player2
+
+    @property    
+    def points_player1(self):
+        return self._points_player1
+
+    @property        
+    def points_player2(self):
+        return self._points_player2
+
+    @property        
+    def result_player1(self):
+        return self._result_player1
+
+    @property        
+    def result_player2(self):
+        return self._result_player2
+
 
 class EntityStats:
     ...
@@ -475,7 +599,7 @@ class EntityStats:
 class CompetitorStats:
     ...
 
-class RoundResult:
+class CombatResult:
     def __init__(self, winner, loser):
         self._winner = winner
         self._loser = loser
@@ -490,7 +614,7 @@ class RoundResult:
         return self._loser
 
 
-class RoundPlayerStats:
+class CombatPlayerStats:
     def __init__(self, won, lost, beating_factor, points_raw):
         self._won = won
         self._lost = lost
@@ -515,13 +639,15 @@ class RoundPlayerStats:
         return self._points_raw
 
 
-''' FUNCTIONS '''
+''' RANKING FUNCTIONS '''
 
 def win_rate(victories, played):
+    ''' Challenges won over challanges played. '''
     return victories / played
     
 
 def win_lose_ratio(func, victories, defeats):
+    ''' Balancing factor. Victories over defeats with some considerations. '''
     win_lose_ratio = 0
     if defeats == 0:
         win_lose_ratio = victories
@@ -535,6 +661,7 @@ def win_lose_ratio(func, victories, defeats):
 
 
 def beating_factor(victories, played):
+    ''' Like win rate but with a consideration when victories are zero. '''
     beating_factor = 0
     if victories == 0:
         beating_factor = (1 / played) / 2
@@ -544,12 +671,15 @@ def beating_factor(victories, played):
 
 
 def level_factor(a, b, win_rates_diff):
+    ''' Level factor to equate competitors with different skill level. '''
     return a * win_rates_diff + b
 
+        
+''' STATISTICS FUNCTIONS '''
 
 # def is_numeric_list(data_list):
 #     return all(isinstance(element, numbers.Number) for element in data_list)
-        
+
 
 def get_statistics(data_list):
     '''
