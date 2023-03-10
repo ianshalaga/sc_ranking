@@ -57,6 +57,10 @@ class EventModality {
     - event_system : EventSystem
 }
 
+class LifeTime {
+
+}
+
 class Season {
     - name : String
     - season_order : Integer
@@ -132,6 +136,8 @@ class Country {
 
 GameVersionPlatform "1..*" --- "1" Game : Have a >
 GameVersionPlatform "1..*" -- "1" Platform : Have a >
+
+LifeTime "1" -- "1..*" Season : Belongs to >
 
 Event "1..*" -- "1" Season : Belongs to >
 Event "1..*" -- "1" EventModality : Is of an >

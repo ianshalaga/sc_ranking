@@ -554,18 +554,91 @@ class DuelStats:
         return self._winner
 
 
-class CombatStats:
+class CombatStats: # @@@@ pendiente
     def __init__(self,
-        rounds_list,
-        rounds_number,
-        competitors_list,
-        characters_list,
-        player_characters_list,
-        results,
-        winner):
-        ...
+                 rounds_list,
+                 rounds_number,
+                 competitors_list,
+                 characters_list,
+                 player_characters_list,
+                 winner):
+        self._rounds_list = rounds_list
+        self._rounds_number = rounds_number
+        self._competitors_list = competitors_list
+        self._characters_list = characters_list
+        self._player_characters_list = player_characters_list
+        self._winner = winner
 
-class RoundStats:
+    @property
+    def rounds_list(self):
+        return self._rounds_list
+
+    @property
+    def rounds_number(self):
+        return self._rounds_number
+
+    @property
+    def competitors_list(self):
+        return self._competitors_list
+
+    @property
+    def characters_list(self):
+        return self._characters_list
+
+    @property
+    def player_characters_list(self):
+        return self._player_characters_list
+
+    @property
+    def winner(self):
+        return self._winner
+
+
+class CombatData:
+    def __init__(self,
+                 win_points_competitor1,
+                 win_points_competitor2,
+                 points_earned_competitor1,
+                 points_earned_competitor2):
+        self._win_points_competitor1 = win_points_competitor1
+        self._win_points_competitor2 = win_points_competitor2
+        self._points_earned_competitor1 = points_earned_competitor1
+        self._points_earned_competitor2 = points_earned_competitor2
+    
+    @property
+    def win_points_competitor1(self):
+        return self._win_points_competitor1
+
+    @property
+    def win_points_competitor2(self):
+        return self._win_points_competitor2
+
+    @property
+    def points_earned_competitor1(self):
+        return self._points_earned_competitor1
+
+    @property
+    def points_earned_competitor2(self):
+        return self._points_earned_competitor2
+
+
+class CombatsData:
+    def __init__(self,
+                 win_points,
+                 points_earned):
+        self._win_points = win_points
+        self._points_earned = points_earned
+
+    @property
+    def win_points(self):
+        return self._win_points
+
+    @property
+    def points_earned(self):
+        return self._points_earned
+
+
+class RoundData:
     def __init__(self,
                  points_player1,
                  points_player2,
