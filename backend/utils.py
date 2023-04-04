@@ -712,6 +712,126 @@ class CombatPlayerStats:
         return self._points_raw
 
 
+class CombatsStats:
+    def __init__(self,
+                 combats_won_list,
+                 combats_lost_list,
+                 combats_draw_list,
+                 combats_won_number,
+                 combats_lost_number,
+                 combats_draw_number,
+                 combats_win_rate,
+                 rounds_played_number,
+                 rounds_won_number,
+                 rounds_lost_number,
+                 rounds_win_rate):
+        self._combats_won_list = combats_won_list
+        self._combats_lost_list = combats_lost_list
+        self._combats_draw_list = combats_draw_list
+        self._combats_won_number = combats_won_number
+        self._combats_lost_number = combats_lost_number
+        self._combats_draw_number = combats_draw_number
+        self._combats_win_rate = combats_win_rate
+        self._rounds_played_number = rounds_played_number
+        self._rounds_won_number = rounds_won_number
+        self._rounds_lost_number = rounds_lost_number
+        self._rounds_win_rate = rounds_win_rate
+        
+    ''' Methods '''
+    @property
+    def combats_won_list(self):
+        return self._combats_won_list
+
+    @property
+    def combats_lost_list(self):
+        return self._combats_lost_list
+
+    @property
+    def combats_draw_list(self):
+        return self._combats_draw_list
+
+    @property
+    def combats_won_number(self):
+        return self._combats_won_number
+
+    @property
+    def combats_lost_number(self):
+        return self._combats_lost_number
+
+    @property
+    def combats_draw_number(self):
+        return self._combats_draw_number
+
+    @property
+    def combats_win_rate(self):
+        return self._combats_win_rate
+
+    @property
+    def rounds_played_number(self):
+        return self._rounds_played_number
+
+    @property
+    def rounds_won_number(self):
+        return self._rounds_won_number
+
+    @property
+    def rounds_lost_number(self):
+        return self._rounds_lost_number
+
+    @property
+    def rounds_win_rate(self):
+        return self._rounds_win_rate
+
+
+class DuelsStats:
+    def __init__(self,
+                 played_list,
+                 won_list,
+                 lost_list,
+                 played_number,
+                 won_number,
+                 lost_number,
+                 win_rate):
+        self._played_list = played_list
+        self._won_list = won_list
+        self._lost_list = lost_list
+        self._played_number = played_number
+        self._won_number = won_number
+        self._lost_number = lost_number
+        self._win_rate = win_rate
+    
+    ''' Methods '''
+    @property
+    def played_list(self):
+        return self._played_list
+
+    @property
+    def won_list(self):
+        return self._won_list
+
+    @property
+    def lost_list(self):
+        return self._lost_list
+
+    @property
+    def played_number(self):
+        return self._played_number
+
+    @property
+    def won_number(self):
+        return self._won_number
+
+    @property
+    def lost_number(self):
+        return self._lost_number
+
+    @property
+    def win_rate(self):
+        return self._win_rate
+
+
+
+
 ''' RANKING FUNCTIONS '''
 
 def win_rate(victories, played):
