@@ -1889,7 +1889,6 @@ class Team(Competitor):
     def combats(self):
         return list(sorted(self.combats_p1 + self.combats_p2, key=lambda x:x.combat_order))
     
-    # @@@@
     # Country
     def get_country(self):
         country = None # When is an international team
@@ -1900,61 +1899,36 @@ class Team(Competitor):
             country = list(countries_set)[0]
         return country
 
-    # Events stats
-    def get_events_stats(self):
-        return super().get_events_stats(self.combats())
+    # Events
+    def get_events_list(self):
+        return super().get_events_list(self.combats())
+    
+    def get_events_number(self):
+        return super().get_events_number(self.combats())
 
-    # Combats stats
-    def get_combats_stats(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats())
+    # Combats
+    def get_combats_stats(self):
+        return super().get_combats_stats(self.combats())
     
-    def get_combats_stats_p1(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats_p1)
+    def get_combats_stats_p1(self):
+        return super().get_combats_stats(self.combats_p1)
     
-    def get_combats_stats_p1(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats_p1)
-    
-    # Combats stage stats
-    def get_combats_stage_stats(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats())
-    
-    def get_combats_stage_stats_p1(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats_p1)
-    
-    def get_combats_stage_stats_p2(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats_p2)
+    def get_combats_stats_p2(self):
+        return super().get_combats_stats(self.combats_p2)
 
-    # Rounds stats
-    def get_rounds_stats(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played(),
-                                     rounds_stats_obj.get_won(),
-                                     rounds_stats_obj.get_lost(),
-                                     rounds_stats_obj.get_win_rate(),
-                                     rounds_stats_obj.get_win_lose_ratio())
-        return round_stats_obj
-        
-    def get_rounds_stats_p1(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played_p1(),
-                                     rounds_stats_obj.get_won_p1(),
-                                     rounds_stats_obj.get_lost_p1(),
-                                     rounds_stats_obj.get_win_rate_p1(),
-                                     rounds_stats_obj.get_win_lose_ratio_p1())
-        return round_stats_obj
+    # Combats stage
+    def get_combats_stats_by_stage(self):
+        return super().get_combats_stats_by_stage(self.combats())
     
-    def get_rounds_stats_p2(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played_p2(),
-                                     rounds_stats_obj.get_won_p2(),
-                                     rounds_stats_obj.get_lost_p2(),
-                                     rounds_stats_obj.get_win_rate_p2(),
-                                     rounds_stats_obj.get_win_lose_ratio_p2())
-        return round_stats_obj
+    def get_combats_stats_by_stage_p1(self):
+        return super().get_combats_stats_by_stage(self.combats_p1)
     
-    # Duels stats
-    def get_duels_stats(self, func_wlr):
-        return super().get_duels_stats(func_wlr, self.combats())
+    def get_combats_stats_by_stage_p2(self):
+        return super().get_combats_stats_by_stage(self.combats_p2)
+
+    # Duels
+    def get_duels_stats(self):
+        return super().get_duels_stats(self.combats())
 
 
 class Character(Entity):
@@ -1962,7 +1936,7 @@ class Character(Entity):
     
     ''' Attributes '''
     id = Column(Integer, ForeignKey('entity.id'), primary_key=True, nullable=False)
-    playlist = Column(String, nullable=True)
+    _playlist = Column(String, nullable=True)
 
     __mapper_args__ = {"polymorphic_identity": "character"}
     
@@ -1973,69 +1947,39 @@ class Character(Entity):
 
     ''' Methods '''
     # Getters
-    def get_name(self):
-        return super().get_name()
-
-    def get_playlist(self):
-        return self.playlist
+    @hybrid_property
+    def playlist(self):
+        return self._playlist
     
     def combats(self):
-        return self.combats_p1 + self.combats_p2
-    
-    def get_players_characters(self):
-        return self.players_characters
+        return list(sorted(self.combats_p1 + self.combats_p2, key=lambda x:x.combat_order))
 
-    # Events stats
-    def get_events_stats(self):
-        return super().get_events_stats(self.combats())
+    # Events
+    def get_events_list(self):
+        return super().get_events_list(self.combats())
     
-    # Combats stats
-    def get_combats_stats(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats())
-    
-    def get_combats_stats_p1(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats_p1)
-    
-    def get_combats_stats_p2(self, func_wlr):
-        return super().get_combats_stats(func_wlr, self.combats_p2)
+    def get_events_number(self):
+        return super().get_events_number(self.combats())
 
-    # Combats stage stats
-    def get_combats_stage_stats(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats())
+    # Combats
+    def get_combats_stats(self):
+        return super().get_combats_stats(self.combats())
     
-    def get_combats_stage_stats_p1(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats_p1)
+    def get_combats_stats_p1(self):
+        return super().get_combats_stats(self.combats_p1)
     
-    def get_combats_stage_stats_p2(self, func_wlr):
-        return super().get_combats_stage_stats(func_wlr, self.combats_p2)
+    def get_combats_stats_p2(self):
+        return super().get_combats_stats(self.combats_p2)
 
-    # Rounds stats
-    def get_rounds_stats(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played(),
-                                     rounds_stats_obj.get_won(),
-                                     rounds_stats_obj.get_lost(),
-                                     rounds_stats_obj.get_win_rate(),
-                                     rounds_stats_obj.get_win_lose_ratio())
-        return round_stats_obj
-        
-    def get_rounds_stats_p1(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played_p1(),
-                                     rounds_stats_obj.get_won_p1(),
-                                     rounds_stats_obj.get_lost_p1(),
-                                     rounds_stats_obj.get_win_rate_p1(),
-                                     rounds_stats_obj.get_win_lose_ratio_p1())
-        return round_stats_obj
+    # Combats stage
+    def get_combats_stats_by_stage(self):
+        return super().get_combats_stats_by_stage(self.combats())
     
-    def get_rounds_stats_p2(self, func_wlr):
-        rounds_stats_obj = super().get_rounds_stats(func_wlr, self.combats_p1, self.combats_p2)
-        round_stats_obj = RoundStats(rounds_stats_obj.get_played_p2(),
-                                     rounds_stats_obj.get_won_p2(),
-                                     rounds_stats_obj.get_lost_p2(),
-                                     rounds_stats_obj.get_win_rate_p2(),
-                                     rounds_stats_obj.get_win_lose_ratio_p2())
-        return round_stats_obj
+    def get_combats_stats_by_stage_p1(self):
+        return super().get_combats_stats_by_stage(self.combats_p1)
+    
+    def get_combats_stats_by_stage_p2(self):
+        return super().get_combats_stats_by_stage(self.combats_p2)
 
 
 class PlayerCharacter(Entity):
@@ -2055,9 +1999,7 @@ class PlayerCharacter(Entity):
 
     ''' Methods '''
     # Getters
-    def get_name(self):
-        return self.player.get_name() + "-" + self.character.get_name()
-    
+    # @@@@    
     def get_combats(self, player):
         ''' Player: 1, 2 '''
         combats = list()
